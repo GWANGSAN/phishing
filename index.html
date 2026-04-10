@@ -10,7 +10,7 @@
 /* 1. 기본 가독성 설정 */
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #f0f2f5;
     color: #333;
     line-height: 1.6;
@@ -51,7 +51,6 @@ h2 {
 p {
     font-size: 1.05rem;
     margin-bottom: 1.2rem;
-    text-align: left;
     color: #444;
 }
 
@@ -145,7 +144,7 @@ button:active {
         
         <div id="intro">
             <h2>보이스피싱 진단</h2>
-            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>위험도를 점검합니다.</p>
             <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
             
             <div id="videoBox" class="hidden" style="margin-top:15px;">
@@ -177,10 +176,10 @@ button:active {
         </div>
 
         <div id="quiz" class="hidden">
-            <div id="question" style="font-size:1.25rem; font-weight:800; margin-bottom:20px; text-align:left;"></div>
+            <div id="question" style="font-size:1.25rem; font-weight:800; margin-bottom:20px;"></div>
             <div id="choices"></div>
             <div id="descBox" class="descBox hidden"></div>
-            <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+            <button id="nextBtn" class="primary hidden">다음 질문 ▶</button>
         </div>
 
         <div id="resultBox" class="hidden">
@@ -188,11 +187,11 @@ button:active {
             <div id="result" style="font-size:2rem; font-weight:900; text-align:center; margin:20px 0;"></div>
             
             <div id="dangerActions" class="action-list hidden">
-                <strong style="color:#d32f2f; font-size:1.1rem;">📢 현장 경찰관 조치 권고</strong>
+                <strong style="color:#d32f2f; font-size:1.1rem;">📢 현장 경찰관 조치 가이드</strong>
                 <ul>
-                    <li>지금 전화중인 상대방은 <b>사기범</b>입니다. 즉시 전화를 끊으세요.</li>
-                    <li>확인 전화를 할 때는 반드시 <b>타인의 휴대폰</b>을 사용하세요.</li>
-                    <li>모든 금융 계좌의 <b>출금을 일시 정지</b>해야 합니다.</li>
+                    <li>상대방은 <b>범죄자</b>입니다. 즉시 전화를 끊으세요.</li>
+                    <li>확인 전화를 할 때는 <b>타인의 휴대폰</b>을 사용하세요.</li>
+                    <li>금융 계좌의 <b>출금을 즉시 정지</b>해야 합니다.</li>
                     <li>설치된 <b>원격제어 앱</b>을 즉시 삭제하도록 안내하세요.</li>
                 </ul>
             </div>
@@ -206,17 +205,17 @@ button:active {
 
 <script>
 const questions = [
-    { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 고전적인 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
-    { q:"질문 2. '명의도용', '범죄 연루', '구속수사' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"검찰·경찰 사칭의 핵심입니다. 수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
-    { q:"질문 3. 수사 협조나 보안 점검을 이유로 '특정 앱(원격제어 등)' 설치를 요구합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"앱을 설치하는 순간 휴대폰의 모든 정보가 빠져나가고 전화가 가로채기 당합니다. 절대 설치하지 마세요.", risk:5 },
-    { q:"질문 4. 직접 확인해보라며 금융감독원(1332)이나 검찰(1301) 번호로 전화를 걸도록 유도합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"가로채기 앱이 설치된 경우, 당신이 어디에 전화해도 범인의 번호로 연결되도록 조작되어 있습니다.", risk:5 },
-    { q:"질문 5. 텔레그램, 라인, 시그널 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"대한민국 수사기관은 절대로 개인 메신저를 통해 조사를 진행하거나 보고를 받지 않습니다.", risk:5 },
-    { q:"질문 6. 수사 보안상 '주변 사람이나 가족에게 절대 알리지 말라'고 경고합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"피해자가 제3자의 객관적인 도움을 받지 못하도록 고립시키는 100% 사기 패턴입니다.", risk:5 },
-    { q:"질문 7. 실시간 영상통화나 사진 촬영을 통해 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"CCTV로 감시 중이라거나 위치추적 중이라는 말은 피해자를 심리적으로 제압하려는 거짓말입니다.", risk:5 },
-    { q:"질문 8. 어떤 명목으로든 현금을 인출하여 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"국가기관은 어떠한 경우에도 개인에게 돈을 요구하거나 보관해주지 않습니다.", risk:5 },
-    { q:"질문 9. 정부지원금이나 저금리 대환대출이 가능하다는 광고 전화를 받았습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"금융기관은 먼저 전화를 걸어 낮은 금리로 대출을 권유하지 않습니다.", risk:5 },
-    { q:"질문 10. '대출 약정 위반'이나 '신용 등급 하락'을 언급하며 당장 돈을 갚아야 한다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"가짜 금융 용어로 압박을 주는 수법입니다. 해당 금융사 공식 고객센터로 직접 확인해야 합니다.", risk:5 },
-    { q:"질문 11. 대출 상환을 위해 현금을 직접 수거하러 직원을 보내겠다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"정상적인 금융거래는 직원을 밖에서 만나 현금을 전달하는 방식을 절대 사용하지 않습니다.", risk:5 }
+    { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
+    { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
+    { q:"질문 3. 수사 협조나 보안 점검을 이유로 '특정 앱(원격제어 등)' 설치를 요구합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
+    { q:"질문 4. 금융감독원(1332)이나 검찰 번호로 전화를 걸어보라고 유도합니까?", choices:["예 (유도함)","아니오"], answer:1, desc:"악성 앱이 깔리면 어디에 전화해도 범인에게 연결되도록 조작됩니다.", risk:5 },
+    { q:"질문 5. 텔레그램, 라인 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"수사기관은 절대로 개인 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
+    { q:"질문 6. 수사 보안상 '가족이나 주변 사람에게 절대 알리지 말라'고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 사기 수법입니다.", risk:5 },
+    { q:"질문 7. 실시간 영상통화나 사진 촬영으로 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"심리적으로 제압하려는 거짓말입니다. 즉시 전화를 끊고 렌즈를 가리세요.", risk:5 },
+    { q:"질문 8. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다.", risk:5 },
+    { q:"질문 9. 저금리 대환대출이 가능하다며 먼저 걸려온 광고 전화를 받았습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"은행은 먼저 전화를 걸어 대환대출을 권유하지 않습니다.", risk:5 },
+    { q:"질문 10. '대출 약정 위반'을 언급하며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"가짜 금융 용어입니다. 공식 고객센터를 통해서만 확인하세요.", risk:5 },
+    { q:"질문 11. 대출 상환을 위해 현금을 직접 수거하러 직원을 보내겠다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"직원이 밖에서 현금을 전달받는 방식은 100% 사기입니다.", risk:5 }
 ];
 
 let index = 0;
@@ -225,7 +224,7 @@ let highRiskDetected = false;
 
 document.getElementById("videoBtn").onclick = function(){
     document.getElementById("videoBox").classList.remove("hidden");
-    // 브라우저 정책 준수: mute=1 추가하여 자동재생 활성화
+    // 브라우저 정책 준수: mute=1을 넣어야 autoplay가 작동합니다.
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&rel=0";
     
     let timer = 10;
@@ -239,7 +238,7 @@ document.getElementById("videoBtn").onclick = function(){
             startBtn.innerText = "진단 시작하기";
             startBtn.classList.add("blink");
         }
-    }, 1500);
+    }, 1000);
 };
 
 document.getElementById("startBtn").onclick = () => {
@@ -308,7 +307,7 @@ function showResult(){
     }
 
     let html = "<b>체크된 위험 항목:</b><br>";
-    if(selectedRisks.length === 0) html += "의심 징후가 발견되지 않았습니다.";
+    if(selectedRisks.length === 0) html += "의심 징후가 없습니다.";
     else selectedRisks.forEach((v, idx) => html += `${idx+1}. ${v}<br>`);
     document.getElementById("detailResult").innerHTML = html;
     window.scrollTo(0,0);
