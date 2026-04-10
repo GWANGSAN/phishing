@@ -212,7 +212,7 @@ button:disabled {
         <div id="intro">
             <h2>보이스피싱 진단</h2>
             <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-            <p style="text-align: center; font-weight:bold;">안내 영상을 끝까지 시청해 주세요.</p>
+            <p style="text-align: center; font-weight:bold;">영상을 끝까지 시청해 주세요.</p>
             <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
             
             <div id="videoBox" class="hidden" style="margin-top:15px;">
@@ -233,12 +233,12 @@ button:disabled {
                 </div>
                 <div class="caseItem">
                     <div class="caseTitle">1. 검찰사칭 피해 - 자산검수</div>
-                    <div class="caseDate">2026. 4.</div>
+                    <div class="caseDate">발생일 2026. 4.</div>
                     <div class="caseMoney">피해금 1억 원</div>
                 </div>
                 <div class="caseItem">
                     <div class="caseTitle">2. 대출사칭 피해 - 계약위반</div>
-                    <div class="caseDate">2026. 2.</div>
+                    <div class="caseDate">발생일 2026. 2.</div>
                     <div class="caseMoney">피해금 1,600만 원</div>
                 </div>
             </div>
@@ -262,7 +262,7 @@ button:disabled {
                 <ul>
                     <li>대상자는 <b>피싱피해자</b>입니다.</li>
                     <li>대상자의 <b>휴대전화를 비행기모드로</b> 전환</li>
-                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b> 연락바랍니다.</li>
+                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b> 연락</li>
                 </ul>
             </div>
 
@@ -277,7 +277,7 @@ button:disabled {
 // 기존 데이터 그대로 유지
 const questions = [
     { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
-    { q:"질문 2. '명의도용', '범죄 연루', '구속수사'라며 수사기관(검찰, 경찰)과 통화를 한적이 있습니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 자산 내역을 묻거나 돈을 요구하지 않고, 사건으로 협박하지 않습니다.", risk:5 },
+    { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
     { q:"질문 3. 수사 협조나 보안 점검을 이유로 '특정 앱(원격제어 등)' 설치를 요구합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
     { q:"질문 4. 금융감독원(1332)이나 검찰 번호로 전화를 걸어보라고 유도합니까?", choices:["예 (유도함)","아니오"], answer:1, desc:"악성 앱이 깔리면 어디에 전화해도 범인에게 연결되도록 조작됩니다.", risk:5 },
     { q:"질문 5. 텔레그램, 라인 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"수사기관은 절대로 개인 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
