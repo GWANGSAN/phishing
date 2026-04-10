@@ -121,17 +121,49 @@ button:active {
 
 .action-list li {
     margin-bottom: 10px;
-    font-size: 1rem;
+    font-size: 1.1rem; /* 고위험 조치사항 글씨 크기 약간 확대 */
+    font-weight: bold;
 }
 
 .hidden { display: none; }
 
+/* 애니메이션 정의 */
 @keyframes blink {
     0% { opacity: 1; }
-    50% { opacity: 0.7; }
+    50% { opacity: 0.3; }
     100% { opacity: 1; }
 }
 .blink { animation: blink 1s infinite; }
+
+/* 🔥 고위험 결과 전용 깜빡임 스타일 (CSS 추가) */
+@keyframes dangerBlink {
+    0% { background-color: #fff5f5; border-color: #ffcccc; }
+    50% { background-color: #ffe0e0; border-color: #d32f2f; } /* 배경색과 테두리색 변경 */
+    100% { background-color: #fff5f5; border-color: #ffcccc; }
+}
+
+/* 고위험 판정 시 결과 텍스트 크기 확대 및 깜빡임 */
+#result.danger-text {
+    font-size: 3rem; /* 크기 확대 */
+    animation: blink 0.8s infinite; /* 빠른 깜빡임 */
+}
+
+/* 고위험 조치 가이드 박스 전체 깜빡임 */
+.action-list.danger-box {
+    border-width: 3px; /* 테두리 두껍게 */
+    animation: dangerBlink 1.5s infinite; /* 배경/테두리 깜빡임 */
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.5); /* 붉은 광채 효과 */
+}
+
+/* 고위험 연락처 강조 */
+.danger-phone {
+    font-size: 1.3rem;
+    color: #d32f2f;
+    background-color: yellow; /* 노란 배경색 */
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
 </style>
 </head>
 
@@ -144,7 +176,7 @@ button:active {
         
         <div id="intro">
             <h2>보이스피싱 진단</h2>
-            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>위험도를 점검합니다.</p>
+            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
             <p>영상 시청 후 진단 시작을 눌러주세요.</p>
             <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
             
@@ -192,18 +224,19 @@ button:active {
                 <ul>
                     <li>대상자는 <b>피싱피해자</b>입니다.</li>
                     <li>대상자의 <b>휴대전화를 즉시 비행기모드로</b>전환하세요</li>
-                    <li>피싱팀 <b>010-7489-8609</b>로 연락하세요</li>
+                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b>로 연락하세요</li>
                 </ul>
             </div>
 
             <div id="detailResult" style="margin-top:20px; padding:15px; background:#f0f0f0; border-radius:10px; font-size:0.95rem;"></div>
-            <button class="gray" onclick="location.reload()" style="background:#888; color:#fff; margin-top:20px;">처음부터 다시하기</button>
+            <button class="primary" onclick="location.reload()" style="margin-top:20px;">처음부터 다시하기</button>
         </div>
 
     </div>
 </div>
 
 <script>
+// 기존 질문 데이터 유지 (중복 콤마 수정 완료)
 const questions = [
     { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
@@ -211,11 +244,11 @@ const questions = [
     { q:"질문 4. 금융감독원(1332)이나 검찰 번호로 전화를 걸어보라고 유도합니까?", choices:["예 (유도함)","아니오"], answer:1, desc:"악성 앱이 깔리면 어디에 전화해도 범인에게 연결되도록 조작됩니다.", risk:5 },
     { q:"질문 5. 텔레그램, 라인 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"수사기관은 절대로 개인 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
     { q:"질문 6. 수사 보안상 '가족이나 주변 사람에게 절대 알리지 말라'고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 사기 수법입니다.", risk:5 },
-    { q:"질문 7. 전화, 영상통화, 사진촬영으로 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"검찰이 CCTV로 감시하고 있다고 하거나, 지켜보고 있다는 느낌이 들었다면 100% 피싱입니다.", risk:5 },
+    { q:"질문 7. 전화, 영상통화, 사진촬영으로 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"검찰이 CCTV로 감시하고 있다고 하거나, 지켜보고 있다는 느낌이 들었다면 100% 피싱입니다.", risk: risk:5 },
     { q:"질문 8. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다.", risk:5 },
     { q:"질문 9. 저금리 대환대출이 가능하다며 먼저 걸려온 광고 전화를 받았습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"은행은 먼저 전화를 걸어 대환대출을 권유하지 않습니다.", risk:5 },
     { q:"질문 10. '대출 약정 위반'을 언급하며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"가짜 금융 용어입니다. 공식 고객센터를 통해서만 확인하세요.", risk:5 },
-    { q:"질문 11. 대출 상환을 위해 현금을 직접 수거하러 직원을 보내겠다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"직원이 밖에서 현금을 전달받는 방식은 100% 사기입니다.", risk:5 },
+    { q:"질문 11. 대출 상환을 위해 현금을 직접 수거하러 직원을 보내겠다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"직원이 밖에서 현금을 전달받는 방식은 100% 사기입니다.", risk:5 }
 ];
 
 let index = 0;
@@ -294,10 +327,19 @@ function showResult(){
     const res = document.getElementById("result");
     const dActions = document.getElementById("dangerActions");
 
+    // 초기화 (이전 스타일 제거)
+    res.className = "";
+    dActions.className = "action-list hidden";
+
     if(highRiskDetected){
         res.innerText = "🚨 고위험";
         res.style.color = "#d32f2f";
+        
+        // 🔥 고위험 전용 스타일 및 애니메이션 적용 (JS 추가)
+        res.classList.add("danger-text"); // 텍스트 크기 확대 및 깜빡임
         dActions.classList.remove("hidden");
+        dActions.classList.add("danger-box"); // 박스 전체 배경/테두리 깜빡임
+        
     } else if(selectedRisks.length > 0){
         res.innerText = "⚠️ 주의";
         res.style.color = "#f57c00";
