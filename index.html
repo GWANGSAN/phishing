@@ -2,172 +2,307 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>보이스피싱 정밀 진단</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#002b5c">
+<title>보이스피싱 예방 진단 시스템</title>
 
 <style>
-body { margin:0; font-family: Arial; background:#f1f4f8; }
+/* 1. 기본 가독성 설정 */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    line-height: 1.6; /* 줄 간격 확보 */
+    word-break: keep-all; /* 단어 단위 줄바꿈으로 가독성 향상 */
+    -webkit-text-size-adjust: none;
+}
 
 .header {
-    background:#003366;
-    color:white;
-    padding:15px;
-    text-align:center;
-    font-weight:bold;
+    background: #002b5c;
+    color: white;
+    padding: 20px 15px;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.3rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.container { max-width:520px; margin:20px auto; padding:15px; }
+.container {
+    max-width: 500px; /* 모바일 폭에 최적화 */
+    margin: 0 auto;
+    padding: 15px;
+}
 
 .card {
-    background:white;
-    border-radius:12px;
-    padding:25px;
-    box-shadow:0 3px 12px rgba(0,0,0,0.2);
-    text-align:center;
+    background: white;
+    border-radius: 16px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
+/* 2. 텍스트 정렬 및 제목 스타일 */
+h2 { 
+    color: #002b5c; 
+    font-size: 1.5rem; 
+    margin-bottom: 15px;
+    text-align: center; 
+}
+
+p {
+    font-size: 1.05rem;
+    margin-bottom: 1.2rem;
+    text-align: left; /* 기본 정렬 */
+    color: #444;
+}
+
+/* 3. 버튼 모바일 최적화 */
 button {
-    width:100%;
-    padding:15px;
-    margin-top:10px;
-    font-size:16px;
-    border:none;
-    border-radius:8px;
+    width: 100%;
+    padding: 18px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.1s;
 }
 
-.start { background:#003366; color:white; }
-.yes { background:#d9534f; color:white; }
-.no { background:#0275d8; color:white; }
+button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
 
-#question { margin:20px 0; font-size:18px; }
-#result { white-space:pre-line; text-align:left; margin-top:15px; }
+.primary { background: #002b5c; color: white; }
+.video { background: linear-gradient(45deg, #d32f2f, #f44336); color: white; }
+.btn-yes { background: #e53935; color: white; margin-bottom: 8px; } /* 위험함 - 빨강 */
+.btn-no { background: #1e88e5; color: white; } /* 안전함 - 파랑 */
+.call { background: #000; color: #fff; font-size: 1.2rem; margin-top: 20px; border: 2px solid red; }
 
-img { width:100%; margin-top:15px; border-radius:8px; }
+/* 4. 사례 및 결과 박스 가독성 */
+.caseItem {
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    text-align: left;
+}
 
-.hidden { display:none; }
+.caseMoney {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #d32f2f;
+    margin-top: 5px;
+}
+
+.descBox {
+    margin-top: 20px;
+    padding: 15px;
+    background: #eef6ff;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #004085;
+    border-left: 5px solid #007bff;
+    text-align: left;
+}
+
+.action-list {
+    text-align: left;
+    background: #fff5f5;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ffcccc;
+    margin-top: 20px;
+}
+
+.action-list ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.action-list li {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.hidden { display: none; }
+
+/* 애니메이션 */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+.blink { animation: blink 1s infinite; }
+
 </style>
 </head>
 
 <body>
 
-<div class="header">🚔 광주광산경찰서 보이스피싱 예방 시스템</div>
+<div class="header">🚔 광주광산경찰서 피싱범죄수사팀</div>
 
 <div class="container">
-<div class="card">
+    <div class="card">
+        
+        <div id="intro">
+            <h2>보이스피싱 진단</h2>
+            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+            <button class="video" id="videoBtn">▶ 교육 영상 시청 (필수)</button>
+            
+            <div id="videoBox" class="hidden" style="margin-top:15px;">
+                <iframe id="ytFrame" width="100%" height="220" src="" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>
+            </div>
 
-<!-- 첫 화면 -->
-<div id="intro">
-<h2>보이스피싱 정밀 진단</h2>
-<p>
-최근 카드배송, 기관사칭, 원격제어 등을 이용한 보이스피싱이 증가하고 있습니다.<br><br>
-간단한 질문을 통해 현재 상황의 위험도를 확인해보세요.
-</p>
-<button class="start" onclick="start()">진단 시작하기</button>
-</div>
+            <button id="startBtn" class="primary" style="margin-top:20px;" disabled>진단 시작</button>
+        </div>
 
-<!-- 질문 화면 -->
-<div id="quiz" class="hidden">
-<div id="progress"></div>
-<div id="question"></div>
-<button class="yes" onclick="answer(true)">예</button>
-<button class="no" onclick="answer(false)">아니오</button>
-</div>
+        <div id="caseScreen" class="hidden">
+            <h2>🚨 실제 피해 사례</h2>
+            <div class="caseItem">
+                <div style="font-weight:bold;">1. 검찰/금융위 사칭</div>
+                <div class="caseMoney">💸 피해 1억 2천만 원</div>
+            </div>
+            <div class="caseItem">
+                <div style="font-weight:bold;">2. 저금리 대환대출 빙자</div>
+                <div class="caseMoney">💸 피해 4,500만 원</div>
+            </div>
+            <button id="caseNextBtn" class="primary">내 상황 진단하기</button>
+        </div>
 
-<!-- 결과 화면 -->
-<div id="resultBox" class="hidden">
-<h2>진단 결과</h2>
-<div id="result"></div>
+        <div id="quiz" class="hidden">
+            <div id="question" style="font-size:1.25rem; font-weight:800; margin-bottom:20px; text-align:left;"></div>
+            <div id="choices"></div>
+            <div id="descBox" class="descBox hidden"></div>
+            <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+        </div>
 
-<!-- 결과 이미지 -->
-<img src="result.png" alt="예방 안내 이미지">
+        <div id="resultBox" class="hidden">
+            <h2>진단 결과</h2>
+            <div id="result" style="font-size:2rem; font-weight:900; text-align:center; margin:20px 0;"></div>
+            
+            <div id="dangerActions" class="action-list hidden">
+                <strong style="color:#d32f2f; font-size:1.1rem;">🚨 즉시 이렇게 하세요!</strong>
+                <ul>
+                    <li>지금 전화중인 상대방은 <b>가짜</b>입니다. 즉시 전화를 끊으세요.</li>
+                    <li>확인 전화를 할 때는 반드시 <b>타인의 휴대폰</b>을 사용하세요.</li>
+                    <li><b>112(경찰)</b>에 신고하여 도움을 요청하세요.</li>
+                    <li>은행 앱을 열지 말고, <b>원격제어 앱</b>을 즉시 삭제하세요.</li>
+                </ul>
+                <button class="call blink" onclick="location.href='tel:112'">📞 지금 112 신고하기</button>
+            </div>
 
-<button onclick="restart()">다시 시작</button>
-</div>
+            <div id="detailResult" style="margin-top:20px; padding:15px; background:#f0f0f0; border-radius:10px; font-size:0.95rem;"></div>
+            <button class="gray" onclick="location.reload()" style="background:#888; color:#fff;">처음부터 다시하기</button>
+        </div>
 
-</div>
+    </div>
 </div>
 
 <script>
-
 const questions = [
-"카드 배송 또는 카드 발급 관련 전화를 받은 적이 있습니까?",
-"본인이 신청하지 않은 카드가 발급되었다고 들었습니까?",
-"명의도용 또는 범죄 연루를 언급했습니까?",
-"금융감독원, 검찰, 경찰 등 공공기관을 사칭했습니까?",
-"사건번호 또는 수사를 언급했습니까?",
-"구속, 범죄 연루 등의 말을 했습니까?",
-"다른 사람에게 알리지 말라고 했습니까?",
-"특급사건, 극비수사, 보완수사, 약식수사에 대해 들은 적이 있습니까?",
-"통화 내용을 비밀로 하라고 했습니까?",
-"계속 통화를 유지하게 했습니까?",
-"정시보고에 대해 들은 적이 있습니까?",
-"행동을 보고하라고 했습니까?",
-"휴대전화 점검을 이유로 앱 설치를 요구했습니까?",
-"애니데스크, 팀뷰어 등 원격제어앱을 사용한 적이 있습니까?",
-"원격제어 또는 화면 공유를 요구했습니까?",
-"설치 후 휴대전화가 이상하게 작동했습니까?",
-"대화앱(텔레그램 등)을 설치한 적이 있습니까?",
-"수사기관은 대화앱으로 수사하지 않는 사실을 알고 있습니까?",
-"금융감독원(1332) 또는 검찰(1301)에 전화하라고 했습니까?",
-"전화 후 즉시 연결된 느낌이었습니까?",
-"공식기관처럼 응대했습니까?",
-"극비 사건이라며 보안을 강조했습니까?",
-"주변 사람을 믿지 말라고 했습니까?",
-"감시당한다고 느꼈습니까?",
-"현금 인출 또는 송금을 요구했습니까?",
-"거짓말을 지시했습니까?",
-"현금을 전달하라고 했습니까?",
-"가족 또는 주변 사람에게 공유했습니까?"
+    { q:"질문 1. 모르는 번호로 '카드 발급' 또는 '해외 결제' 문자를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"정상적인 카드사는 개인 번호로 문자를 보내지 않습니다.", risk:3 },
+    { q:"질문 2. 수사관이 '보안 유지'를 이유로 주변 사람에게 말하지 말라고 했습니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"비밀 수사는 핑계일 뿐, 외부 도움을 차단하려는 전형적 사기 수법입니다.", risk:5 },
+    { q:"질문 3. 핸드폰 점검이나 수사 협조를 위해 '앱 설치'를 요구했습니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"앱을 까는 순간 당신의 전화와 문자는 범인에게 가로채기 당합니다.", risk:5 },
+    { q:"질문 4. 저금리 대출을 해주겠다며 '기존 대출금 상환'을 현금으로 요구했나요?", choices:["예 (요구함)","아니오"], answer:1, desc:"은행 직원은 절대로 밖에서 만나 현금을 수거하지 않습니다.", risk:5 },
+    { q:"질문 5. 검찰이 카카오톡으로 신분증이나 공문을 보냈습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"검찰은 절대로 SNS로 공문을 보내거나 수사하지 않습니다.", risk:5 }
 ];
 
-let index=0;
-let score=0;
+let index = 0;
+let selectedRisks = [];
+let highRiskDetected = false;
 
-function start(){
-    document.getElementById("intro").style.display="none";
-    document.getElementById("quiz").style.display="block";
-    loadQuestion();
+document.getElementById("videoBtn").onclick = function(){
+    document.getElementById("videoBox").classList.remove("hidden");
+    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1";
+    
+    let timer = 10;
+    const startBtn = document.getElementById("startBtn");
+    const interval = setInterval(() => {
+        timer--;
+        startBtn.innerText = `잠시만 기다려주세요 (${timer}초)`;
+        if(timer <= 0) {
+            clearInterval(interval);
+            startBtn.disabled = false;
+            startBtn.innerText = "진단 시작하기";
+            startBtn.classList.add("blink");
+        }
+    }, 1000);
+};
+
+document.getElementById("startBtn").onclick = () => {
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("caseScreen").classList.remove("hidden");
+};
+
+document.getElementById("caseNextBtn").onclick = () => {
+    document.getElementById("caseScreen").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+    loadQ();
+};
+
+function loadQ(){
+    const q = questions[index];
+    document.getElementById("question").innerText = q.q;
+    const c = document.getElementById("choices");
+    c.innerHTML = "";
+
+    q.choices.forEach((t, i) => {
+        let b = document.createElement("button");
+        b.className = (i === 0) ? "btn-yes" : "btn-no";
+        b.innerText = t;
+        b.onclick = () => answer(i);
+        c.appendChild(b);
+    });
+
+    document.getElementById("descBox").classList.add("hidden");
+    document.getElementById("nextBtn").classList.add("hidden");
 }
 
-function loadQuestion(){
-    document.getElementById("question").innerText=questions[index];
-    document.getElementById("progress").innerText=(index+1)+"/"+questions.length;
-}
-
-function answer(v){
-    if(v) score+=3;
-    index++;
-
-    if(index<questions.length){
-        loadQuestion();
-    } else {
-        showResult();
+function answer(i){
+    const q = questions[index];
+    if(i === 0){
+        selectedRisks.push(q.q);
+        if(q.risk >= 4) highRiskDetected = true;
     }
+    const dBox = document.getElementById("descBox");
+    dBox.innerText = q.desc;
+    dBox.classList.remove("hidden");
+    document.getElementById("nextBtn").classList.remove("hidden");
 }
+
+document.getElementById("nextBtn").onclick = () => {
+    index++;
+    if(index >= questions.length) showResult();
+    else loadQ();
+};
 
 function showResult(){
-    document.getElementById("quiz").style.display="none";
-    document.getElementById("resultBox").style.display="block";
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("resultBox").classList.remove("hidden");
+    const res = document.getElementById("result");
+    const dActions = document.getElementById("dangerActions");
 
-    let text="";
-    if(score>50){
-        text="🔴 매우 높은 위험\n즉시 112 신고 및 금융거래 중단";
-    } else if(score>25){
-        text="🟠 의심 상황\n공식기관 확인 필요";
+    if(highRiskDetected){
+        res.innerText = "🚨 고위험 사기 의심";
+        res.style.color = "#d32f2f";
+        dActions.classList.remove("hidden");
+    } else if(selectedRisks.length > 0){
+        res.innerText = "⚠️ 주의 단계";
+        res.style.color = "#f57c00";
     } else {
-        text="🟢 낮은 위험\n예방수칙 숙지";
+        res.innerText = "✅ 안전 단계";
+        res.style.color = "#388e3c";
     }
 
-    document.getElementById("result").innerText="점수: "+score+"\n\n"+text;
+    let html = "<b>체크된 항목:</b><br>";
+    if(selectedRisks.length === 0) html += "의심 징후가 없습니다.";
+    else selectedRisks.forEach((v, idx) => html += `${idx+1}. ${v}<br>`);
+    document.getElementById("detailResult").innerHTML = html;
+    window.scrollTo(0,0);
 }
-
-function restart(){
-    index=0; score=0;
-    document.getElementById("resultBox").style.display="none";
-    document.getElementById("intro").style.display="block";
-}
-
 </script>
-
 </body>
 </html>
