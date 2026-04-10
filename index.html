@@ -13,8 +13,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: #f0f2f5;
     color: #333;
-    line-height: 1.6; /* 줄 간격 확보 */
-    word-break: keep-all; /* 단어 단위 줄바꿈으로 가독성 향상 */
+    line-height: 1.6;
+    word-break: keep-all;
     -webkit-text-size-adjust: none;
 }
 
@@ -29,7 +29,7 @@ body {
 }
 
 .container {
-    max-width: 500px; /* 모바일 폭에 최적화 */
+    max-width: 500px;
     margin: 0 auto;
     padding: 15px;
 }
@@ -41,7 +41,6 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* 2. 텍스트 정렬 및 제목 스타일 */
 h2 { 
     color: #002b5c; 
     font-size: 1.5rem; 
@@ -52,11 +51,10 @@ h2 {
 p {
     font-size: 1.05rem;
     margin-bottom: 1.2rem;
-    text-align: left; /* 기본 정렬 */
+    text-align: left;
     color: #444;
 }
 
-/* 3. 버튼 모바일 최적화 */
 button {
     width: 100%;
     padding: 18px;
@@ -76,11 +74,9 @@ button:active {
 
 .primary { background: #002b5c; color: white; }
 .video { background: linear-gradient(45deg, #d32f2f, #f44336); color: white; }
-.btn-yes { background: #e53935; color: white; margin-bottom: 8px; } /* 위험함 - 빨강 */
-.btn-no { background: #1e88e5; color: white; } /* 안전함 - 파랑 */
-.call { background: #000; color: #fff; font-size: 1.2rem; margin-top: 20px; border: 2px solid red; }
+.btn-yes { background: #e53935; color: white; margin-bottom: 8px; }
+.btn-no { background: #1e88e5; color: white; }
 
-/* 4. 사례 및 결과 박스 가독성 */
 .caseItem {
     padding: 15px;
     border-radius: 12px;
@@ -90,6 +86,8 @@ button:active {
     text-align: left;
 }
 
+.caseTitle { font-weight: 900; font-size: 1.1rem; color: #002b5c; }
+.caseDate { font-size: 0.85rem; color: #777; }
 .caseMoney {
     font-size: 1.3rem;
     font-weight: 900;
@@ -124,19 +122,17 @@ button:active {
 
 .action-list li {
     margin-bottom: 10px;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .hidden { display: none; }
 
-/* 애니메이션 */
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
 .blink { animation: blink 1s infinite; }
-
 </style>
 </head>
 
@@ -150,10 +146,10 @@ button:active {
         <div id="intro">
             <h2>보이스피싱 진단</h2>
             <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-            <button class="video" id="videoBtn">▶ 교육 영상 시청 (필수)</button>
+            <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
             
             <div id="videoBox" class="hidden" style="margin-top:15px;">
-                <iframe id="ytFrame" width="100%" height="220" src="" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>
+                <iframe id="ytFrame" width="100%" height="220" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:10px;"></iframe>
             </div>
 
             <button id="startBtn" class="primary" style="margin-top:20px;" disabled>진단 시작</button>
@@ -162,22 +158,21 @@ button:active {
         <div id="caseScreen" class="hidden">
             <h2>🚨 실제 피해 사례</h2>
             <div class="caseBox">
-    <div class="caseItem danger">
-        <div class="caseTitle">2025년 광주청 피해현황</div>
-        <div class="caseMoney">💸 피해금 279억 원</div>
-    </div>
-    
-    <div class="caseItem danger">
-        <div class="caseTitle">1. 검찰사칭 피해 - 자산검수</div>
-        <div class="caseDate">2026. 4.</div>
-        <div class="caseMoney">💸 피해금 1억 원</div>
-    </div>
-
-    <div class="caseItem warning">
-        <div class="caseTitle">2. 대출사칭 피해 - 계약위반</div>
-        <div class="caseDate">2026. 2.</div>
-        <div class="caseMoney">💸 피해금 1,600만 원</div>
-    </div>
+                <div class="caseItem">
+                    <div class="caseTitle">2025년 광주청 피해현황</div>
+                    <div class="caseMoney">💸 피해금 279억 원</div>
+                </div>
+                <div class="caseItem">
+                    <div class="caseTitle">1. 검찰사칭 피해 - 자산검수</div>
+                    <div class="caseDate">2026. 4.</div>
+                    <div class="caseMoney">💸 피해금 1억 원</div>
+                </div>
+                <div class="caseItem">
+                    <div class="caseTitle">2. 대출사칭 피해 - 계약위반</div>
+                    <div class="caseDate">2026. 2.</div>
+                    <div class="caseMoney">💸 피해금 1,600만 원</div>
+                </div>
+            </div>
             <button id="caseNextBtn" class="primary">내 상황 진단하기</button>
         </div>
 
@@ -193,18 +188,17 @@ button:active {
             <div id="result" style="font-size:2rem; font-weight:900; text-align:center; margin:20px 0;"></div>
             
             <div id="dangerActions" class="action-list hidden">
-                <strong style="color:#d32f2f; font-size:1.1rem;">🚨 즉시 이렇게 하세요!</strong>
+                <strong style="color:#d32f2f; font-size:1.1rem;">📢 현장 경찰관 조치 권고</strong>
                 <ul>
-                    <li>지금 전화중인 상대방은 <b>가짜</b>입니다. 즉시 전화를 끊으세요.</li>
+                    <li>지금 전화중인 상대방은 <b>사기범</b>입니다. 즉시 전화를 끊으세요.</li>
                     <li>확인 전화를 할 때는 반드시 <b>타인의 휴대폰</b>을 사용하세요.</li>
-                    <li><b>112(경찰)</b>에 신고하여 도움을 요청하세요.</li>
-                    <li>은행 앱을 열지 말고, <b>원격제어 앱</b>을 즉시 삭제하세요.</li>
+                    <li>모든 금융 계좌의 <b>출금을 일시 정지</b>해야 합니다.</li>
+                    <li>설치된 <b>원격제어 앱</b>을 즉시 삭제하도록 안내하세요.</li>
                 </ul>
-                <button class="call blink" onclick="location.href='tel:112'">📞 지금 112 신고하기</button>
             </div>
 
             <div id="detailResult" style="margin-top:20px; padding:15px; background:#f0f0f0; border-radius:10px; font-size:0.95rem;"></div>
-            <button class="gray" onclick="location.reload()" style="background:#888; color:#fff;">처음부터 다시하기</button>
+            <button class="gray" onclick="location.reload()" style="background:#888; color:#fff; margin-top:20px;">처음부터 다시하기</button>
         </div>
 
     </div>
@@ -212,16 +206,16 @@ button:active {
 
 <script>
 const questions = [
-    { q:"질문 1. 본인이 신청하지 않은 **'카드 발급'**이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 고전적인 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
+    { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 고전적인 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"질문 2. '명의도용', '범죄 연루', '구속수사' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"검찰·경찰 사칭의 핵심입니다. 수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
     { q:"질문 3. 수사 협조나 보안 점검을 이유로 '특정 앱(원격제어 등)' 설치를 요구합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"앱을 설치하는 순간 휴대폰의 모든 정보가 빠져나가고 전화가 가로채기 당합니다. 절대 설치하지 마세요.", risk:5 },
-    { q:"질문 4. 직접 확인해보라며 **금융감독원(1332)**이나 검찰(1301) 번호로 전화를 걸도록 유도합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"가로채기 앱이 설치된 경우, 당신이 어디에 전화해도 범인의 번호로 연결되도록 조작되어 있습니다.", risk:5 },
-    { q:"질문 5. 텔레그램, 라인, 시그널 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"대한민국 수사기관은 절대로 개인 메신저를 통해 조사를 진행하거나 보고를 받지 않습니다.", risk:5 }
-    { q:"질문 6. 수사 보안상 **'주변 사람이나 가족에게 절대 알리지 말라'**고 경고합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"피해자가 제3자의 객관적인 도움을 받지 못하도록 고립시키는 100% 사기 패턴입니다.", risk:5 }
-    { q:"질문 7. 실시간 영상통화나 사진 촬영을 통해 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"CCTV로 감시 중이라거나 위치추적 중이라는 말은 피해자를 심리적으로 제압하려는 거짓말입니다.", risk:5 }
-    { q:"질문 8. 어떤 명목으로든 현금을 인출하여 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"국가기관은 어떠한 경우에도 개인에게 돈을 요구하거나 보관해주지 않습니다.", risk:5 }
-    { q:"질문 9. 정부지원금이나 저금리 대환대출이 가능하다는 광고 전화를 받았습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"금융기관은 먼저 전화를 걸어 낮은 금리로 대출을 권유하지 않습니다.", risk:5 }
-    { q:"질문 10. **'대출 약정 위반'**이나 **'신용 등급 하락'**을 언급하며 당장 돈을 갚아야 한다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"가짜 금융 용어로 압박을 주는 수법입니다. 해당 금융사 공식 고객센터로 직접 확인해야 합니다.", risk:5 }
+    { q:"질문 4. 직접 확인해보라며 금융감독원(1332)이나 검찰(1301) 번호로 전화를 걸도록 유도합니까?", choices:["예 (요구함)","아니오"], answer:1, desc:"가로채기 앱이 설치된 경우, 당신이 어디에 전화해도 범인의 번호로 연결되도록 조작되어 있습니다.", risk:5 },
+    { q:"질문 5. 텔레그램, 라인, 시그널 등 비밀 메시지 앱으로 수사 보고나 지시를 내립니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"대한민국 수사기관은 절대로 개인 메신저를 통해 조사를 진행하거나 보고를 받지 않습니다.", risk:5 },
+    { q:"질문 6. 수사 보안상 '주변 사람이나 가족에게 절대 알리지 말라'고 경고합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"피해자가 제3자의 객관적인 도움을 받지 못하도록 고립시키는 100% 사기 패턴입니다.", risk:5 },
+    { q:"질문 7. 실시간 영상통화나 사진 촬영을 통해 감시당하고 있다는 느낌을 줍니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"CCTV로 감시 중이라거나 위치추적 중이라는 말은 피해자를 심리적으로 제압하려는 거짓말입니다.", risk:5 },
+    { q:"질문 8. 어떤 명목으로든 현금을 인출하여 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"국가기관은 어떠한 경우에도 개인에게 돈을 요구하거나 보관해주지 않습니다.", risk:5 },
+    { q:"질문 9. 정부지원금이나 저금리 대환대출이 가능하다는 광고 전화를 받았습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"금융기관은 먼저 전화를 걸어 낮은 금리로 대출을 권유하지 않습니다.", risk:5 },
+    { q:"질문 10. '대출 약정 위반'이나 '신용 등급 하락'을 언급하며 당장 돈을 갚아야 한다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"가짜 금융 용어로 압박을 주는 수법입니다. 해당 금융사 공식 고객센터로 직접 확인해야 합니다.", risk:5 },
     { q:"질문 11. 대출 상환을 위해 현금을 직접 수거하러 직원을 보내겠다고 합니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"정상적인 금융거래는 직원을 밖에서 만나 현금을 전달하는 방식을 절대 사용하지 않습니다.", risk:5 }
 ];
 
@@ -231,20 +225,21 @@ let highRiskDetected = false;
 
 document.getElementById("videoBtn").onclick = function(){
     document.getElementById("videoBox").classList.remove("hidden");
-    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1";
+    // 브라우저 정책 준수: mute=1 추가하여 자동재생 활성화
+    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&rel=0";
     
     let timer = 10;
     const startBtn = document.getElementById("startBtn");
     const interval = setInterval(() => {
         timer--;
-        startBtn.innerText = `잠시만 기다려주세요 (${timer}초)`;
+        startBtn.innerText = `안내 영상 시청 중 (${timer}초)`;
         if(timer <= 0) {
             clearInterval(interval);
             startBtn.disabled = false;
             startBtn.innerText = "진단 시작하기";
             startBtn.classList.add("blink");
         }
-    }, 1000);
+    }, 1500);
 };
 
 document.getElementById("startBtn").onclick = () => {
@@ -301,19 +296,19 @@ function showResult(){
     const dActions = document.getElementById("dangerActions");
 
     if(highRiskDetected){
-        res.innerText = "🚨 고위험 사기 의심";
+        res.innerText = "🚨 고위험";
         res.style.color = "#d32f2f";
         dActions.classList.remove("hidden");
     } else if(selectedRisks.length > 0){
-        res.innerText = "⚠️ 주의 단계";
+        res.innerText = "⚠️ 주의";
         res.style.color = "#f57c00";
     } else {
-        res.innerText = "✅ 안전 단계";
+        res.innerText = "✅ 안전";
         res.style.color = "#388e3c";
     }
 
-    let html = "<b>체크된 항목:</b><br>";
-    if(selectedRisks.length === 0) html += "의심 징후가 없습니다.";
+    let html = "<b>체크된 위험 항목:</b><br>";
+    if(selectedRisks.length === 0) html += "의심 징후가 발견되지 않았습니다.";
     else selectedRisks.forEach((v, idx) => html += `${idx+1}. ${v}<br>`);
     document.getElementById("detailResult").innerHTML = html;
     window.scrollTo(0,0);
