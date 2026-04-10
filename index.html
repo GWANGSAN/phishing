@@ -7,13 +7,13 @@
 <title>보이스피싱 예방 진단 시스템</title>
 
 <style>
-/* 📱 모바일 최적화 고급 설정 */
+/* 📱 노령층 최적화: 아주 큰 글씨와 고대비 디자인 */
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
     background: #f0f2f5;
     color: #111;
-    line-height: 1.6;
+    line-height: 1.5;
     word-break: keep-all;
     -webkit-tap-highlight-color: transparent;
 }
@@ -21,189 +21,131 @@ body {
 .header {
     background: #002b5c;
     color: white;
-    padding: 20px 10px;
+    padding: 22px 10px;
     text-align: center;
-    font-weight: 800;
-    font-size: 1.25rem;
+    font-weight: 900;
+    font-size: 1.5rem;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .container {
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 15px 12px; /* 좌우 여백 미세 조정 */
+    padding: 15px;
 }
 
 .card {
     background: white;
-    border-radius: 24px; /* 곡률을 높여 더 부드러운 느낌 */
+    border-radius: 25px;
     padding: 30px 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
-    min-height: 70vh; /* 모바일에서 카드 높이 일관성 유지 */
 }
 
 h2 { 
     color: #002b5c; 
-    font-size: 1.7rem;
-    margin-top: 0;
+    font-size: 2rem;
     margin-bottom: 25px;
     text-align: center; 
     font-weight: 900;
-    letter-spacing: -0.5px;
 }
 
 p {
-    font-size: 1.25rem;
-    margin-bottom: 1.3rem;
-    color: #333;
+    font-size: 1.5rem; /* 글자 크기 대폭 확대 */
+    margin-bottom: 1.2rem;
+    color: #000;
+    font-weight: 700;
 }
 
-/* 🔘 모바일 전용 버튼 설계 */
+/* 🔘 큰 버튼 디자인 */
 button {
     width: 100%;
-    padding: 22px 15px; /* 터치 영역 확대 */
-    margin-top: 12px;
+    padding: 22px 15px;
+    margin-top: 15px;
     border: none;
-    border-radius: 18px;
-    font-size: 1.35rem;
-    font-weight: 800;
+    border-radius: 15px;
+    font-size: 1.6rem; /* 버튼 글자 아주 크게 */
+    font-weight: 900;
     cursor: pointer;
     box-sizing: border-box;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-button:active {
-    transform: scale(0.96);
-    filter: brightness(0.9);
-}
-
-button:disabled {
-    background: #d1d5db !important;
-    color: #9ca3af;
-    box-shadow: none;
 }
 
 .primary { background: #002b5c; color: white; }
-.video { background: linear-gradient(135deg, #d32f2f, #b71c1c); color: white; }
-.btn-yes { background: #e53935; color: white; margin-bottom: 15px; } /* 버튼 간격 확대 */
+.video { background: #d32f2f; color: white; }
+.btn-yes { background: #e53935; color: white; margin-bottom: 15px; }
 .btn-no { background: #1e88e5; color: white; }
+.btn-gold { background: #fbc02d; color: #000; border: 3px solid #000; }
 
-/* 💰 사례 가독성 최적화 */
+/* 💰 사례 시각화 복원 */
 .caseItem {
-    padding: 18px;
-    border-radius: 18px;
+    padding: 15px;
+    border-radius: 15px;
     margin-bottom: 15px;
-    background: #ffffff;
-    border: 1px solid #eaeaea;
+    background: #fdfdfd;
+    border: 2px solid #eee;
 }
 
-.caseTitle { font-weight: 800; font-size: 1.15rem; color: #002b5c; margin-bottom: 6px; }
-.caseDate { font-size: 1rem; color: #888; }
+.caseTitle { font-weight: 900; font-size: 1.3rem; color: #002b5c; }
+.caseDate { font-size: 1.1rem; color: #666; font-weight: bold; }
 
 .caseMoney {
     display: block;
-    margin-top: 12px;
-    padding: 14px;
-    font-size: 1.75rem;
+    margin-top: 10px;
+    padding: 15px;
+    font-size: 2rem;
     font-weight: 900;
     color: #ffffff;
     background: #d32f2f;
-    border-radius: 14px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
 }
 
-/* 📒 설명창 모바일 가독성 */
-.descBox {
-    margin-top: 25px;
-    padding: 22px;
-    background: #fff9c4;
-    border-radius: 16px;
-    font-size: 1.25rem;
-    color: #111;
-    border-left: 8px solid #fbc02d;
-    font-weight: 700;
-    box-shadow: 0 4px 10px rgba(251, 192, 45, 0.1);
+/* 🛡️ 예방 수칙 리스트 */
+.prevent-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    border-left: 10px solid #002b5c;
+    font-size: 1.4rem;
+    font-weight: 800;
 }
-
-.action-list {
-    text-align: left;
-    background: #fff5f5;
-    padding: 22px;
-    border-radius: 20px;
-    border: 2px solid #ffcccc;
-    margin-top: 25px;
-}
-
-.action-list ul {
-    padding-left: 20px;
-    margin: 15px 0;
-}
-
-.action-list li {
-    margin-bottom: 15px;
-    font-size: 1.25rem;
+.prevent-sub {
+    font-size: 1.1rem;
+    color: #d32f2f;
+    display: block;
+    margin-top: 5px;
     font-weight: bold;
+}
+
+.descBox {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff9c4;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    color: #111;
+    border: 3px solid #fbc02d;
+    font-weight: 800;
 }
 
 .hidden { display: none; }
-
-/* 애니메이션 */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-.blink { animation: blink 1.2s infinite; }
-
-#result.danger-text {
-    font-size: 3.5rem;
-    animation: blink 0.8s infinite;
-}
-
-.danger-phone {
-    font-size: 1.55rem;
-    color: #d32f2f;
-    background: #ffeb3b;
-    padding: 2px 8px;
-    border-radius: 6px;
-}
-
-#timerText {
-    text-align: center;
-    margin-top: 20px;
-    color: #d32f2f;
-    font-size: 1.15rem;
-    font-weight: bold;
-}
+.blink { animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.5; } }
 
 .video-wrap {
     position: relative;
     padding-bottom: 56.25%;
     height: 0;
+    border-radius: 15px;
     overflow: hidden;
-    border-radius: 18px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid #002b5c;
 }
-.video-wrap iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-}
+.video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 </style>
 </head>
 
@@ -216,69 +158,79 @@ button:disabled {
         
         <div id="intro">
             <h2>보이스피싱 진단</h2>
-            <p style="text-align: center; font-weight: 500;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-            <p style="text-align: center; font-weight:bold; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
+            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+            <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
             <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
-            
-            <div id="videoBox" class="hidden" style="margin-top:20px;">
+            <div id="videoBox" class="hidden" style="margin-top:15px;">
                 <div class="video-wrap">
                     <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
             </div>
-
-            <button id="startBtn" class="primary" style="margin-top:25px;" disabled>안내 영상을 시청 중입니다</button>
+            <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
         </div>
 
         <div id="caseScreen" class="hidden">
             <h2>🚨 실제 피해 사례</h2>
             <div class="caseBox">
-                <div class="caseItem">
-                    <div class="caseTitle">2025년 광주청 피해현황</div>
-                    <div class="caseMoney">피해금 279억 원</div>
+                <div class="caseItem" style="margin-bottom:20px;">
+                    <p style="font-size:1.2rem; margin-bottom:5px;">2025년 광주청 피해액</p>
+                    <div class="caseMoney">총 279억 원</div>
                 </div>
-                <div class="caseItem">
-                    <div class="caseTitle">1. 검찰사칭 피해 - 자산검수</div>
-                    <div class="caseDate">발생일 2026. 4.</div>
+                <div class="caseItem" style="margin-bottom:20px;">
+                    <p style="font-size:1.2rem; margin-bottom:5px;">검찰사칭 - 자산검수(26년 4월)</p>
                     <div class="caseMoney">피해금 1억 원</div>
                 </div>
-                <div class="caseItem">
-                    <div class="caseTitle">2. 대출사칭 피해 - 계약위반</div>
-                    <div class="caseDate">발생일 2026. 2.</div>
+                <div class="caseItem" style="margin-bottom:20px;">
+                    <p style="font-size:1.2rem; margin-bottom:5px;">대출사칭 - 계약위반(26년 2월)</p>
                     <div class="caseMoney">피해금 1,600만 원</div>
                 </div>
             </div>
-            <button id="caseNextBtn" class="primary" style="margin-top:10px;">내 상황 진단하기 (클릭)</button>
+            <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
         </div>
 
         <div id="quiz" class="hidden">
-            <div id="question" style="font-size:1.55rem; font-weight:900; margin-bottom:30px; line-height:1.5; color:#002b5c; text-shadow: 0 1px 1px rgba(0,0,0,0.05);"></div>
+            <div id="question" style="font-size:1.7rem; font-weight:900; margin-bottom:25px; color:#002b5c;"></div>
             <div id="choices"></div>
             <div id="descBox" class="descBox hidden"></div>
-            <div id="timerText" class="hidden">설명을 읽으시면 버튼이 생성됩니다...</div>
-            <button id="nextBtn" class="primary hidden" style="margin-top:20px;">다음 질문 이동 ▶</button>
+            <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:#d32f2f; font-weight:bold;">잠시만 기다려주세요...</div>
+            <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+        </div>
+
+        <div id="preventionScreen" class="hidden">
+            <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 예방 완결편</h2>
+            <p style="text-align:center; font-weight:900;">결과 확인 전 꼭 기억하세요!</p>
+            <div>
+                <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
+                <div class="prevent-item">
+                    2. 보안위험자동차단 설정
+                    <span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span>
+                </div>
+                <div class="prevent-item">3. 휴대전화 소액결제 원천차단</div>
+                <div class="prevent-item">4. 명의도용방지 가입제한 설정</div>
+                <div class="prevent-item">5. 여신거래안심차단, 비대면계좌개설차단</div>
+            </div>
+            <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
         </div>
 
         <div id="resultBox" class="hidden">
             <h2>진단 결과</h2>
-            <div id="result" style="font-size:2.8rem; font-weight:900; text-align:center; margin:35px 0;"></div>
-            
-            <div id="dangerActions" class="action-list hidden">
-                <strong style="color:#d32f2f; font-size:1.35rem;">📢 현장 경찰관 조치 가이드</strong>
-                <ul>
-                    <li>대상자는 <b>피싱피해자</b>입니다.</li>
-                    <li>대상자의 <b>휴대전화를 비행기모드로</b> 전환</li>
-                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b> 연락</li>
+            <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin:30px 0;"></div>
+            <div id="dangerActions" class="hidden" style="background:#fff5f5; padding:20px; border-radius:20px; border:4px solid #d32f2f;">
+                <strong style="color:#d32f2f; font-size:1.6rem;">📢 경찰관 조치 가이드</strong>
+                <ul style="font-size:1.4rem; font-weight:bold; margin-top:10px;">
+                    <li>휴대전화를 <b>비행기모드</b>로 전환</li>
+                    <li>피싱팀 <span style="background:yellow;">010-7489-8609</span> 연락</li>
                 </ul>
             </div>
-
-            <div id="detailResult" style="margin-top:25px; padding:20px; background:#f8f9fa; border-radius:18px; font-size:1.2rem; border:1px solid #eaeaea;"></div>
-            <button class="primary" onclick="location.reload()" style="margin-top:35px; background:#6b7280;">처음부터 다시하기</button>
+            <div id="detailResult" style="margin-top:20px; padding:20px; background:#f8f9fa; border-radius:12px; font-size:1.4rem; border:1px solid #ddd;"></div>
+            <button class="primary" onclick="location.reload()" style="margin-top:30px; background:#666;">다시 처음으로</button>
         </div>
 
     </div>
 </div>
 
 <script>
+// 원본 질문 데이터 엄격 유지
 const questions = [
     { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
@@ -300,7 +252,6 @@ let highRiskDetected = false;
 document.getElementById("videoBtn").onclick = function(){
     document.getElementById("videoBox").classList.remove("hidden");
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&rel=0";
-    
     let timer = 20;
     const startBtn = document.getElementById("startBtn");
     const interval = setInterval(() => {
@@ -318,7 +269,7 @@ document.getElementById("videoBtn").onclick = function(){
 document.getElementById("startBtn").onclick = () => {
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("caseScreen").classList.remove("hidden");
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo(0,0);
 };
 
 document.getElementById("caseNextBtn").onclick = () => {
@@ -328,12 +279,11 @@ document.getElementById("caseNextBtn").onclick = () => {
 };
 
 function loadQ(){
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo(0,0);
     const q = questions[index];
     document.getElementById("question").innerText = q.q;
     const c = document.getElementById("choices");
     c.innerHTML = "";
-
     q.choices.forEach((t, i) => {
         let b = document.createElement("button");
         b.className = (i === 0) ? "btn-yes" : "btn-no";
@@ -341,7 +291,6 @@ function loadQ(){
         b.onclick = () => answer(i);
         c.appendChild(b);
     });
-
     document.getElementById("descBox").classList.add("hidden");
     document.getElementById("nextBtn").classList.add("hidden");
     document.getElementById("timerText").classList.add("hidden");
@@ -356,39 +305,39 @@ function answer(i){
     const dBox = document.getElementById("descBox");
     dBox.innerText = q.desc;
     dBox.classList.remove("hidden");
-
-    const btns = document.querySelectorAll("#choices button");
-    btns.forEach(b => b.disabled = true);
-
+    document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
     const nextBtn = document.getElementById("nextBtn");
     const timerText = document.getElementById("timerText");
     timerText.classList.remove("hidden");
-
     setTimeout(() => {
         timerText.classList.add("hidden");
         nextBtn.classList.remove("hidden");
-        nextBtn.classList.add("fade-in");
     }, 2000); 
 }
 
 document.getElementById("nextBtn").onclick = () => {
     index++;
-    if(index >= questions.length) showResult();
-    else loadQ();
+    if(index >= questions.length) {
+        document.getElementById("quiz").classList.add("hidden");
+        document.getElementById("preventionScreen").classList.remove("hidden");
+    } else {
+        loadQ();
+    }
+};
+
+document.getElementById("resultBtn").onclick = () => {
+    document.getElementById("preventionScreen").classList.add("hidden");
+    document.getElementById("resultBox").classList.remove("hidden");
+    showResult();
 };
 
 function showResult(){
-    window.scrollTo({top: 0, behavior: 'smooth'});
-    document.getElementById("quiz").classList.add("hidden");
-    document.getElementById("resultBox").classList.remove("hidden");
+    window.scrollTo(0,0);
     const res = document.getElementById("result");
-    const dActions = document.getElementById("dangerActions");
-
     if(highRiskDetected){
         res.innerText = "🚨 고위험";
         res.style.color = "#d32f2f";
-        res.classList.add("danger-text");
-        dActions.classList.remove("hidden");
+        document.getElementById("dangerActions").classList.remove("hidden");
     } else if(selectedRisks.length > 0){
         res.innerText = "⚠️ 주의";
         res.style.color = "#f57c00";
@@ -396,7 +345,6 @@ function showResult(){
         res.innerText = "✅ 안전";
         res.style.color = "#388e3c";
     }
-
     let html = "<b>체크된 위험 항목:</b><br>";
     if(selectedRisks.length === 0) html += "의심 징후가 없습니다.";
     else selectedRisks.forEach((v, idx) => html += `${idx+1}. ${v}<br>`);
