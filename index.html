@@ -269,7 +269,7 @@ document.getElementById("videoBtn").onclick = function(){
     const startBtn = document.getElementById("startBtn");
     const interval = setInterval(() => {
         timer--;
-        startBtn.innerText = `안내 영상 시청 중 (${timer}초)`;
+        startBtn.innerText = `영상 시청 중 (${timer}초)`;
         if(timer <= 0) {
             clearInterval(interval);
             startBtn.disabled = false;
