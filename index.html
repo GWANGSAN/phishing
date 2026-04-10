@@ -7,10 +7,10 @@
 <title>보이스피싱 예방 진단 시스템</title>
 
 <style>
-/* 📱 모바일 최적화 및 가독성 설정 */
+/* 📱 모바일 최적화 고급 설정 */
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     background: #f0f2f5;
     color: #111;
     line-height: 1.6;
@@ -21,117 +21,125 @@ body {
 .header {
     background: #002b5c;
     color: white;
-    padding: 18px 10px;
+    padding: 20px 10px;
     text-align: center;
     font-weight: 800;
-    font-size: 1.2rem;
-    position: sticky; /* 상단 고정 */
+    font-size: 1.25rem;
+    position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .container {
     max-width: 480px;
     margin: 0 auto;
-    padding: 15px;
+    padding: 15px 12px; /* 좌우 여백 미세 조정 */
 }
 
 .card {
     background: white;
-    border-radius: 20px;
-    padding: 25px 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 24px; /* 곡률을 높여 더 부드러운 느낌 */
+    padding: 30px 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
     display: flex;
     flex-direction: column;
+    min-height: 70vh; /* 모바일에서 카드 높이 일관성 유지 */
 }
 
 h2 { 
     color: #002b5c; 
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: center; 
     font-weight: 900;
+    letter-spacing: -0.5px;
 }
 
 p {
-    font-size: 1.2rem;
-    margin-bottom: 1.2rem;
+    font-size: 1.25rem;
+    margin-bottom: 1.3rem;
     color: #333;
 }
 
-/* 🔘 버튼 최적화 */
+/* 🔘 모바일 전용 버튼 설계 */
 button {
     width: 100%;
-    padding: 18px;
-    margin-top: 10px;
+    padding: 22px 15px; /* 터치 영역 확대 */
+    margin-top: 12px;
     border: none;
-    border-radius: 15px;
-    font-size: 1.3rem;
+    border-radius: 18px;
+    font-size: 1.35rem;
     font-weight: 800;
     cursor: pointer;
     box-sizing: border-box;
-    transition: transform 0.1s, opacity 0.2s;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 button:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
+    filter: brightness(0.9);
 }
 
 button:disabled {
-    background: #ccc !important;
-    color: #888;
-    cursor: not-allowed;
+    background: #d1d5db !important;
+    color: #9ca3af;
+    box-shadow: none;
 }
 
 .primary { background: #002b5c; color: white; }
 .video { background: linear-gradient(135deg, #d32f2f, #b71c1c); color: white; }
-.btn-yes { background: #e53935; color: white; margin-bottom: 12px; }
+.btn-yes { background: #e53935; color: white; margin-bottom: 15px; } /* 버튼 간격 확대 */
 .btn-no { background: #1e88e5; color: white; }
 
-/* 💰 피해 사례 시각화 강화 */
+/* 💰 사례 가독성 최적화 */
 .caseItem {
-    padding: 15px;
-    border-radius: 15px;
+    padding: 18px;
+    border-radius: 18px;
     margin-bottom: 15px;
-    background: #fdfdfd;
-    border: 1px solid #eee;
+    background: #ffffff;
+    border: 1px solid #eaeaea;
 }
 
-.caseTitle { font-weight: 800; font-size: 1.15rem; color: #002b5c; margin-bottom: 5px; }
-.caseDate { font-size: 1rem; color: #777; }
+.caseTitle { font-weight: 800; font-size: 1.15rem; color: #002b5c; margin-bottom: 6px; }
+.caseDate { font-size: 1rem; color: #888; }
 
 .caseMoney {
     display: block;
-    margin-top: 10px;
-    padding: 12px;
-    font-size: 1.7rem;
+    margin-top: 12px;
+    padding: 14px;
+    font-size: 1.75rem;
     font-weight: 900;
     color: #ffffff;
     background: #d32f2f;
-    border-radius: 12px;
+    border-radius: 14px;
     text-align: center;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
 }
 
-/* 📒 설명창 가독성 최적화 */
+/* 📒 설명창 모바일 가독성 */
 .descBox {
     margin-top: 25px;
-    padding: 20px;
+    padding: 22px;
     background: #fff9c4;
-    border-radius: 12px;
+    border-radius: 16px;
     font-size: 1.25rem;
     color: #111;
     border-left: 8px solid #fbc02d;
     font-weight: 700;
+    box-shadow: 0 4px 10px rgba(251, 192, 45, 0.1);
 }
 
 .action-list {
     text-align: left;
     background: #fff5f5;
-    padding: 20px;
-    border-radius: 15px;
+    padding: 22px;
+    border-radius: 20px;
     border: 2px solid #ffcccc;
     margin-top: 25px;
 }
@@ -149,19 +157,19 @@ button:disabled {
 
 .hidden { display: none; }
 
-/* 애니메이션 및 효과 */
+/* 애니메이션 */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
-.fade-in { animation: fadeIn 0.4s ease-out forwards; }
+.fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
 @keyframes blink {
     0% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
-.blink { animation: blink 1s infinite; }
+.blink { animation: blink 1.2s infinite; }
 
 #result.danger-text {
     font-size: 3.5rem;
@@ -169,35 +177,32 @@ button:disabled {
 }
 
 .danger-phone {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
     color: #d32f2f;
-    background: yellow;
-    padding: 2px 6px;
-    border-radius: 5px;
+    background: #ffeb3b;
+    padding: 2px 8px;
+    border-radius: 6px;
 }
 
 #timerText {
     text-align: center;
     margin-top: 20px;
     color: #d32f2f;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: bold;
 }
 
-/* 유튜브 비율 최적화 */
 .video-wrap {
     position: relative;
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
-    border-radius: 15px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .video-wrap iframe {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
 }
 </style>
 </head>
@@ -211,17 +216,17 @@ button:disabled {
         
         <div id="intro">
             <h2>보이스피싱 진단</h2>
-            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-            <p style="text-align: center; font-weight:bold;">영상을 끝까지 시청해 주세요.</p>
+            <p style="text-align: center; font-weight: 500;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+            <p style="text-align: center; font-weight:bold; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
             <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
             
-            <div id="videoBox" class="hidden" style="margin-top:15px;">
+            <div id="videoBox" class="hidden" style="margin-top:20px;">
                 <div class="video-wrap">
                     <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
+            <button id="startBtn" class="primary" style="margin-top:25px;" disabled>안내 영상을 시청 중입니다</button>
         </div>
 
         <div id="caseScreen" class="hidden">
@@ -242,23 +247,23 @@ button:disabled {
                     <div class="caseMoney">피해금 1,600만 원</div>
                 </div>
             </div>
-            <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
+            <button id="caseNextBtn" class="primary" style="margin-top:10px;">내 상황 진단하기 (클릭)</button>
         </div>
 
         <div id="quiz" class="hidden">
-            <div id="question" style="font-size:1.5rem; font-weight:900; margin-bottom:25px; line-height:1.5; color:#002b5c;"></div>
+            <div id="question" style="font-size:1.55rem; font-weight:900; margin-bottom:30px; line-height:1.5; color:#002b5c; text-shadow: 0 1px 1px rgba(0,0,0,0.05);"></div>
             <div id="choices"></div>
             <div id="descBox" class="descBox hidden"></div>
-            <div id="timerText" class="hidden">안내를 읽으시면 버튼이 생성됩니다...</div>
-            <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+            <div id="timerText" class="hidden">설명을 읽으시면 버튼이 생성됩니다...</div>
+            <button id="nextBtn" class="primary hidden" style="margin-top:20px;">다음 질문 이동 ▶</button>
         </div>
 
         <div id="resultBox" class="hidden">
             <h2>진단 결과</h2>
-            <div id="result" style="font-size:2.5rem; font-weight:900; text-align:center; margin:30px 0;"></div>
+            <div id="result" style="font-size:2.8rem; font-weight:900; text-align:center; margin:35px 0;"></div>
             
             <div id="dangerActions" class="action-list hidden">
-                <strong style="color:#d32f2f; font-size:1.3rem;">📢 현장 경찰관 조치 가이드</strong>
+                <strong style="color:#d32f2f; font-size:1.35rem;">📢 현장 경찰관 조치 가이드</strong>
                 <ul>
                     <li>대상자는 <b>피싱피해자</b>입니다.</li>
                     <li>대상자의 <b>휴대전화를 비행기모드로</b> 전환</li>
@@ -266,15 +271,14 @@ button:disabled {
                 </ul>
             </div>
 
-            <div id="detailResult" style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:12px; font-size:1.2rem; border:1px solid #ddd;"></div>
-            <button class="primary" onclick="location.reload()" style="margin-top:30px; background:#555;">처음부터 다시하기</button>
+            <div id="detailResult" style="margin-top:25px; padding:20px; background:#f8f9fa; border-radius:18px; font-size:1.2rem; border:1px solid #eaeaea;"></div>
+            <button class="primary" onclick="location.reload()" style="margin-top:35px; background:#6b7280;">처음부터 다시하기</button>
         </div>
 
     </div>
 </div>
 
 <script>
-// 기존 데이터 그대로 유지
 const questions = [
     { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
@@ -314,7 +318,7 @@ document.getElementById("videoBtn").onclick = function(){
 document.getElementById("startBtn").onclick = () => {
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("caseScreen").classList.remove("hidden");
-    window.scrollTo(0,0);
+    window.scrollTo({top: 0, behavior: 'smooth'});
 };
 
 document.getElementById("caseNextBtn").onclick = () => {
@@ -324,7 +328,7 @@ document.getElementById("caseNextBtn").onclick = () => {
 };
 
 function loadQ(){
-    window.scrollTo(0,0);
+    window.scrollTo({top: 0, behavior: 'smooth'});
     const q = questions[index];
     document.getElementById("question").innerText = q.q;
     const c = document.getElementById("choices");
@@ -374,7 +378,7 @@ document.getElementById("nextBtn").onclick = () => {
 };
 
 function showResult(){
-    window.scrollTo(0,0);
+    window.scrollTo({top: 0, behavior: 'smooth'});
     document.getElementById("quiz").classList.add("hidden");
     document.getElementById("resultBox").classList.remove("hidden");
     const res = document.getElementById("result");
