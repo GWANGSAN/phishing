@@ -229,17 +229,17 @@ button:disabled {
             <div class="caseBox">
                 <div class="caseItem">
                     <div class="caseTitle">2025년 광주청 피해현황</div>
-                    <div class="caseMoney">💸 피해금 279억 원</div>
+                    <div class="caseMoney">피해금 279억 원</div>
                 </div>
                 <div class="caseItem">
                     <div class="caseTitle">1. 검찰사칭 피해 - 자산검수</div>
                     <div class="caseDate">2026. 4.</div>
-                    <div class="caseMoney">💸 피해금 1억 원</div>
+                    <div class="caseMoney">피해금 1억 원</div>
                 </div>
                 <div class="caseItem">
                     <div class="caseTitle">2. 대출사칭 피해 - 계약위반</div>
                     <div class="caseDate">2026. 2.</div>
-                    <div class="caseMoney">💸 피해금 1,600만 원</div>
+                    <div class="caseMoney">피해금 1,600만 원</div>
                 </div>
             </div>
             <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
@@ -262,7 +262,7 @@ button:disabled {
                 <ul>
                     <li>대상자는 <b>피싱피해자</b>입니다.</li>
                     <li>대상자의 <b>휴대전화를 비행기모드로</b> 전환</li>
-                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b> 연락</li>
+                    <li>피싱팀 <b class="danger-phone">010-7489-8609</b> 연락바랍니다.</li>
                 </ul>
             </div>
 
@@ -297,11 +297,11 @@ document.getElementById("videoBtn").onclick = function(){
     document.getElementById("videoBox").classList.remove("hidden");
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&rel=0";
     
-    let timer = 15;
+    let timer = 20;
     const startBtn = document.getElementById("startBtn");
     const interval = setInterval(() => {
         timer--;
-        startBtn.innerText = `안내 영상 시청 중 (${timer}초)`;
+        startBtn.innerText = `영상 시청 중 (${timer}초)`;
         if(timer <= 0) {
             clearInterval(interval);
             startBtn.disabled = false;
