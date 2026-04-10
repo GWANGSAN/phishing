@@ -137,6 +137,7 @@ button {
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 
+/* 영상 컨테이너 스타일 */
 .video-wrap {
     position: relative;
     padding-bottom: 56.25%;
@@ -144,8 +145,23 @@ button {
     border-radius: 15px;
     overflow: hidden;
     border: 2px solid #002b5c;
+    background: #000;
 }
 .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+/* 전체화면 모드일 때 타이머 글자 스타일 */
+#fullscreenTimer {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    z-index: 9999;
+    text-shadow: 2px 2px 4px #000;
+    display: none;
+}
 </style>
 </head>
 
@@ -160,10 +176,11 @@ button {
             <h2>보이스피싱 진단</h2>
             <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
             <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
-            <button class="video" id="videoBtn">▶ 교육 영상 시청 (자동재생)</button>
-            <div id="videoBox" class="hidden" style="margin-top:15px;">
-                <div class="video-wrap">
-                    <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
+            <div id="videoBox" class="hidden" style="margin-top:15px; position: relative;">
+                <div id="fullscreenTimer">시청 완료 후 자동 전환됩니다 (<span id="count">20</span>초)</div>
+                <div class="video-wrap" id="vFrameContainer">
+                    <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
                 </div>
             </div>
             <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
@@ -230,7 +247,7 @@ button {
 </div>
 
 <script>
-// 원본 질문 데이터 엄격 유지
+// 질문 데이터 유지
 const questions = [
     { q:"질문 1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 전화를 받은 적이 있습니까?", choices:["예 (받았음)","아니오"], answer:1, desc:"개인정보를 탈취하기 위한 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"질문 2. '명의도용', '범죄 연루' 등 무서운 용어를 사용하며 공포를 조성합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 사건 내용을 설명하거나 협박하지 않습니다.", risk:5 },
@@ -249,29 +266,40 @@ let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
+// 📺 전체화면 및 화면 전환 기능 로직
 document.getElementById("videoBtn").onclick = function(){
-    document.getElementById("videoBox").classList.remove("hidden");
-    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&rel=0";
+    const videoBox = document.getElementById("videoBox");
+    const container = document.getElementById("vFrameContainer");
+    const timerText = document.getElementById("fullscreenTimer");
+    
+    videoBox.classList.remove("hidden");
+    timerText.style.display = "block";
+    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
+
+    // 전체화면 요청
+    if (container.requestFullscreen) { container.requestFullscreen(); }
+    else if (container.webkitRequestFullscreen) { container.webkitRequestFullscreen(); }
+    else if (container.msRequestFullscreen) { container.msRequestFullscreen(); }
+
     let timer = 20;
-    const startBtn = document.getElementById("startBtn");
+    const countDisplay = document.getElementById("count");
     const interval = setInterval(() => {
         timer--;
-        startBtn.innerText = `영상 시청 중 (${timer}초)`;
+        countDisplay.innerText = timer;
         if(timer <= 0) {
             clearInterval(interval);
-            startBtn.disabled = false;
-            startBtn.innerText = "진단 시작하기";
-            startBtn.classList.add("blink");
+            // 전체화면 해제
+            if (document.exitFullscreen) { document.exitFullscreen(); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+            // 화면 전환
+            document.getElementById("intro").classList.add("hidden");
+            document.getElementById("caseScreen").classList.remove("hidden");
+            window.scrollTo(0,0);
         }
     }, 1000);
 };
 
-document.getElementById("startBtn").onclick = () => {
-    document.getElementById("intro").classList.add("hidden");
-    document.getElementById("caseScreen").classList.remove("hidden");
-    window.scrollTo(0,0);
-};
-
+// 이하 기존 로직 엄격 유지
 document.getElementById("caseNextBtn").onclick = () => {
     document.getElementById("caseScreen").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
