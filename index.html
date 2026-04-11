@@ -425,8 +425,8 @@ document.getElementById("nextBtn").onclick = () => {
         showScreen('reWatchScreen');
         document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75";
         
-        // 영상 종료 대기 로직 (15초 대기)
-        let vTimer = 15;
+        // 영상 종료 대기 로직 (10초 대기)
+        let vTimer = 10;
         const vInterval = setInterval(() => {
             vTimer--;
             document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
