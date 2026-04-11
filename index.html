@@ -7,7 +7,7 @@
 <title>보이스피싱 예방 진단 시스템</title>
 
 <style>
-/* 기본 디자인 유지 */
+/* 기존 스타일 유지 */
 body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background: #f0f2f5; color: #111; line-height: 1.5; word-break: keep-all; -webkit-tap-highlight-color: transparent; }
 .header { background: #002b5c; color: white; padding: 22px 10px; text-align: center; font-weight: 900; font-size: 1.5rem; position: sticky; top: 0; z-index: 1000; }
 .container { max-width: 500px; margin: 0 auto; padding: 15px; }
@@ -29,7 +29,7 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 
-/* 📺 영상 박스 및 제목 스타일 */
+/* 📺 영상 박스 스타일 */
 .video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid #d32f2f; background: #000; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -39,6 +39,9 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
 .report-item { background: #fff; border: 2px solid #d32f2f; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
 .report-q { font-size: 1.2rem; color: #333; font-weight: 800; margin-bottom: 8px; }
 .report-desc { font-size: 1.4rem; color: #d32f2f; font-weight: 900; background: #fff3f3; padding: 10px; border-radius: 8px; border-left: 5px solid #d32f2f; }
+
+/* 🔗 공유 버튼 스타일 추가 */
+.share-btn { background: #fee500; color: #3c1e1e; border: 2px solid #3c1e1e; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 </style>
 </head>
 
@@ -76,17 +79,14 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
             <div id="quiz" class="hidden">
                 <div id="question" style="font-size:1.7rem; font-weight:900; margin-bottom:25px; color:#002b5c;"></div>
                 <div id="choices"></div>
-                
                 <div id="quizVideoBox" class="video-box hidden">
                     <div id="videoTitle" class="video-label">실제 보이스피싱 통화 내용</div>
                     <div class="video-container"><iframe id="quizFrame" src="" frameborder="0" allowfullscreen></iframe></div>
-                    
                     <div id="multiVideoBtns" class="hidden" style="padding:10px; background:#fff; display:flex; flex-direction:column; gap:10px;">
                         <button onclick="playQuizVideo('vNsf2p9CDZQ')" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 1)</button>
                         <button onclick="playQuizVideo('CvEsZdEL00I')" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 2)</button>
                     </div>
                 </div>
-
                 <div id="descBox" class="descBox hidden"></div>
                 <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:#d32f2f; font-weight:bold;">잠시만 기다려주세요...</div>
                 <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
@@ -122,7 +122,12 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
                         <li>피싱팀 직통번호: <b>010-7489-8609</b></li>
                     </ul>
                 </div>
-                <button class="primary" onclick="location.reload()" style="margin-top:30px; background:#666;">다시 처음으로</button>
+
+                <button class="share-btn" onclick="shareSystem()">
+                    <span>💬 가족·지인에게 공유하기</span>
+                </button>
+
+                <button class="primary" onclick="location.reload()" style="margin-top:15px; background:#666;">다시 처음으로</button>
             </div>
 
         </div>
@@ -130,7 +135,6 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
 </div>
 
 <script>
-// [수정] 질문별 영상 제목(vTitle) 데이터 추가
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
     { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5, videoId:"MULTI", vTitle:"📽️ 수사기관, 검찰 사칭 보이스피싱" },
@@ -148,7 +152,6 @@ let index = 0;
 let selectedRisks = []; 
 let highRiskDetected = false;
 
-// 인트로 영상 제어
 document.getElementById("videoBtn").onclick = function(){
     const vBox = document.getElementById("introVideoBox");
     const container = document.getElementById("vFrameContainer");
@@ -198,25 +201,20 @@ function answer(i){
         selectedRisks.push({q: q.q, desc: q.desc});
         if(q.risk >= 4) highRiskDetected = true;
     }
-    
     document.getElementById("descBox").innerText = q.desc;
     document.getElementById("descBox").classList.remove("hidden");
     document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
-
-    // [수정] 영상 및 제목 노출 로직
     if(q.videoId) {
         document.getElementById("quizVideoBox").classList.remove("hidden");
-        document.getElementById("videoTitle").innerText = q.vTitle; // 제목 설정
-        
+        document.getElementById("videoTitle").innerText = q.vTitle;
         if(q.videoId === "MULTI") {
             document.getElementById("multiVideoBtns").classList.remove("hidden");
-            playQuizVideo('vNsf2p9CDZQ'); // 기본 첫 영상 재생
+            playQuizVideo('vNsf2p9CDZQ');
         } else {
             document.getElementById("multiVideoBtns").classList.add("hidden");
             playQuizVideo(q.videoId);
         }
     }
-
     const timerText = document.getElementById("timerText");
     timerText.classList.remove("hidden");
     setTimeout(() => { timerText.classList.add("hidden"); document.getElementById("nextBtn").classList.remove("hidden"); }, 2000); 
@@ -243,7 +241,6 @@ function showResult(){
     if(highRiskDetected){ res.innerText = "🚨 고위험"; res.style.color = "#d32f2f"; }
     else if(selectedRisks.length > 0){ res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; }
     else { res.innerText = "✅ 안전"; res.style.color = "#388e3c"; document.getElementById("goGuideBtn").innerText = "처음으로 돌아가기"; }
-
     let reportArea = document.getElementById("detailResult");
     reportArea.innerHTML = "";
     if(selectedRisks.length === 0) {
@@ -266,6 +263,30 @@ document.getElementById("goGuideBtn").onclick = () => {
         window.scrollTo(0,0);
     }
 };
+
+// [추가] 공유하기 기능 함수
+function shareSystem() {
+    const shareData = {
+        title: '보이스피싱 예방 진단 시스템',
+        text: '[광주광산경찰서] 실제 보이스피싱 통화 영상을 시청하고 나의 위험도를 진단해보세요!',
+        url: window.location.href
+    };
+
+    if (navigator.share) {
+        navigator.share(shareData)
+            .then(() => console.log('공유 성공'))
+            .catch((error) => console.log('공유 실패', error));
+    } else {
+        // 공유 기능을 지원하지 않는 경우 주소 복사
+        const tempInput = document.createElement("input");
+        document.body.appendChild(tempInput);
+        tempInput.value = window.location.href;
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("시스템 주소가 복사되었습니다.\n카카오톡이나 문자에 붙여넣어 공유해주세요!");
+    }
+}
 </script>
 </body>
 </html>
