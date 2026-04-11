@@ -90,8 +90,6 @@ button {
 }
 
 .caseTitle { font-weight: 900; font-size: 1.3rem; color: #002b5c; }
-.caseDate { font-size: 1.1rem; color: #666; font-weight: bold; }
-
 .caseMoney {
     display: block;
     margin-top: 10px;
@@ -134,116 +132,101 @@ button {
 }
 
 .hidden { display: none; }
-.blink { animation: blink 1s infinite; }
-@keyframes blink { 50% { opacity: 0.5; } }
 
-/* 영상 컨테이너 스타일 */
-.video-wrap {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    border-radius: 15px;
-    overflow: hidden;
-    border: 2px solid #002b5c;
-    background: #000;
-}
-.video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
-/* 전체화면 모드일 때 타이머 글자 스타일 */
-#fullscreenTimer {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    z-index: 9999;
-    text-shadow: 2px 2px 4px #000;
+/* 📺 진짜 전체화면(기기 전체) 전용 레이어 */
+#fullVideoOverlay {
     display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: black;
+    z-index: 9999;
 }
+#fullVideoOverlay iframe { width: 100%; height: 80%; border: none; }
+.overlay-text { color: white; text-align: center; padding: 20px; font-size: 1.4rem; font-weight: bold; }
+
 </style>
 </head>
 
 <body>
 
-<div class="header">🚔 광주광산경찰서 피싱범죄수사팀</div>
+<div id="mainUI">
+    <div class="header">🚔 광주광산경찰서 피싱범죄수사팀</div>
 
-<div class="container">
-    <div class="card">
-        
-        <div id="intro">
-            <h2>보이스피싱 진단</h2>
-            <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-            <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
-            <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
-            <div id="videoBox" class="hidden" style="margin-top:15px; position: relative;">
-                <div id="fullscreenTimer">시청 완료 후 자동 전환됩니다 (<span id="count">20</span>초)</div>
-                <div class="video-wrap" id="vFrameContainer">
-                    <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                </div>
+    <div class="container">
+        <div class="card">
+            
+            <div id="intro">
+                <h2>보이스피싱 진단</h2>
+                <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+                <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
+                <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
+                <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
             </div>
-            <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
-        </div>
 
-        <div id="caseScreen" class="hidden">
-            <h2>🚨 실제 피해 사례</h2>
-            <div class="caseBox">
-                <div class="caseItem" style="margin-bottom:20px;">
-                    <p style="font-size:1.2rem; margin-bottom:5px;">2025년 광주청 피해액</p>
-                    <div class="caseMoney">총 279억 원</div>
+            <div id="caseScreen" class="hidden">
+                <h2>🚨 실제 피해 사례</h2>
+                <div class="caseBox">
+                    <div class="caseItem" style="margin-bottom:20px;">
+                        <p style="font-size:1.2rem; margin-bottom:5px;">2025년 광주청 피해액</p>
+                        <div class="caseMoney">총 279억 원</div>
+                    </div>
+                    <div class="caseItem" style="margin-bottom:20px;">
+                        <p style="font-size:1.2rem; margin-bottom:5px;">검찰사칭 - 자산검수(26년 4월)</p>
+                        <div class="caseMoney">피해금 1억 원</div>
+                    </div>
+                    <div class="caseItem" style="margin-bottom:20px;">
+                        <p style="font-size:1.2rem; margin-bottom:5px;">대출사칭 - 계약위반(26년 2월)</p>
+                        <div class="caseMoney">피해금 1,600만 원</div>
+                    </div>
                 </div>
-                <div class="caseItem" style="margin-bottom:20px;">
-                    <p style="font-size:1.2rem; margin-bottom:5px;">검찰사칭 - 자산검수(26년 4월)</p>
-                    <div class="caseMoney">피해금 1억 원</div>
-                </div>
-                <div class="caseItem" style="margin-bottom:20px;">
-                    <p style="font-size:1.2rem; margin-bottom:5px;">대출사칭 - 계약위반(26년 2월)</p>
-                    <div class="caseMoney">피해금 1,600만 원</div>
-                </div>
+                <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
             </div>
-            <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
-        </div>
 
-        <div id="quiz" class="hidden">
-            <div id="question" style="font-size:1.7rem; font-weight:900; margin-bottom:25px; color:#002b5c;"></div>
-            <div id="choices"></div>
-            <div id="descBox" class="descBox hidden"></div>
-            <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:#d32f2f; font-weight:bold;">잠시만 기다려주세요...</div>
-            <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
-        </div>
+            <div id="quiz" class="hidden">
+                <div id="question" style="font-size:1.7rem; font-weight:900; margin-bottom:25px; color:#002b5c;"></div>
+                <div id="choices"></div>
+                <div id="descBox" class="descBox hidden"></div>
+                <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:#d32f2f; font-weight:bold;">잠시만 기다려주세요...</div>
+                <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+            </div>
 
-        <div id="preventionScreen" class="hidden">
-            <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 예방 완결편</h2>
-            <p style="text-align:center; font-weight:900;">결과 확인 전 꼭 기억하세요!</p>
-            <div>
-                <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
-                <div class="prevent-item">
-                    2. 보안위험자동차단 설정
-                    <span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span>
+            <div id="preventionScreen" class="hidden">
+                <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 예방 완결편</h2>
+                <p style="text-align:center; font-weight:900;">결과 확인 전 꼭 기억하세요!</p>
+                <div>
+                    <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
+                    <div class="prevent-item">
+                        2. 보안위험자동차단 설정
+                        <span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span>
+                    </div>
+                    <div class="prevent-item">3. 휴대전화 소액결제 원천차단</div>
+                    <div class="prevent-item">4. 명의도용방지 가입제한 설정</div>
+                    <div class="prevent-item">5. 여신거래안심차단, 비대면계좌개설차단</div>
                 </div>
-                <div class="prevent-item">3. 휴대전화 소액결제 원천차단</div>
-                <div class="prevent-item">4. 명의도용방지 가입제한 설정</div>
-                <div class="prevent-item">5. 여신거래안심차단, 비대면계좌개설차단</div>
+                <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
             </div>
-            <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
-        </div>
 
-        <div id="resultBox" class="hidden">
-            <h2>진단 결과</h2>
-            <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin:30px 0;"></div>
-            <div id="dangerActions" class="hidden" style="background:#fff5f5; padding:20px; border-radius:20px; border:4px solid #d32f2f;">
-                <strong style="color:#d32f2f; font-size:1.6rem;">📢 경찰관 조치 가이드</strong>
-                <ul style="font-size:1.4rem; font-weight:bold; margin-top:10px;">
-                    <li>휴대전화를 <b>비행기모드</b>로 전환</li>
-                    <li>피싱팀 <span style="background:yellow;">010-7489-8609</span> 연락</li>
-                </ul>
+            <div id="resultBox" class="hidden">
+                <h2>진단 결과</h2>
+                <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin:30px 0;"></div>
+                <div id="dangerActions" class="hidden" style="background:#fff5f5; padding:20px; border-radius:20px; border:4px solid #d32f2f;">
+                    <strong style="color:#d32f2f; font-size:1.6rem;">📢 경찰관 조치 가이드</strong>
+                    <ul style="font-size:1.4rem; font-weight:bold; margin-top:10px;">
+                        <li>휴대전화를 <b>비행기모드</b>로 전환</li>
+                        <li>피싱팀 <span style="background:yellow;">010-7489-8609</span> 연락</li>
+                    </ul>
+                </div>
+                <div id="detailResult" style="margin-top:20px; padding:20px; background:#f8f9fa; border-radius:12px; font-size:1.4rem; border:1px solid #ddd;"></div>
+                <button class="primary" onclick="location.reload()" style="margin-top:30px; background:#666;">다시 처음으로</button>
             </div>
-            <div id="detailResult" style="margin-top:20px; padding:20px; background:#f8f9fa; border-radius:12px; font-size:1.4rem; border:1px solid #ddd;"></div>
-            <button class="primary" onclick="location.reload()" style="margin-top:30px; background:#666;">다시 처음으로</button>
         </div>
-
     </div>
+</div>
+
+<div id="fullVideoOverlay">
+    <div class="overlay-text">시청 완료 후 자동으로 진단이 시작됩니다.<br>(<span id="count">20</span>초 남음)</div>
+    <iframe id="ytFrame" src="" allow="autoplay; fullscreen"></iframe>
 </div>
 
 <script>
@@ -260,25 +243,22 @@ const questions = [
     { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
     { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], answer:1, desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다. 돈을 요구한다면 그건 100% 보이스피싱입니다.", risk:5 },
 ];
-    
+
 let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
-// 📺 전체화면 및 화면 전환 기능 로직
+// 📺 전체화면 및 자동 전환 로직
 document.getElementById("videoBtn").onclick = function(){
-    const videoBox = document.getElementById("videoBox");
-    const container = document.getElementById("vFrameContainer");
-    const timerText = document.getElementById("fullscreenTimer");
+    const overlay = document.getElementById("fullVideoOverlay");
+    overlay.style.display = "block";
     
-    videoBox.classList.remove("hidden");
-    timerText.style.display = "block";
+    // 유튜브 소스 삽입 (자동재생)
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
 
-    // 전체화면 요청
-    if (container.requestFullscreen) { container.requestFullscreen(); }
-    else if (container.webkitRequestFullscreen) { container.webkitRequestFullscreen(); }
-    else if (container.msRequestFullscreen) { container.msRequestFullscreen(); }
+    // 브라우저 전체화면 요청 (휴대폰 화면 꽉 채우기)
+    if (overlay.requestFullscreen) { overlay.requestFullscreen(); }
+    else if (overlay.webkitRequestFullscreen) { overlay.webkitRequestFullscreen(); } // iOS/Safari 대응
 
     let timer = 20;
     const countDisplay = document.getElementById("count");
@@ -290,7 +270,9 @@ document.getElementById("videoBtn").onclick = function(){
             // 전체화면 해제
             if (document.exitFullscreen) { document.exitFullscreen(); }
             else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
-            // 화면 전환
+            
+            // UI 전환
+            overlay.style.display = "none";
             document.getElementById("intro").classList.add("hidden");
             document.getElementById("caseScreen").classList.remove("hidden");
             window.scrollTo(0,0);
