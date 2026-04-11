@@ -132,6 +132,8 @@ button {
 }
 
 .hidden { display: none; }
+.blink { animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.5; } }
 
 /* 📺 진짜 전체화면(기기 전체) 전용 레이어 */
 #fullVideoOverlay {
@@ -142,8 +144,12 @@ button {
     background: black;
     z-index: 9999;
 }
-#fullVideoOverlay iframe { width: 100%; height: 80%; border: none; }
-.overlay-text { color: white; text-align: center; padding: 20px; font-size: 1.4rem; font-weight: bold; }
+#fullVideoOverlay iframe { width: 100%; height: 100%; border: none; }
+.overlay-text { 
+    position: absolute; top: 10px; width: 100%; 
+    color: white; text-align: center; font-size: 1.2rem; font-weight: bold; 
+    background: rgba(0,0,0,0.5); padding: 10px 0; z-index: 10;
+}
 
 </style>
 </head>
@@ -160,7 +166,7 @@ button {
                 <h2>보이스피싱 진단</h2>
                 <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
                 <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
-                <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
+                <button class="video" id="videoBtn">▶ 교육 영상 시청 (가로 전체화면)</button>
                 <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
             </div>
 
@@ -225,12 +231,12 @@ button {
 </div>
 
 <div id="fullVideoOverlay">
-    <div class="overlay-text">시청 완료 후 자동으로 진단이 시작됩니다.<br>(<span id="count">20</span>초 남음)</div>
+    <div class="overlay-text">영상 시청 중... <span id="count">20</span>초 후 버튼이 활성화됩니다.</div>
     <iframe id="ytFrame" src="" allow="autoplay; fullscreen"></iframe>
 </div>
 
 <script>
-// 질문 데이터 유지
+// 질문 데이터 엄격 유지
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5 },
@@ -248,17 +254,24 @@ let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
-// 📺 전체화면 및 자동 전환 로직
+// 📺 가로 전체화면 및 버튼 활성화 로직
 document.getElementById("videoBtn").onclick = function(){
     const overlay = document.getElementById("fullVideoOverlay");
+    const startBtn = document.getElementById("startBtn");
     overlay.style.display = "block";
     
-    // 유튜브 소스 삽입 (자동재생)
-    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
+    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0&controls=0";
 
-    // 브라우저 전체화면 요청 (휴대폰 화면 꽉 채우기)
-    if (overlay.requestFullscreen) { overlay.requestFullscreen(); }
-    else if (overlay.webkitRequestFullscreen) { overlay.webkitRequestFullscreen(); } // iOS/Safari 대응
+    // 전체화면 및 가로모드 요청
+    if (overlay.requestFullscreen) {
+        overlay.requestFullscreen().then(() => {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(e => console.log("방향 고정 미지원"));
+            }
+        });
+    } else if (overlay.webkitRequestFullscreen) {
+        overlay.webkitRequestFullscreen();
+    }
 
     let timer = 20;
     const countDisplay = document.getElementById("count");
@@ -268,19 +281,29 @@ document.getElementById("videoBtn").onclick = function(){
         if(timer <= 0) {
             clearInterval(interval);
             // 전체화면 해제
-            if (document.exitFullscreen) { document.exitFullscreen(); }
-            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+            if (document.exitFullscreen) { 
+                document.exitFullscreen(); 
+                if (screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
+            } else if (document.webkitExitFullscreen) { 
+                document.webkitExitFullscreen(); 
+            }
             
-            // UI 전환
+            // UI 복귀
             overlay.style.display = "none";
-            document.getElementById("intro").classList.add("hidden");
-            document.getElementById("caseScreen").classList.remove("hidden");
+            startBtn.disabled = false;
+            startBtn.innerText = "진단 시작하기 (클릭)";
+            startBtn.classList.add("blink");
             window.scrollTo(0,0);
         }
     }, 1000);
 };
 
-// 이하 기존 로직 엄격 유지
+// 단계별 진행 로직
+document.getElementById("startBtn").onclick = () => {
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("caseScreen").classList.remove("hidden");
+};
+
 document.getElementById("caseNextBtn").onclick = () => {
     document.getElementById("caseScreen").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
