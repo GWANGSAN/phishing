@@ -35,6 +35,24 @@ body {
     top: 0; 
     z-index: 1000; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 뒤로가기 버튼 스타일 */
+.back-btn {
+    position: absolute;
+    left: 15px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    cursor: pointer;
+    display: none; /* 기본 숨김 */
 }
 
 .container { width: 100%; max-width: 500px; margin: 0 auto; box-sizing: border-box; }
@@ -49,6 +67,7 @@ body {
     display: flex; 
     flex-direction: column; 
     box-sizing: border-box;
+    position: relative;
 }
 
 h2 { color: var(--primary-color); font-size: 1.8rem; margin-bottom: 20px; text-align: center; font-weight: 900; line-height: 1.2; }
@@ -103,12 +122,15 @@ button {
 
 <body>
 
-<div class="header">🚔 광주광산경찰서 피싱범죄수사팀</div>
+<div class="header">
+    <button id="backBtn" class="back-btn" onclick="goBack()">◀</button>
+    <span>🚔 광주광산경찰서 피싱범죄수사팀</span>
+</div>
 
 <div class="container">
     <div class="card">
         
-        <div id="intro">
+        <div id="intro" class="screen">
             <h2>보이스피싱 진단</h2>
             <p>실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
             <p style="font-size: 1.1rem; color: #666; font-weight: normal;">영상 시청 후 진단을 시작해 주세요.</p>
@@ -122,7 +144,7 @@ button {
             <button id="startBtn" class="primary" style="margin-top:15px;" disabled>안내 영상을 시청해 주세요</button>
         </div>
 
-        <div id="caseScreen" class="hidden">
+        <div id="caseScreen" class="hidden screen">
             <h2>🚨 실제 피해 사례</h2>
             <div class="caseItem"><p style="font-size:1.1rem; margin-bottom:5px;">2025년 광주청 피해액</p><div class="caseMoney">총 279억 원</div></div>
             <div class="caseItem"><p style="font-size:1.1rem; margin-bottom:5px;">검찰사칭 - 자산검수(26년 4월)</p><div class="caseMoney">피해금 1억 원</div></div>
@@ -130,7 +152,7 @@ button {
             <button id="caseNextBtn" class="primary">내 상황 진단하기 (클릭)</button>
         </div>
 
-        <div id="quiz" class="hidden">
+        <div id="quiz" class="hidden screen">
             <div id="question"></div>
             <div id="choices"></div>
             <div id="dynamicVideoArea"></div>
@@ -139,19 +161,19 @@ button {
             <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
         </div>
 
-        <div id="reWatchScreen" class="hidden">
+        <div id="reWatchScreen" class="hidden screen">
             <h2 style="color:var(--danger-color);">📱 꼭 기억하세요!</h2>
             <div class="video-box">
-                <div class="video-label">의심스러운 전화는 '어서끊자'</div>
+                <div id="reWatchLabel" class="video-label">영상 시청 중 (대기...)</div>
                 <div class="video-container">
                     <iframe id="reWatchFrame" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
             <p style="text-align:center; font-size:1.3rem; margin-top:15px; font-weight:800;">영상을 시청하신 후<br>아래 버튼을 눌러주세요.</p>
-            <button id="toPreventionBtn" class="primary">예방 수칙 확인하기 ▶</button>
+            <button id="toPreventionBtn" class="primary" disabled style="background:#ccc;">영상을 시청해 주세요</button>
         </div>
 
-       <div id="preventionScreen" class="hidden">
+        <div id="preventionScreen" class="hidden screen">
             <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 보이스피싱 예방 완결편</h2>
             <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
             <div class="prevent-item">2. 확인할 땐 알려준 번호가 아닌 공식 고객센터로 연락</div>
@@ -163,14 +185,14 @@ button {
             <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
         </div>
 
-        <div id="resultBox" class="hidden">
+        <div id="resultBox" class="hidden screen">
             <h2>진단 결과</h2>
             <div id="result" style="font-size:3rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
             <div id="detailResult"></div>
             <button id="goFinalBtn" class="primary" style="margin-top:15px;"></button>
         </div>
 
-        <div id="finalGuideBox" class="hidden">
+        <div id="finalGuideBox" class="hidden screen">
             <h2 style="color:var(--danger-color);">🚨 긴급 조치 가이드</h2>
             <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color);">
                 <p style="font-size:1.4rem; color:var(--danger-color); text-align:center; font-weight:900;">지금 즉시 실행하세요!</p>
@@ -184,7 +206,7 @@ button {
             <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
         </div>
 
-        <div id="shareOnlyBox" class="hidden">
+        <div id="shareOnlyBox" class="hidden screen">
             <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
             <p style="font-size:1.4rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
             <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
@@ -209,12 +231,40 @@ const questions = [
 ];
 
 let index = 0, selectedRisks = [], highRiskDetected = false;
+let screenHistory = ['intro'];
 
+// 화면 전환 함수 (히스토리 관리 포함)
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(screenId).classList.remove('hidden');
+    
+    // 뒤로가기 버튼 노출 여부 제어
+    const backBtn = document.getElementById('backBtn');
+    if (screenId === 'intro' || screenId === 'shareOnlyBox' || screenId === 'finalGuideBox') {
+        backBtn.style.display = 'none';
+    } else {
+        backBtn.style.display = 'block';
+    }
+}
+
+function goBack() {
+    if (index > 0 && document.getElementById('quiz').classList.contains('hidden') === false) {
+        index--;
+        loadQ();
+    } else {
+        if (screenHistory.length > 1) {
+            screenHistory.pop();
+            showScreen(screenHistory[screenHistory.length - 1]);
+        }
+    }
+}
+
+// 1. 인트로 로직
 document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&rel=0";
-    let timer = 0;
+    let timer = 30;
     const interval = setInterval(() => {
         timer--;
         document.getElementById("count").innerText = timer;
@@ -229,9 +279,19 @@ document.getElementById("videoBtn").onclick = function(){
     }, 1000);
 };
 
-document.getElementById("startBtn").onclick = () => { document.getElementById("intro").classList.add("hidden"); document.getElementById("caseScreen").classList.remove("hidden"); };
-document.getElementById("caseNextBtn").onclick = () => { document.getElementById("caseScreen").classList.add("hidden"); document.getElementById("quiz").classList.remove("hidden"); loadQ(); };
+document.getElementById("startBtn").onclick = () => { 
+    screenHistory.push('caseScreen');
+    showScreen('caseScreen'); 
+};
 
+// 2. 사례 화면 로직
+document.getElementById("caseNextBtn").onclick = () => { 
+    screenHistory.push('quiz');
+    showScreen('quiz'); 
+    loadQ(); 
+};
+
+// 3. 퀴즈 로직
 function loadQ(){
     window.scrollTo(0,0);
     const q = questions[index];
@@ -277,22 +337,45 @@ function playVid(id) { const frame = document.getElementById("qFrame"); if(frame
 document.getElementById("nextBtn").onclick = () => {
     index++;
     if(index >= questions.length) { 
-        document.getElementById("quiz").classList.add("hidden"); 
-        document.getElementById("reWatchScreen").classList.remove("hidden"); 
+        screenHistory.push('reWatchScreen');
+        showScreen('reWatchScreen');
         document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75";
+        
+        // 영상 종료 대기 로직 (영상 플레이 시간이 충분하도록 15초 대기 설정)
+        let vTimer = 15;
+        const vInterval = setInterval(() => {
+            vTimer--;
+            document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
+            if(vTimer <= 0) {
+                clearInterval(vInterval);
+                document.getElementById("reWatchLabel").innerText = "영상 시청 완료 ✅";
+                const nextB = document.getElementById("toPreventionBtn");
+                nextB.disabled = false;
+                nextB.style.background = "var(--primary-color)";
+                nextB.innerText = "예방 수칙 확인하기 ▶";
+            }
+        }, 1000);
+
     } else { loadQ(); }
 };
 
-document.getElementById("toPreventionBtn").onclick = () => { document.getElementById("reWatchScreen").classList.add("hidden"); document.getElementById("preventionScreen").classList.remove("hidden"); };
+// 4. 재시청 -> 예방 수칙
+document.getElementById("toPreventionBtn").onclick = () => { 
+    screenHistory.push('preventionScreen');
+    showScreen('preventionScreen'); 
+};
 
-document.getElementById("resultBtn").onclick = () => { document.getElementById("preventionScreen").classList.add("hidden"); document.getElementById("resultBox").classList.remove("hidden"); showResult(); };
+// 5. 예방 수칙 -> 결과
+document.getElementById("resultBtn").onclick = () => { 
+    screenHistory.push('resultBox');
+    showScreen('resultBox'); 
+    showResult(); 
+};
 
 function showResult(){
     window.scrollTo(0,0);
     const res = document.getElementById("result");
     const finalBtn = document.getElementById("goFinalBtn");
-    
-    // 로직 적용: 안전 상태 체크
     const isSafe = !highRiskDetected && selectedRisks.length === 0;
 
     if(highRiskDetected){ 
@@ -326,17 +409,12 @@ function showResult(){
     }
 }
 
-// 결과 보기 버튼 클릭 시 분기 로직
 document.getElementById("goFinalBtn").onclick = () => {
-    document.getElementById("resultBox").classList.add("hidden");
     const isSafe = !highRiskDetected && selectedRisks.length === 0;
-
     if(isSafe) {
-        // 안전 상태 -> 바로 공유 화면
-        document.getElementById("shareOnlyBox").classList.remove("hidden");
+        showScreen('shareOnlyBox');
     } else {
-        // 주의/위험 상태 -> 긴급 조치 가이드
-        document.getElementById("finalGuideBox").classList.remove("hidden");
+        showScreen('finalGuideBox');
     }
     window.scrollTo(0,0);
 };
