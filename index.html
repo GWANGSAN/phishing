@@ -372,7 +372,7 @@ document.getElementById("videoBtn").onclick = function(){
     }, 1000);
 };
 
-document.getElementById("startBtn").onclick = () => { screenHistory.push('caseScreen'); showScreen('caseScreen'); };
+document.getElementById("startBtn").onclick = () => {document.getElementById("introFrame").src = ""; screenHistory.push('caseScreen'); showScreen('caseScreen'); };
 document.getElementById("caseNextBtn").onclick = () => { screenHistory.push('quiz'); showScreen('quiz'); loadQ(); };
 
 // 퀴즈 로직
