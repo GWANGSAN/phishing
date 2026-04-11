@@ -267,7 +267,7 @@ let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
-// 📺 가로 재생 -> 복구 후 계속 재생 -> 버튼 활성화
+// 📺 재생 제어
 document.getElementById("videoBtn").onclick = function(){
     const vBox = document.getElementById("videoBox");
     const container = document.getElementById("vFrameContainer");
@@ -276,8 +276,10 @@ document.getElementById("videoBtn").onclick = function(){
 
     videoBtn.classList.add("hidden");
     vBox.classList.remove("hidden");
+    // 유튜브 소스 삽입
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
 
+    // 전체화면 요청
     if (container.requestFullscreen) { 
         container.requestFullscreen().then(() => {
             if(screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(e=>{});
@@ -286,7 +288,7 @@ document.getElementById("videoBtn").onclick = function(){
         container.webkitRequestFullscreen();
     }
 
-    let timer = 30;
+    let timer = 20;
     const countDisplay = document.getElementById("count");
     const interval = setInterval(() => {
         timer--;
@@ -294,6 +296,7 @@ document.getElementById("videoBtn").onclick = function(){
         if(timer <= 0) {
             clearInterval(interval);
             
+            // 전체화면 해제
             if (document.exitFullscreen) { 
                 document.exitFullscreen(); 
                 if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
@@ -309,7 +312,9 @@ document.getElementById("videoBtn").onclick = function(){
     }, 1000);
 };
 
+// 🛑 핵심: 진단 시작하기 누르면 영상 멈춤(src 비우기)
 document.getElementById("startBtn").onclick = () => {
+    document.getElementById("ytFrame").src = ""; // 영상 주소를 비워 소리 차단
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("caseScreen").classList.remove("hidden");
 };
