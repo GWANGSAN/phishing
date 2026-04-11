@@ -133,7 +133,7 @@ function startIntroVideo() {
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&rel=0";
     
-    let timer = 20;
+    let timer = 0;
     const interval = setInterval(() => {
         document.getElementById("count").innerText = --timer;
         if(timer <= 0) {
