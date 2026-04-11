@@ -136,8 +136,8 @@ button {
     margin-top: 15px;
     border-radius: 15px;
     overflow: hidden;
-    border: 3px solid #002b5c;
-    position: relative;
+    border: 4px solid #002b5c;
+    background: #000;
 }
 
 .video-container {
@@ -152,15 +152,13 @@ button {
     width: 100%; height: 100%;
 }
 
-/* 전체화면 오버레이 텍스트 */
 #fsInfo {
-    position: fixed;
-    top: 20px; width: 100%;
-    text-align: center; color: white;
-    font-size: 1.2rem; font-weight: bold;
-    z-index: 10001; text-shadow: 2px 2px 5px black;
-    pointer-events: none;
-    display: none;
+    text-align: center;
+    background: #002b5c;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 </style>
 </head>
@@ -176,18 +174,18 @@ button {
             <div id="intro">
                 <h2>보이스피싱 진단</h2>
                 <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-                <p style="text-align: center; color: #d32f2f;">영상을 시청하면 버튼이 나타납니다.</p>
+                <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
                 
                 <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
 
                 <div id="videoBox" class="hidden">
-                    <div id="fsInfo">가로 화면 시청 중 (<span id="count">20</span>초)</div>
+                    <div id="fsInfo">안내 영상 시청 중 (<span id="count">20</span>초)</div>
                     <div class="video-container" id="vFrameContainer">
                         <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
                     </div>
                 </div>
 
-                <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청해 주세요</button>
+                <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
             </div>
 
             <div id="caseScreen" class="hidden">
@@ -251,6 +249,7 @@ button {
 </div>
 
 <script>
+// 원본 텍스트 데이터 엄격 유지
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5 },
@@ -268,21 +267,20 @@ let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
-// 📺 가로 전체화면 -> 복구 -> 버튼 활성화 로직
+// 📺 가로 재생 -> 복구 후 계속 재생 -> 버튼 활성화
 document.getElementById("videoBtn").onclick = function(){
     const vBox = document.getElementById("videoBox");
     const container = document.getElementById("vFrameContainer");
-    const info = document.getElementById("fsInfo");
     const startBtn = document.getElementById("startBtn");
+    const videoBtn = document.getElementById("videoBtn");
 
+    videoBtn.classList.add("hidden");
     vBox.classList.remove("hidden");
-    info.style.display = "block";
     document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
 
-    // 전체화면 요청 및 가로 고정 시도
     if (container.requestFullscreen) { 
         container.requestFullscreen().then(() => {
-            if(screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(e => {});
+            if(screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(e=>{});
         });
     } else if (container.webkitRequestFullscreen) {
         container.webkitRequestFullscreen();
@@ -296,7 +294,6 @@ document.getElementById("videoBtn").onclick = function(){
         if(timer <= 0) {
             clearInterval(interval);
             
-            // 1. 전체화면 해제 (작은 화면으로 복구)
             if (document.exitFullscreen) { 
                 document.exitFullscreen(); 
                 if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
@@ -304,8 +301,7 @@ document.getElementById("videoBtn").onclick = function(){
                 document.webkitExitFullscreen(); 
             }
 
-            // 2. 버튼 상태 변경
-            info.style.display = "none";
+            document.getElementById("fsInfo").innerText = "안내 영상 시청 완료!";
             startBtn.disabled = false;
             startBtn.innerText = "진단 시작하기 (클릭)";
             startBtn.classList.add("blink");
@@ -313,7 +309,6 @@ document.getElementById("videoBtn").onclick = function(){
     }, 1000);
 };
 
-// 메인 UI 진행 로직
 document.getElementById("startBtn").onclick = () => {
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("caseScreen").classList.remove("hidden");
@@ -353,12 +348,11 @@ function answer(i){
     dBox.innerText = q.desc;
     dBox.classList.remove("hidden");
     document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
-    const nextBtn = document.getElementById("nextBtn");
     const timerText = document.getElementById("timerText");
     timerText.classList.remove("hidden");
     setTimeout(() => {
         timerText.classList.add("hidden");
-        nextBtn.classList.remove("hidden");
+        document.getElementById("nextBtn").classList.remove("hidden");
     }, 2000); 
 }
 
