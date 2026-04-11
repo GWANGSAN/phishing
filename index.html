@@ -163,7 +163,7 @@ document.getElementById("videoBtn").onclick = function(){
     vBox.classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0&start=0";
     if (container.requestFullscreen) { container.requestFullscreen(); }
-    let timer = 20;
+    let timer = 0;
     const interval = setInterval(() => {
         timer--;
         document.getElementById("count").innerText = timer;
