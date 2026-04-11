@@ -40,7 +40,7 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
 .report-q { font-size: 1.2rem; color: #333; font-weight: 800; margin-bottom: 8px; }
 .report-desc { font-size: 1.4rem; color: #d32f2f; font-weight: 900; background: #fff3f3; padding: 10px; border-radius: 8px; border-left: 5px solid #d32f2f; }
 
-/* 🔗 공유 버튼 스타일 추가 */
+/* 🔗 공유 버튼 스타일 */
 .share-btn { background: #fee500; color: #3c1e1e; border: 2px solid #3c1e1e; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 </style>
 </head>
@@ -79,29 +79,34 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
             <div id="quiz" class="hidden">
                 <div id="question" style="font-size:1.7rem; font-weight:900; margin-bottom:25px; color:#002b5c;"></div>
                 <div id="choices"></div>
-                <div id="quizVideoBox" class="video-box hidden">
-                    <div id="videoTitle" class="video-label">실제 보이스피싱 통화 내용</div>
-                    <div class="video-container"><iframe id="quizFrame" src="" frameborder="0" allowfullscreen></iframe></div>
-                    <div id="multiVideoBtns" class="hidden" style="padding:10px; background:#fff; display:flex; flex-direction:column; gap:10px;">
-                        <button onclick="playQuizVideo('vNsf2p9CDZQ')" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 1)</button>
-                        <button onclick="playQuizVideo('CvEsZdEL00I')" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 2)</button>
-                    </div>
-                </div>
+                
+                <div id="dynamicVideoArea"></div>
+
                 <div id="descBox" class="descBox hidden"></div>
                 <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:#d32f2f; font-weight:bold;">잠시만 기다려주세요...</div>
                 <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
             </div>
 
+            <div id="reWatchScreen" class="hidden">
+                <h2 style="color:#d32f2f;">📱 꼭 기억하세요!</h2>
+                <div class="video-box">
+                    <div class="video-label">의심스러운 전화는 '어서끊자'</div>
+                    <div class="video-container">
+                        <iframe id="reWatchFrame" src="" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <p style="text-align:center; font-size:1.2rem; margin-top:15px; font-weight:800;">영상을 시청하신 후<br>아래 버튼을 눌러주세요.</p>
+                <button id="toPreventionBtn" class="primary">예방 수칙 확인하기 ▶</button>
+            </div>
+
             <div id="preventionScreen" class="hidden">
                 <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 보이스피싱 예방 완결편</h2>
-                <div>
-                    <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
-                    <div class="prevent-item">2. 보안위험자동차단 설정<span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span></div>
-                    <div class="prevent-item">3. 휴대전화 소액결제 원천차단</div>
-                    <div class="prevent-item">4. 명의도용방지 가입제한 설정<span class="prevent-sub">-휴대전화 비대면 개설차단</span></div>
-                    <div class="prevent-item">5. 여신거래안심차단<span class="prevent-sub">-신규 대출, 신규 카드발급 차단</span></div>
-                    <div class="prevent-item">6. 비대면계좌개설차단<span class="prevent-sub">금융기관 또는 어플에서 가입가능</span></div>
-                </div>
+                <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
+                <div class="prevent-item">2. 보안위험자동차단 설정<span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span></div>
+                <div class="prevent-item">3. 휴대전화 소액결제 원천차단</div>
+                <div class="prevent-item">4. 명의도용방지 가입제한 설정<span class="prevent-sub">-휴대전화 비대면 개설차단</span></div>
+                <div class="prevent-item">5. 여신거래안심차단<span class="prevent-sub">-신규 대출, 신규 카드발급 차단</span></div>
+                <div class="prevent-item">6. 비대면계좌개설차단<span class="prevent-sub">금융기관 또는 어플에서 가입가능</span></div>
                 <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
             </div>
 
@@ -119,14 +124,10 @@ button { width: 100%; padding: 22px 15px; margin-top: 15px; border: none; border
                     <ul style="font-size:1.5rem; font-weight:bold; margin-top:20px; padding-left:20px;">
                         <li style="margin-bottom:15px;">휴대전화를 즉시 <b>비행기모드</b>로 전환하세요.</li>
                         <li style="margin-bottom:15px;">주변인의 전화를 빌려 <b>112</b>에 신고하세요.</li>
-                        <li>피싱팀 직통번호: <b>010-7489-8609</b></li>
+                        <li style="margin-bottom:15px;">계좌번호가 유출된 경우 계좌를 지급정지하세요.</li>
                     </ul>
                 </div>
-
-                <button class="share-btn" onclick="shareSystem()">
-                    <span>💬 가족·지인에게 공유하기</span>
-                </button>
-
+                <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
                 <button class="primary" onclick="location.reload()" style="margin-top:15px; background:#666;">다시 처음으로</button>
             </div>
 
@@ -152,6 +153,7 @@ let index = 0;
 let selectedRisks = []; 
 let highRiskDetected = false;
 
+// 인트로
 document.getElementById("videoBtn").onclick = function(){
     const vBox = document.getElementById("introVideoBox");
     const container = document.getElementById("vFrameContainer");
@@ -189,7 +191,8 @@ function loadQ(){
         b.onclick = () => answer(i);
         c.appendChild(b);
     });
-    document.getElementById("quizVideoBox").classList.add("hidden");
+    // 질문 이동 시 개별 영상틀 및 설명 초기화
+    document.getElementById("dynamicVideoArea").innerHTML = "";
     document.getElementById("descBox").classList.add("hidden");
     document.getElementById("nextBtn").classList.add("hidden");
     document.getElementById("timerText").classList.add("hidden");
@@ -204,29 +207,48 @@ function answer(i){
     document.getElementById("descBox").innerText = q.desc;
     document.getElementById("descBox").classList.remove("hidden");
     document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
+
+    // 개별 영상틀 동적 생성 (8초 시작 적용)
     if(q.videoId) {
-        document.getElementById("quizVideoBox").classList.remove("hidden");
-        document.getElementById("videoTitle").innerText = q.vTitle;
-        if(q.videoId === "MULTI") {
-            document.getElementById("multiVideoBtns").classList.remove("hidden");
-            playQuizVideo('vNsf2p9CDZQ');
-        } else {
-            document.getElementById("multiVideoBtns").classList.add("hidden");
-            playQuizVideo(q.videoId);
-        }
+        const area = document.getElementById("dynamicVideoArea");
+        area.innerHTML = `
+            <div class="video-box">
+                <div class="video-label">${q.vTitle}</div>
+                <div class="video-container"><iframe id="qFrame_${index}" src="" frameborder="0" allowfullscreen></iframe></div>
+                ${q.videoId === "MULTI" ? `
+                <div style="padding:10px; background:#fff; display:flex; flex-direction:column; gap:10px;">
+                    <button onclick="playIndividualVideo('vNsf2p9CDZQ', ${index})" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 1)</button>
+                    <button onclick="playIndividualVideo('CvEsZdEL00I', ${index})" style="font-size:1.3rem; padding:15px; background:#d32f2f; color:white; margin:0;">📺 검찰 사칭 사례 (영상 2)</button>
+                </div>` : ''}
+            </div>
+        `;
+        playIndividualVideo(q.videoId === "MULTI" ? 'vNsf2p9CDZQ' : q.videoId, index);
     }
+
     const timerText = document.getElementById("timerText");
     timerText.classList.remove("hidden");
     setTimeout(() => { timerText.classList.add("hidden"); document.getElementById("nextBtn").classList.remove("hidden"); }, 2000); 
 }
 
-function playQuizVideo(id) { document.getElementById("quizFrame").src = `https://www.youtube.com/embed/${id}?autoplay=1`; }
+function playIndividualVideo(id, idx) {
+    const frame = document.getElementById(`qFrame_${idx}`);
+    if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=8`;
+}
 
 document.getElementById("nextBtn").onclick = () => {
-    document.getElementById("quizFrame").src = "";
     index++;
-    if(index >= questions.length) { document.getElementById("quiz").classList.add("hidden"); document.getElementById("preventionScreen").classList.remove("hidden"); }
+    if(index >= questions.length) { 
+        document.getElementById("quiz").classList.add("hidden"); 
+        document.getElementById("reWatchScreen").classList.remove("hidden"); 
+        // 완결편 전 영상: 1분 15초(75초)부터 재생
+        document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75";
+    }
     else { loadQ(); }
+};
+
+document.getElementById("toPreventionBtn").onclick = () => {
+    document.getElementById("reWatchScreen").classList.add("hidden");
+    document.getElementById("preventionScreen").classList.remove("hidden");
 };
 
 document.getElementById("resultBtn").onclick = () => {
@@ -264,20 +286,17 @@ document.getElementById("goGuideBtn").onclick = () => {
     }
 };
 
-// [추가] 공유하기 기능 함수
 function shareSystem() {
     const shareData = {
         title: '보이스피싱 예방 진단 시스템',
         text: '[광주광산경찰서] 실제 보이스피싱 통화 영상을 시청하고 나의 위험도를 진단해보세요!',
         url: window.location.href
     };
-
     if (navigator.share) {
         navigator.share(shareData)
             .then(() => console.log('공유 성공'))
             .catch((error) => console.log('공유 실패', error));
     } else {
-        // 공유 기능을 지원하지 않는 경우 주소 복사
         const tempInput = document.createElement("input");
         document.body.appendChild(tempInput);
         tempInput.value = window.location.href;
