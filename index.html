@@ -55,20 +55,19 @@ h2 {
 }
 
 p {
-    font-size: 1.5rem; /* 글자 크기 대폭 확대 */
+    font-size: 1.5rem;
     margin-bottom: 1.2rem;
     color: #000;
     font-weight: 700;
 }
 
-/* 🔘 큰 버튼 디자인 */
 button {
     width: 100%;
     padding: 22px 15px;
     margin-top: 15px;
     border: none;
     border-radius: 15px;
-    font-size: 1.6rem; /* 버튼 글자 아주 크게 */
+    font-size: 1.6rem;
     font-weight: 900;
     cursor: pointer;
     box-sizing: border-box;
@@ -80,7 +79,6 @@ button {
 .btn-no { background: #1e88e5; color: white; }
 .btn-gold { background: #fbc02d; color: #000; border: 3px solid #000; }
 
-/* 💰 사례 시각화 복원 */
 .caseItem {
     padding: 15px;
     border-radius: 15px;
@@ -89,7 +87,6 @@ button {
     border: 2px solid #eee;
 }
 
-.caseTitle { font-weight: 900; font-size: 1.3rem; color: #002b5c; }
 .caseMoney {
     display: block;
     margin-top: 10px;
@@ -102,7 +99,6 @@ button {
     text-align: center;
 }
 
-/* 🛡️ 예방 수칙 리스트 */
 .prevent-item {
     background: #f8f9fa;
     padding: 15px;
@@ -135,22 +131,37 @@ button {
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 
-/* 📺 진짜 전체화면(기기 전체) 전용 레이어 */
-#fullVideoOverlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: black;
-    z-index: 9999;
-}
-#fullVideoOverlay iframe { width: 100%; height: 100%; border: none; }
-.overlay-text { 
-    position: absolute; top: 10px; width: 100%; 
-    color: white; text-align: center; font-size: 1.2rem; font-weight: bold; 
-    background: rgba(0,0,0,0.5); padding: 10px 0; z-index: 10;
+/* 📺 영상 박스 스타일 */
+#videoBox {
+    margin-top: 15px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid #002b5c;
+    position: relative;
 }
 
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+
+/* 전체화면 오버레이 텍스트 */
+#fsInfo {
+    position: fixed;
+    top: 20px; width: 100%;
+    text-align: center; color: white;
+    font-size: 1.2rem; font-weight: bold;
+    z-index: 10001; text-shadow: 2px 2px 5px black;
+    pointer-events: none;
+    display: none;
+}
 </style>
 </head>
 
@@ -165,9 +176,18 @@ button {
             <div id="intro">
                 <h2>보이스피싱 진단</h2>
                 <p style="text-align: center;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
-                <p style="text-align: center; color: #d32f2f;">영상을 끝까지 시청해 주세요.</p>
-                <button class="video" id="videoBtn">▶ 교육 영상 시청 (가로 전체화면)</button>
-                <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청 중입니다</button>
+                <p style="text-align: center; color: #d32f2f;">영상을 시청하면 버튼이 나타납니다.</p>
+                
+                <button class="video" id="videoBtn">▶ 교육 영상 시청 (전체화면)</button>
+
+                <div id="videoBox" class="hidden">
+                    <div id="fsInfo">가로 화면 시청 중 (<span id="count">20</span>초)</div>
+                    <div class="video-container" id="vFrameContainer">
+                        <iframe id="ytFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청해 주세요</button>
             </div>
 
             <div id="caseScreen" class="hidden">
@@ -230,13 +250,7 @@ button {
     </div>
 </div>
 
-<div id="fullVideoOverlay">
-    <div class="overlay-text">영상 시청 중... <span id="count">20</span>초 후 버튼이 활성화됩니다.</div>
-    <iframe id="ytFrame" src="" allow="autoplay; fullscreen"></iframe>
-</div>
-
 <script>
-// 질문 데이터 엄격 유지
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3 },
     { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], answer:1, desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5 },
@@ -254,23 +268,24 @@ let index = 0;
 let selectedRisks = [];
 let highRiskDetected = false;
 
-// 📺 가로 전체화면 및 버튼 활성화 로직
+// 📺 가로 전체화면 -> 복구 -> 버튼 활성화 로직
 document.getElementById("videoBtn").onclick = function(){
-    const overlay = document.getElementById("fullVideoOverlay");
+    const vBox = document.getElementById("videoBox");
+    const container = document.getElementById("vFrameContainer");
+    const info = document.getElementById("fsInfo");
     const startBtn = document.getElementById("startBtn");
-    overlay.style.display = "block";
-    
-    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0&controls=0";
 
-    // 전체화면 및 가로모드 요청
-    if (overlay.requestFullscreen) {
-        overlay.requestFullscreen().then(() => {
-            if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock("landscape").catch(e => console.log("방향 고정 미지원"));
-            }
+    vBox.classList.remove("hidden");
+    info.style.display = "block";
+    document.getElementById("ytFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=0&rel=0";
+
+    // 전체화면 요청 및 가로 고정 시도
+    if (container.requestFullscreen) { 
+        container.requestFullscreen().then(() => {
+            if(screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(e => {});
         });
-    } else if (overlay.webkitRequestFullscreen) {
-        overlay.webkitRequestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
     }
 
     let timer = 20;
@@ -280,25 +295,25 @@ document.getElementById("videoBtn").onclick = function(){
         countDisplay.innerText = timer;
         if(timer <= 0) {
             clearInterval(interval);
-            // 전체화면 해제
+            
+            // 1. 전체화면 해제 (작은 화면으로 복구)
             if (document.exitFullscreen) { 
                 document.exitFullscreen(); 
-                if (screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
+                if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
             } else if (document.webkitExitFullscreen) { 
                 document.webkitExitFullscreen(); 
             }
-            
-            // UI 복귀
-            overlay.style.display = "none";
+
+            // 2. 버튼 상태 변경
+            info.style.display = "none";
             startBtn.disabled = false;
             startBtn.innerText = "진단 시작하기 (클릭)";
             startBtn.classList.add("blink");
-            window.scrollTo(0,0);
         }
     }, 1000);
 };
 
-// 단계별 진행 로직
+// 메인 UI 진행 로직
 document.getElementById("startBtn").onclick = () => {
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("caseScreen").classList.remove("hidden");
@@ -367,15 +382,12 @@ function showResult(){
     window.scrollTo(0,0);
     const res = document.getElementById("result");
     if(highRiskDetected){
-        res.innerText = "🚨 고위험";
-        res.style.color = "#d32f2f";
+        res.innerText = "🚨 고위험"; res.style.color = "#d32f2f";
         document.getElementById("dangerActions").classList.remove("hidden");
     } else if(selectedRisks.length > 0){
-        res.innerText = "⚠️ 주의";
-        res.style.color = "#f57c00";
+        res.innerText = "⚠️ 주의"; res.style.color = "#f57c00";
     } else {
-        res.innerText = "✅ 안전";
-        res.style.color = "#388e3c";
+        res.innerText = "✅ 안전"; res.style.color = "#388e3c";
     }
     let html = "<b>체크된 위험 항목:</b><br>";
     if(selectedRisks.length === 0) html += "의심 징후가 없습니다.";
