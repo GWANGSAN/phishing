@@ -469,9 +469,9 @@ async function shareSystem() {
 }
 
 /* =========================================
-    ✨ [수정] 월간피싱 로직 (zero-1 ~ zero-27)
+    ✨ [수정본] 월간피싱 로직
    ========================================= */
-const totalMonthlyImages = 27; // 말씀하신 27장으로 수정
+const totalMonthlyImages = 27; 
 
 function openMonthlyPhishing() {
     screenHistory.push('monthlyPhishingScreen');
@@ -479,28 +479,34 @@ function openMonthlyPhishing() {
     
     const slider = document.getElementById('phishingSlider');
     
-    // 슬라이더가 비어있을 때만 이미지 삽입 (중복 방지)
     if(slider.innerHTML.trim() === "") {
+        let htmlContent = "";
         for(let i = 1; i <= totalMonthlyImages; i++) {
-            // 🚨 말씀하신 zero-숫자 규칙 적용 (확장자가 jpg인 경우)
-            // 만약 png라면 맨 뒤 .jpg를 .png로 바꾸세요.
+            // 🚨 경로 확인: 확장자가 .jpg가 맞는지, .png는 아닌지 꼭 확인하세요!
             const imgSrc = `https://raw.githubusercontent.com/GWANGSAN/phishing/main/zero-${i}.jpg`;
             
-            slider.innerHTML += `
+            htmlContent += `
                 <div class="slide-item">
                     <img src="${imgSrc}" alt="월간피싱 ${i}페이지" 
-                         onerror="this.src='https://via.placeholder.com/400x500/002b5c/ffffff?text=이미지+로딩+중...'">
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/eee/999?text=Image+Not+Found';">
                 </div>
             `;
         }
+        slider.innerHTML = htmlContent;
     }
+    // 페이지 번호 초기화
+    document.getElementById('slideIndicator').innerText = `1 / ${totalMonthlyImages}`;
 }
-// 스크롤 시 현재 몇 페이지인지 업데이트
+
+// 스크롤 시 인덱스 업데이트 (함수 이름 확인)
 function updateSliderIndex() {
     const slider = document.getElementById('phishingSlider');
-    const index = Math.round(slider.scrollLeft / slider.clientWidth) + 1;
-    // 30대신 27로 고정하거나 totalMonthlyImages 변수 사용
-    document.getElementById('slideIndicator').innerText = `${index} / 27`;
+    if(!slider) return;
+    const scrollPos = slider.scrollLeft;
+    const itemWidth = slider.clientWidth;
+    const curIndex = Math.round(scrollPos / itemWidth) + 1;
+    
+    document.getElementById('slideIndicator').innerText = `${curIndex} / ${totalMonthlyImages}`;
 }
 </script>
 </body>
