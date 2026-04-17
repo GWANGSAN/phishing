@@ -24,10 +24,9 @@ body {
     overflow-wrap: break-word;
 }
 
-/* ✨ 개선점 4. 상단 헤더 글래스모피즘(투명 블러) 적용 */
 .header { 
-    background: rgba(0, 43, 92, 0.85); /* 약간의 투명도 */
-    backdrop-filter: blur(10px); /* 블러 효과 */
+    background: rgba(0, 43, 92, 0.85); 
+    backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px);
     color: white; 
     padding: 15px 10px; 
@@ -72,7 +71,6 @@ body {
     position: relative;
 }
 
-/* ✨ 개선점 1. 부드러운 화면 전환을 위한 Fade-in 클래스 설정 */
 .screen { display: none; }
 .screen.active {
     display: flex;
@@ -102,17 +100,11 @@ button {
     justify-content: center;
     text-align: center;
     line-height: 1.2;
-    /* ✨ 개선점 2. 버튼 터치 피드백을 위한 트랜지션 추가 */
     transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
 }
 
-/* ✨ 개선점 2. 버튼 터치 시 살짝 눌리는 효과 */
-button:active {
-    transform: scale(0.96);
-}
-button:disabled {
-    transform: none; /* 비활성화 상태에서는 눌림 효과 방지 */
-}
+button:active { transform: scale(0.96); }
+button:disabled { transform: none; }
 
 .primary { background: var(--primary-color); color: white; }
 .video-btn { background: var(--danger-color); color: white; animation: pulse 2s infinite; }
@@ -120,9 +112,6 @@ button:disabled {
 .btn-no { background: #448aff; color: white; border-bottom: 5px solid #1565c0; margin-bottom: 5px; }
 .btn-gold { background: #ffd600; color: #000; border: 2px solid #000; }
 
-/* =========================================
-   🚨 [강조] 경찰관 안내 말풍선 디자인
-   ========================================= */
 .descBox { 
     margin-top: 20px; 
     padding: 20px; 
@@ -157,9 +146,6 @@ button:disabled {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================
-   📺 피해 사례 화면 (수정 버전 유지)
-   ========================================= */
 #caseScreen { background: linear-gradient(180deg, #202020 0%, #101010 100%); border: 4px solid var(--danger-color); color: #fff; }
 .case-title-bar { background: #000; padding: 15px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid var(--danger-color); }
 .case-title-bar h2 { color: #fff; margin: 0; font-size: 1.7rem; }
@@ -168,7 +154,6 @@ button:disabled {
 .caseItem-v2 p { color: #ccc; font-size: 1.1rem; text-align: left; }
 .caseMoney-v2 { display: block; font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; }
 
-/* 나머지 스타일 유지 */
 .video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid var(--danger-color); background: #000; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -180,11 +165,29 @@ button:disabled {
 .report-desc { font-size: 1.2rem; color: var(--danger-color); font-weight: 900; background: #fff3f3; padding: 10px; border-radius: 10px; border-left: 5px solid var(--danger-color); }
 .share-btn { background: #fee500; color: #3c1e1e; border: 2px solid #3c1e1e; margin-top: 15px; }
 
-/* 컴포넌트 내부 숨김 처리를 위한 유틸리티 클래스 */
 .hidden { display: none !important; }
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(211,47,47, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(211,47,47, 0); } 100% { box-shadow: 0 0 0 0 rgba(211,47,47, 0); } }
+
+/* ✨ [추가] 월간피싱 슬라이더 전용 CSS */
+.slider-wrapper { position: relative; width: 100%; margin-top: 15px; }
+.image-slider { 
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+    gap: 15px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+    padding-bottom: 15px; 
+}
+/* 스크롤바 디자인 (크롬/사파리) */
+.image-slider::-webkit-scrollbar { height: 6px; }
+.image-slider::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+.image-slider::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 10px; }
+
+.slide-item { 
+    flex: 0 0 100%; scroll-snap-align: center; border-radius: 15px; overflow: hidden; 
+    background: #f9f9f9; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #ddd;
+}
+.slide-item img { width: 100%; height: auto; display: block; object-fit: contain; }
+.slide-indicator { text-align: center; font-weight: 900; font-size: 1.2rem; margin-top: 5px; color: var(--primary-color); }
 </style>
 </head>
 
@@ -269,6 +272,7 @@ button:disabled {
                 <li>계좌번호 유출 시 계좌를 <b>지급정지</b>하세요.</li>
             </ul>
         </div>
+        <button class="btn-gold" style="margin-top:15px;" onclick="openMonthlyPhishing()">📖 월간피싱 매거진 보기</button>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
     </div>
@@ -276,8 +280,20 @@ button:disabled {
     <div class="card screen" id="shareOnlyBox">
         <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
         <p style="font-size:1.4rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
+        <button class="btn-gold" style="margin-top:15px;" onclick="openMonthlyPhishing()">📖 월간피싱 매거진 보기</button>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
+    </div>
+
+    <div class="card screen" id="monthlyPhishingScreen">
+        <h2>📖 월간피싱</h2>
+        <p>이미지를 옆으로(<span style="font-size:1.5rem;">↔️</span>) 넘겨보세요.</p>
+        
+        <div class="slider-wrapper">
+            <div class="image-slider" id="phishingSlider" onscroll="updateSliderIndex()">
+                </div>
+        </div>
+        <div class="slide-indicator" id="slideIndicator">1 / 30</div>
     </div>
 </div>
 
@@ -298,7 +314,6 @@ const questions = [
 let index = 0, selectedRisks = [], highRiskDetected = false;
 let screenHistory = ['intro'];
 
-// ✨ 개선점 1. Fade-in 애니메이션을 위한 클래스 토글 (active 추가/제거)
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
@@ -388,7 +403,7 @@ document.getElementById("nextBtn").onclick = () => {
     if(index >= questions.length) { 
         screenHistory.push('reWatchScreen'); showScreen('reWatchScreen');
         document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75";
-        let vTimer = 10;
+        let vTimer = 15;
         const vInterval = setInterval(() => {
             vTimer--; document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
             if(vTimer <= 0) {
@@ -437,7 +452,6 @@ document.getElementById("goFinalBtn").onclick = () => {
     window.scrollTo(0,0);
 };
 
-// ✨ 개선점 3. 스마트폰 기본 공유 기능(Web Share API) 연동
 async function shareSystem() {
     if (navigator.share) {
         try {
@@ -450,9 +464,43 @@ async function shareSystem() {
             console.log('공유가 취소되었거나 오류가 발생했습니다.', err);
         }
     } else {
-        // 공유 기능을 지원하지 않는 PC나 구형 브라우저를 위한 대비
         alert("시스템 주소가 복사되었습니다.\n(현재 브라우저는 바로 공유하기 기능을 지원하지 않습니다.)");
     }
+}
+
+/* =========================================
+    ✨ [수정] 월간피싱 로직 (zero-1 ~ zero-27)
+   ========================================= */
+const totalMonthlyImages = 27; // 말씀하신 27장으로 수정
+
+function openMonthlyPhishing() {
+    screenHistory.push('monthlyPhishingScreen');
+    showScreen('monthlyPhishingScreen');
+    
+    const slider = document.getElementById('phishingSlider');
+    
+    // 슬라이더가 비어있을 때만 이미지 삽입 (중복 방지)
+    if(slider.innerHTML.trim() === "") {
+        for(let i = 1; i <= totalMonthlyImages; i++) {
+            // 🚨 말씀하신 zero-숫자 규칙 적용 (확장자가 jpg인 경우)
+            // 만약 png라면 맨 뒤 .jpg를 .png로 바꾸세요.
+            const imgSrc = `https://raw.githubusercontent.com/GWANGSAN/phishing/main/zero-${i}.jpg`;
+            
+            slider.innerHTML += `
+                <div class="slide-item">
+                    <img src="${imgSrc}" alt="월간피싱 ${i}페이지" 
+                         onerror="this.src='https://via.placeholder.com/400x500/002b5c/ffffff?text=이미지+로딩+중...'">
+                </div>
+            `;
+        }
+    }
+}
+/ 스크롤 시 현재 몇 페이지인지 업데이트
+function updateSliderIndex() {
+    const slider = document.getElementById('phishingSlider');
+    const index = Math.round(slider.scrollLeft / slider.clientWidth) + 1;
+    // 30대신 27로 고정하거나 totalMonthlyImages 변수 사용
+    document.getElementById('slideIndicator').innerText = `${index} / 27`;
 }
 </script>
 </body>
