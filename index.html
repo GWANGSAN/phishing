@@ -8,29 +8,41 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root { --p-blue: #002b5c; --p-gold: #ffd600; --danger: #d32f2f; }
-        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f4f7fa; color: #111; line-height: 1.5; word-break: keep-all; }
-        .header { background: var(--p-blue); color: white; padding: 18px; text-align: center; font-weight: 800; font-size: 1.2rem; position: sticky; top: 0; z-index: 1000; }
+        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f4f7fa; color: #111; line-height: 1.6; word-break: keep-all; }
+        
+        .header { background: var(--p-blue); color: white; padding: 22px; text-align: center; font-weight: 900; font-size: 1.4rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .container { width: 100%; max-width: 500px; margin: 0 auto; }
-        .card { background: white; margin: 12px; border-radius: 20px; padding: 25px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: none; flex-direction: column; min-height: 70vh; }
+        
+        .card { background: white; margin: 15px; border-radius: 25px; padding: 35px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: none; flex-direction: column; min-height: 75vh; }
         .card.active { display: flex; }
-        h2 { color: var(--p-blue); font-size: 1.6rem; text-align: center; margin-top: 0; }
-        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8f9fc; padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 0.85rem; border: 1px solid #eee; }
-        .stats-bar b { display: block; color: var(--p-blue); font-size: 1.1rem; }
-        button { width: 100%; padding: 18px; margin-top: 10px; border: none; border-radius: 15px; font-size: 1.3rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
+        
+        h2 { color: var(--p-blue); font-size: 1.9rem; text-align: center; margin-top: 0; margin-bottom: 25px; font-weight: 900; }
+        .main-p { text-align: center; font-size: 1.5rem; font-weight: 800; margin-bottom: 30px; }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f0f4f8; padding: 15px; border-radius: 15px; margin-bottom: 25px; text-align: center; font-size: 1rem; border: 1px solid #ddd; }
+        .stats-bar b { display: block; color: var(--p-blue); font-size: 1.3rem; margin-top: 5px; }
+        
+        button { width: 100%; padding: 22px; margin-top: 15px; border: none; border-radius: 18px; font-size: 1.5rem; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        button:active { transform: scale(0.97); }
         .btn-main { background: var(--p-blue); color: white; }
         .btn-red { background: var(--danger); color: white; }
-        .btn-yes { background: #ff5252; color: white; border-bottom: 4px solid #b71c1c; }
-        .btn-no { background: #448aff; color: white; border-bottom: 4px solid #1565c0; }
-        .btn-gold { background: var(--p-gold); color: #000; }
+        .btn-yes { background: #ff5252; color: white; border-bottom: 5px solid #b71c1c; height: 90px; }
+        .btn-no { background: #448aff; color: white; border-bottom: 5px solid #1565c0; height: 90px; }
+        .btn-gold { background: var(--p-gold); color: #000; border: 2px solid #333; }
         button:disabled { background: #ccc !important; }
-        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 3px solid var(--p-blue); margin-top: 15px; }
+        
+        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 4px solid var(--p-blue); margin-top: 20px; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; }
-        .desc-box { margin-top: 20px; padding: 18px; background: #fffdf0; border-radius: 15px; border: 2px solid var(--p-gold); font-weight: 700; font-size: 1.15rem; }
-        .case-item { background: #1a1a1a; color: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 6px solid var(--danger); }
-        .case-money { display: block; font-size: 1.8rem; font-weight: 900; text-align: right; color: var(--danger); }
+        
+        /* 경찰관 핵심 내용 박스 스타일링 */
+        .desc-box { margin-top: 30px; padding: 22px; background: #fffdf0; border-radius: 20px; border: 3px solid var(--p-gold); font-weight: 800; font-size: 1.35rem; line-height: 1.6; position: relative; }
+        .desc-tag { display: inline-block; background: var(--p-gold); color: #000; font-size: 1rem; padding: 4px 15px; border-radius: 10px; position: absolute; top: -18px; left: 20px; font-weight: 900; border: 2px solid #333; }
+        
+        .case-item { background: #1a1a1a; color: white; padding: 20px; border-radius: 18px; margin-bottom: 15px; border-left: 8px solid var(--danger); font-size: 1.2rem; font-weight: 700; }
+        .case-money { display: block; font-size: 2.2rem; font-weight: 900; text-align: right; color: var(--danger); margin-top: 5px; }
+        .res-text { font-size: 3.5rem; font-weight: 900; text-align: center; margin: 25px 0; }
     </style>
 </head>
 <body>
@@ -45,7 +57,7 @@
             <div>오늘 방문<b id="todayV">0</b></div>
             <div>정보 공유<b id="shareV">0</b></div>
         </div>
-        <p style="text-align:center; font-size:1.3rem; font-weight:700;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+        <p class="main-p">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
         <button class="btn-red" id="btnIntroVid">▶ 교육 영상 시청 (30초 대기)</button>
         <div id="introVidBox" class="video-box" style="display:none;">
             <div class="video-container">
@@ -53,7 +65,7 @@
                 <div class="video-overlay"></div>
             </div>
         </div>
-        <button id="btnStart" class="btn-main" disabled style="margin-top:20px;">안내 영상을 시청해 주세요</button>
+        <button id="btnStart" class="btn-main" disabled style="margin-top:25px;">안내 영상을 시청해 주세요</button>
     </div>
 
     <div class="card" id="case">
@@ -65,34 +77,36 @@
     </div>
 
     <div class="card" id="quiz">
-        <div id="qText" style="font-size:1.4rem; font-weight:800; text-align:center; margin-bottom:20px;"></div>
-        <div id="qChoices" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+        <div id="qText" style="font-size:1.6rem; font-weight:900; text-align:center; margin-bottom:25px; color:var(--p-blue);"></div>
+        <div id="qChoices" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"></div>
         <div id="qVideoArea"></div>
-        <div id="qDesc" class="desc-box" style="display:none;"></div>
-        <button id="btnNext" class="btn-main" style="display:none; margin-top:20px;">다음 질문 이동 ▶</button>
+        <div id="qDesc" class="desc-box" style="display:none;">
+            <div class="desc-tag">🚔 경찰관 핵심 내용</div>
+            <div id="qDescText"></div>
+        </div>
+        <button id="btnNext" class="btn-main" style="display:none; margin-top:25px;">다음 질문 이동 ▶</button>
     </div>
 
     <div class="card" id="result">
         <h2>진단 결과</h2>
-        <div id="resTitle" style="font-size:3rem; font-weight:900; text-align:center; margin:20px 0;"></div>
-        <div id="resList"></div>
-        <button id="btnFinal" class="btn-main" style="margin-top:20px;"></button>
+        <div id="resTitle" class="res-text"></div>
+        <div id="resList" style="font-size:1.2rem;"></div>
+        <button id="btnFinal" class="btn-main" style="margin-top:25px;"></button>
     </div>
 
     <div class="card" id="final">
         <h2 style="color:var(--danger);">🚨 긴급 조치 가이드</h2>
-        <div style="background:#fff5f5; padding:20px; border-radius:15px; border:2px solid var(--danger); font-size:1.2rem; font-weight:800;">
-            1. 즉시 비행기모드로 전환!<br><br>
-            2. 다른 전화로 112 신고!<br><br>
-            3. 은행에 지급정지 요청!
+        <div style="background:#fff5f5; padding:25px; border-radius:20px; border:3px solid var(--danger); font-size:1.4rem; font-weight:900; line-height:1.7;">
+            1. 즉시 <span style="color:red;">비행기모드</span> 전환!<br>
+            2. 다른 전화로 <span style="color:red;">112</span> 신고!<br>
+            3. 은행에 <span style="color:red;">지급정지</span> 요청!
         </div>
-        <button class="btn-gold" onclick="share()" style="margin-top:30px;">💬 가족·지인에게 공유하기</button>
+        <button class="btn-gold" onclick="share()" style="margin-top:35px;">📢 가족·지인에게 공유하기</button>
         <button class="btn-main" onclick="location.reload()" style="background:#666;">처음으로 돌아가기</button>
     </div>
 </div>
 
 <script>
-    // 파이어베이스 기존 설정 100% 동일
     const firebaseConfig = {
         apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
         authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -112,7 +126,6 @@
     db.ref('stats/visitors/total_accumulated').on('value', s => { document.getElementById('totalV').innerText = (s.val() || 0).toLocaleString(); });
     db.ref('stats/shares/total').on('value', s => { document.getElementById('shareV').innerText = (s.val() || 0).toLocaleString(); });
 
-    // 질문 리스트 원본 보존
     const questions = [
         { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, vid:"EC8lTWKjCQM" },
         { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5, vid:"MULTI" },
@@ -138,7 +151,7 @@
         const timer = setInterval(() => {
             time--;
             if(time > 0) document.getElementById('btnStart').innerText = `시청 중 (${time}초)`;
-            else { clearInterval(timer); document.getElementById('btnStart').disabled = false; document.getElementById('btnStart').innerText = "진단 시작하기 ▶"; }
+            else { clearInterval(timer); document.getElementById('btnStart').disabled = false; document.getElementById('btnStart').innerText = "진단 시작하기 ▶"; document.getElementById('btnStart').style.background = "#2e7d32"; }
         }, 1000);
     };
 
@@ -168,7 +181,7 @@
         if(i === 0) { results.push(q); if(q.risk >= 5) highRisk = true; }
 
         const desc = document.getElementById('qDesc');
-        desc.innerText = q.desc;
+        document.getElementById('qDescText').innerText = q.desc;
         desc.style.display = "block";
 
         if(q.vid) {
@@ -179,9 +192,9 @@
                         <iframe id="qFrame" src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&start=8&controls=0" allow="autoplay"></iframe>
                         <div class="video-overlay"></div>
                     </div>
-                    ${q.vid === "MULTI" ? `<div style="display:flex; gap:5px; padding:5px; background:#fff;">
-                        <button onclick="play('vNsf2p9CDZQ')" style="flex:1; font-size:1rem; padding:10px;">영상 1</button>
-                        <button onclick="play('CvEsZdEL00I')" style="flex:1; font-size:1rem; padding:10px;">영상 2</button>
+                    ${q.vid === "MULTI" ? `<div style="display:flex; gap:10px; padding:10px; background:#fff;">
+                        <button onclick="play('vNsf2p9CDZQ')" style="flex:1; font-size:1.1rem; padding:15px; background:var(--p-blue); color:white;">사례 1</button>
+                        <button onclick="play('CvEsZdEL00I')" style="flex:1; font-size:1.1rem; padding:15px; background:var(--p-blue); color:white;">사례 2</button>
                     </div>` : ''}
                 </div>`;
         }
@@ -199,13 +212,13 @@
             const btnFinal = document.getElementById('btnFinal');
             if(highRisk) { resTitle.innerText = "🚨 고위험"; resTitle.style.color = "var(--danger)"; btnFinal.innerText = "긴급 가이드 확인 ▶"; }
             else if(results.length > 0) { resTitle.innerText = "⚠️ 주의"; resTitle.style.color = "#f39c12"; btnFinal.innerText = "대응 가이드 확인 ▶"; }
-            else { resTitle.innerText = "✅ 안전"; resTitle.style.color = "#2a9d8f"; btnFinal.innerText = "가족에게 알리기 ▶"; }
+            else { resTitle.innerText = "✅ 안전"; resTitle.style.color = "#2a9d8f"; btnFinal.innerText = "진단 완료 ▶"; }
             
             const list = document.getElementById('resList');
             results.forEach(item => {
                 const d = document.createElement('div');
-                d.style = "background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:8px; border-left:5px solid var(--danger);";
-                d.innerHTML = `<b>${item.q}</b><br><small>안내: ${item.desc}</small>`;
+                d.style = "background:#fdf2f2; padding:20px; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--danger); font-weight:700;";
+                d.innerHTML = `<div>${item.q}</div><div style="color:var(--danger); font-size:1rem; margin-top:8px;">💡 안내: ${item.desc}</div>`;
                 list.appendChild(d);
             });
         }
