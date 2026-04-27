@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>보이스피싱 예방 진단 시스템</title>
+    <title>광주광산경찰서 보이스피싱 진단시스템</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root { --p-blue: #002b5c; --p-gold: #ffd600; --danger: #d32f2f; }
-        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f0f2f5; color: #111; line-height: 1.4; word-break: keep-all; }
+        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f0f4f8; color: #111; line-height: 1.5; word-break: keep-all; }
         
-        .header { background: var(--p-blue); color: white; padding: 20px; text-align: center; font-weight: 900; font-size: 1.4rem; border-bottom: 4px solid var(--p-gold); position: sticky; top: 0; z-index: 1000; }
+        /* 고령층 최적화 시인성 강화 UI */
+        .header { background: var(--p-blue); color: white; padding: 20px; text-align: center; font-weight: 900; font-size: 1.45rem; border-bottom: 5px solid var(--p-gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .container { width: 100%; max-width: 500px; margin: 0 auto; }
         
-        .card { background: white; margin: 10px; border-radius: 20px; padding: 25px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: none; flex-direction: column; min-height: 75vh; }
+        .card { background: white; margin: 12px; border-radius: 20px; padding: 30px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; flex-direction: column; min-height: 80vh; border: 1px solid #ddd; }
         .card.active { display: flex; }
         
-        h2 { color: var(--p-blue); font-size: 1.9rem; text-align: center; margin-top: 0; }
+        h2 { color: var(--p-blue); font-size: 2rem; text-align: center; margin-top: 0; font-weight: 900; letter-spacing: -1px; }
         
-        /* 통계바 유지 */
-        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8f9fa; padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 0.9rem; border: 1px solid #eee; }
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8f9fc; padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 0.9rem; border: 1px solid #dee2e6; }
         .stats-bar b { display: block; color: var(--p-blue); font-size: 1.2rem; }
         
-        /* 버튼 강화 */
-        button { width: 100%; padding: 22px; margin-top: 12px; border: none; border-radius: 15px; font-size: 1.6rem; font-weight: 900; cursor: pointer; }
+        /* 스마트폰 터치 및 고령층 시인성 고려 버튼 */
+        button { width: 100%; padding: 22px; margin-top: 15px; border: none; border-radius: 18px; font-size: 1.7rem; font-weight: 900; cursor: pointer; transition: 0.2s; -webkit-appearance: none; }
         .btn-main { background: var(--p-blue); color: white; }
-        .btn-red { background: var(--danger); color: white; }
-        .btn-yes { background: #ff4d4d; color: white; border-bottom: 6px solid #b30000; height: 95px; }
-        .btn-no { background: #3d85f5; color: white; border-bottom: 6px solid #0a58ca; height: 95px; }
-        .btn-gold { background: var(--p-gold); color: #000; font-size: 1.4rem; border: 2px solid #333; }
-        button:disabled { background: #ccc !important; }
+        .btn-red { background: var(--danger); color: white; box-shadow: 0 4px 0 #8b0000; }
+        .btn-yes { background: #ff4d4d; color: white; border-bottom: 8px solid #b30000; height: 110px; margin-top: 0; }
+        .btn-no { background: #3d85f5; color: white; border-bottom: 8px solid #0a58ca; height: 110px; margin-top: 0; }
+        .btn-gold { background: var(--p-gold); color: #000; border: 3px solid #333; }
+        button:disabled { background: #ccc !important; border-bottom: none; color: #666; }
 
-        /* 대기 안내 */
-        .wait-text { text-align: center; color: var(--danger); font-weight: 900; font-size: 1.3rem; margin: 15px 0; display: none; }
+        /* 안내 텍스트 */
+        .wait-info { text-align: center; color: var(--danger); font-weight: 900; font-size: 1.3rem; margin: 15px 0; background: #fff5f5; padding: 12px; border-radius: 15px; border: 2px dashed var(--danger); }
         
-        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 4px solid var(--p-blue); margin-top: 15px; }
+        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 5px solid var(--p-blue); margin-top: 15px; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        .desc-box { margin-top: 25px; padding: 22px; background: #fffdf0; border-radius: 20px; border: 3px solid var(--p-gold); font-weight: 800; font-size: 1.4rem; line-height: 1.6; position: relative; }
-        .desc-tag { display: inline-block; background: var(--p-gold); color: #000; font-size: 1rem; padding: 4px 12px; border-radius: 10px; position: absolute; top: -16px; left: 20px; font-weight: 900; border: 1px solid #333; }
+        .desc-box { margin-top: 25px; padding: 25px; background: #fffdf0; border-radius: 20px; border: 4px solid var(--p-gold); font-weight: 800; font-size: 1.5rem; line-height: 1.6; position: relative; }
+        .desc-tag { display: inline-block; background: var(--p-gold); color: #000; font-size: 1.1rem; padding: 5px 15px; border-radius: 10px; position: absolute; top: -18px; left: 20px; font-weight: 900; border: 2px solid #333; }
         
-        .case-item { background: #111; color: white; padding: 20px; border-radius: 15px; margin-bottom: 12px; border-left: 10px solid var(--danger); }
-        .case-money { display: block; font-size: 2.2rem; font-weight: 900; text-align: right; color: var(--danger); }
+        .case-item { background: #111; color: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 12px solid var(--danger); }
+        .case-money { display: block; font-size: 2.3rem; font-weight: 900; text-align: right; color: #ff5252; }
     </style>
 </head>
 <body>
@@ -57,14 +57,14 @@
             <div>정보 공유<b id="shareV">0</b></div>
         </div>
         <h2>보이스피싱 진단</h2>
-        <p style="text-align:center; font-size:1.5rem; font-weight:800; margin-bottom:20px;">[필독] 실제 사례를 통한<br>정밀 진단을 시작합니다.</p>
+        <p style="text-align:center; font-size:1.6rem; font-weight:900; color:var(--p-blue); margin-bottom:20px;">[긴급] 실제 수사 데이터 기반<br>나의 위험도를 점검하십시오.</p>
         <button class="btn-red" id="btnIntroVid">▶ 교육 영상 시청 (30초)</button>
         <div id="introVidBox" class="video-box" style="display:none;">
             <div class="video-container">
                 <iframe id="frameIntro" src="" allow="autoplay; fullscreen"></iframe>
             </div>
         </div>
-        <button id="btnStart" class="btn-main" disabled style="margin-top:20px;">영상을 시청해 주세요</button>
+        <button id="btnStart" class="btn-main" disabled style="margin-top:25px;">영상을 시청해 주세요</button>
     </div>
 
     <div class="card" id="case">
@@ -72,38 +72,40 @@
         <div class="case-item">2025년 광주청 전체 피해 <span class="case-money">총 279억 원</span></div>
         <div class="case-item">검찰사칭 - 자산검수 수법 <span class="case-money">피해액 1억 원</span></div>
         <div class="case-item">대출사칭 - 계약위반 협박 <span class="case-money">피해액 1,600만 원</span></div>
-        <button class="btn-red" style="margin-top:auto;" onclick="goQuiz()">나의 상황 진단하기 ▶</button>
+        <button class="btn-red" style="margin-top:auto;" onclick="goQuiz()">내 상황 진단하기 ▶</button>
     </div>
 
     <div class="card" id="quiz">
-        <div id="qText" style="font-size:1.7rem; font-weight:900; text-align:center; margin-bottom:25px; color:var(--p-blue);"></div>
-        <div id="qChoices" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"></div>
+        <div id="qText" style="font-size:1.8rem; font-weight:900; text-align:center; margin-bottom:30px; color:var(--p-blue);"></div>
+        <div id="qChoices" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;"></div>
         
-        <div id="waitText" class="wait-text">경찰관 데이터 분석 중... <span id="timer">2</span>초</div>
-        
-        <div id="qVideoArea"></div>
-        <div id="qDesc" class="desc-box" style="display:none;">
-            <div class="desc-tag">🚔 경찰관 핵심 내용</div>
-            <div id="qDescText"></div>
+        <div id="qResultArea" style="display:none;">
+            <div id="qVideoArea"></div>
+            <div id="qDesc" class="desc-box">
+                <div class="desc-tag">🚔 경찰관 핵심 조언</div>
+                <div id="qDescText"></div>
+            </div>
+            
+            <div id="btnTimerBox" class="wait-info">안내를 읽어주세요... <span id="timer">2</span>초</div>
+            <button id="btnNext" class="btn-main" style="display:none; margin-top:20px;">내용 확인 완료, 다음 질문 ▶</button>
         </div>
-        <button id="btnNext" class="btn-main" style="display:none; margin-top:25px;">다음 질문 이동 ▶</button>
     </div>
 
     <div class="card" id="result">
-        <h2>진단 결과 분석</h2>
-        <div id="resTitle" style="font-size:3.8rem; font-weight:900; text-align:center; margin:20px 0;"></div>
+        <h2>진단 분석 결과</h2>
+        <div id="resTitle" style="font-size:4rem; font-weight:900; text-align:center; margin:25px 0;"></div>
         <div id="resList"></div>
         <button id="btnFinal" class="btn-main" style="margin-top:20px;"></button>
     </div>
 
     <div class="card" id="final">
         <h2 style="color:var(--danger);">🚨 경찰 긴급 가이드</h2>
-        <div style="background:#fff5f5; padding:25px; border-radius:20px; border:3px solid var(--danger); font-size:1.5rem; font-weight:900; line-height:1.7;">
-            1. 즉시 <span style="color:red;">비행기모드</span> 실행!<br>
-            2. 다른 전화로 <span style="color:red;">112</span> 신고!<br>
-            3. 거래 은행 <span style="color:red;">지급정지</span> 요청!
+        <div style="background:#fff2f2; padding:25px; border-radius:20px; border:4px solid var(--danger); font-size:1.6rem; font-weight:900; line-height:1.8;">
+            1. 즉시 <span style="color:red;">비행기모드</span> 전환!<br>
+            2. 주변 지인 전화로 <span style="color:red;">112</span> 신고!<br>
+            3. 은행에 <span style="color:red;">지급정지</span> 요청!
         </div>
-        <button class="btn-gold" onclick="share()" style="margin-top:35px;">📢 가족·지인에게 공유하기</button>
+        <button class="btn-gold" onclick="share()" style="margin-top:40px;">📢 가족·지인에게 공유하기</button>
         <button class="btn-main" onclick="location.reload()" style="background:#444;">처음으로</button>
     </div>
 </div>
@@ -122,7 +124,6 @@
     const db = firebase.database();
     const day = new Date().toISOString().split('T')[0];
 
-    // 통계 수집 로직
     db.ref(`stats/visitors/${day}`).transaction(c => (c || 0) + 1);
     db.ref('stats/visitors/total_accumulated').transaction(c => (c || 0) + 1);
     db.ref(`stats/visitors/${day}`).on('value', s => { document.getElementById('todayV').innerText = (s.val() || 0).toLocaleString(); });
@@ -153,7 +154,7 @@
         let time = 0;
         const timer = setInterval(() => {
             time--;
-            if(time > 0) document.getElementById('btnStart').innerText = `시청 대기 (${time}초)`;
+            if(time > 0) document.getElementById('btnStart').innerText = `시청 중 (${time}초)`;
             else { clearInterval(timer); document.getElementById('btnStart').disabled = false; document.getElementById('btnStart').innerText = "진단 시작하기 ▶"; }
         }, 1000);
     };
@@ -170,38 +171,20 @@
             btn.innerText = txt; btn.className = (i === 0) ? "btn-yes" : "btn-no";
             btn.onclick = () => handle(i); box.appendChild(btn);
         });
-        document.getElementById('waitText').style.display = "none";
-        document.getElementById('qVideoArea').innerHTML = "";
-        document.getElementById('qDesc').style.display = "none";
+        document.getElementById('qResultArea').style.display = "none";
         document.getElementById('btnNext').style.display = "none";
+        document.getElementById('btnTimerBox').style.display = "none";
     }
 
+    // 답변 클릭 시의 로직 고정
     function handle(i) {
         const q = questions[current];
         document.querySelectorAll('#qChoices button').forEach(b => b.disabled = true);
         if(i === 0) { results.push(q); if(q.risk >= 5) highRisk = true; }
         
-        // 2초 대기 피드백
-        const wait = document.getElementById('waitText');
-        const timerSpan = document.getElementById('timer');
-        wait.style.display = "block";
-        let count = 2;
-        timerSpan.innerText = count;
-        
-        const timer = setInterval(() => {
-            count--;
-            timerSpan.innerText = count;
-            if(count <= 0) {
-                clearInterval(timer);
-                wait.style.display = "none";
-                showDesc(q);
-            }
-        }, 1000);
-    }
-
-    function showDesc(q) {
+        // 1. 즉시 영상과 설명 노출
+        document.getElementById('qResultArea').style.display = "block";
         document.getElementById('qDescText').innerText = q.desc;
-        document.getElementById('qDesc').style.display = "block";
         if(q.vid) {
             const vId = (q.vid === "MULTI") ? "vNsf2p9CDZQ" : q.vid;
             document.getElementById('qVideoArea').innerHTML = `
@@ -209,16 +192,28 @@
                     <div class="video-container">
                         <iframe id="qFrame" src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&start=8&controls=0" allow="autoplay"></iframe>
                     </div>
-                    ${q.vid === "MULTI" ? `<div style="display:flex; gap:10px; padding:10px; background:#fff;">
-                        <button onclick="play('vNsf2p9CDZQ')" style="flex:1; font-size:1.1rem; padding:15px; background:var(--p-blue); color:white;">사례 1</button>
-                        <button onclick="play('CvEsZdEL00I')" style="flex:1; font-size:1.1rem; padding:15px; background:var(--p-blue); color:white;">사례 2</button>
-                    </div>` : ''}
                 </div>`;
-        }
-        setTimeout(() => { document.getElementById('btnNext').style.display = "block"; }, 1500);
+        } else { document.getElementById('qVideoArea').innerHTML = ""; }
+
+        // 2. 2초 타이머 시작 (다음 버튼 활성화용)
+        const timerBox = document.getElementById('btnTimerBox');
+        const timerSpan = document.getElementById('timer');
+        timerBox.style.display = "block";
+        let count = 2;
+        timerSpan.innerText = count;
+
+        const timerItv = setInterval(() => {
+            count--;
+            timerSpan.innerText = count;
+            if(count <= 0) {
+                clearInterval(timerItv);
+                timerBox.style.display = "none";
+                document.getElementById('btnNext').style.display = "block"; // 2초 뒤 버튼 노출
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+        }, 1000);
     }
 
-    function play(id) { document.getElementById('qFrame').src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&start=8&controls=0`; }
     document.getElementById('btnNext').onclick = () => { current++; if(current < questions.length) loadQ(); else showResult(); };
 
     function showResult() {
@@ -228,36 +223,34 @@
         if(highRisk) { resTitle.innerText = "🚨 고위험"; resTitle.style.color = "var(--danger)"; btnFinal.innerText = "긴급 가이드 확인 ▶"; }
         else if(results.length > 0) { resTitle.innerText = "⚠️ 주의"; resTitle.style.color = "#f39c12"; btnFinal.innerText = "대응 가이드 확인 ▶"; }
         else { resTitle.innerText = "✅ 안전"; resTitle.style.color = "#2e7d32"; btnFinal.innerText = "진단 완료 ▶"; }
-        const list = document.getElementById('resList');
+        
+        const list = document.getElementById('resList'); list.innerHTML = "";
         results.forEach(item => {
             const d = document.createElement('div');
-            d.style = "background:#fdf2f2; padding:20px; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--danger); font-weight:700;";
-            d.innerHTML = `<div>${item.q}</div><div style="color:var(--danger); font-size:1rem; margin-top:8px;">💡 안내: ${item.desc}</div>`;
+            d.style = "background:#fdf2f2; padding:22px; border-radius:18px; margin-bottom:15px; border-left:10px solid var(--danger); font-weight:700;";
+            d.innerHTML = `<div style="font-size:1.2rem;">${item.q}</div><div style="color:var(--danger); font-size:1.1rem; margin-top:10px;">🚔 경찰관 조언: ${item.desc}</div>`;
             list.appendChild(d);
         });
     }
 
     document.getElementById('btnFinal').onclick = () => { if(results.length > 0) show('final'); else share(); };
 
-    // 공유 기능 보강
+    // 강화된 공유 및 클립보드 복사 로직
     async function share() {
         const shareData = { title: '보이스피싱 진단', text: '부모님, 꼭 한번 진단해보세요! 광주경찰청 보이스피싱 진단 시스템', url: window.location.href };
         try {
             if (navigator.share) {
                 await navigator.share(shareData);
                 db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
-            } else {
-                throw new Error('NotSupported');
-            }
+            } else { throw new Error(); }
         } catch (err) {
-            // 수동 복사 로직 (공유 API 미지원 시)
-            const textArea = document.createElement("textarea");
-            textArea.value = window.location.href;
-            document.body.appendChild(textArea);
-            textArea.select();
+            const t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = window.location.href;
+            t.select();
             document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert("진단 링크가 복사되었습니다.\n카톡방에 붙여넣어 가족들과 공유하세요!");
+            document.body.removeChild(t);
+            alert("진단 링크가 복사되었습니다!\n가족 카톡방에 붙여넣어 공유해주세요.");
             db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
         }
     }
