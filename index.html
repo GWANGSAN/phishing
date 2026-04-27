@@ -34,7 +34,7 @@ body {
     padding: 15px 10px; 
     text-align: center; 
     font-weight: 800; 
-    font-size: 1.2rem; 
+    font-size: 1.3rem; 
     position: sticky; 
     top: 0; 
     z-index: 1000; 
@@ -50,12 +50,12 @@ body {
     background: transparent;
     color: white;
     border: none;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     cursor: pointer;
     display: none;
 }
 
-.container { width: 100%; max-width: 500px; margin: 0 auto; }
+.container { width: 100%; max-width: 500px; margin: 0 auto; box-sizing: border-box; }
 
 .card { 
     background: white; 
@@ -67,15 +67,17 @@ body {
     display: flex; 
     flex-direction: column; 
     box-sizing: border-box;
+    position: relative;
 }
 
 .screen { display: none; }
 .screen.active { display: flex; animation: fadeInUp 0.4s ease-out forwards; }
 
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-h2 { color: var(--primary-color); font-size: 1.6rem; margin-bottom: 15px; text-align: center; font-weight: 900; }
-p { font-size: 1.2rem; margin-bottom: 1rem; color: #333; font-weight: 700; text-align: center; }
+h2 { color: var(--primary-color); font-size: 1.8rem; margin-bottom: 20px; text-align: center; font-weight: 900; line-height: 1.2; }
+#question { font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; color: var(--primary-color); text-align: center; padding: 0 5px; }
+p { font-size: 1.3rem; margin-bottom: 1rem; color: #000; font-weight: 700; text-align: center; }
 
 button { 
     width: 100%; 
@@ -83,64 +85,87 @@ button {
     margin-top: 10px; 
     border: none; 
     border-radius: 15px; 
-    font-size: 1.3rem; 
+    font-size: 1.4rem; 
     font-weight: 800; 
     cursor: pointer; 
-    transition: transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-button:active { transform: scale(0.97); }
+button:active { transform: scale(0.96); }
 .primary { background: var(--primary-color); color: white; }
 .video-btn { background: var(--danger-color); color: white; animation: pulse 2s infinite; }
-.btn-yes { background: #ff5252; color: white; border-bottom: 4px solid #b71c1c; }
-.btn-no { background: #448aff; color: white; border-bottom: 4px solid #1565c0; }
+.btn-yes { background: #ff5252; color: white; border-bottom: 5px solid #b71c1c; }
+.btn-no { background: #448aff; color: white; border-bottom: 5px solid #1565c0; margin-bottom: 5px; }
 .btn-gold { background: #ffd600; color: #000; border: 2px solid #000; }
 
+/* 개선된 슬림 통계 바 */
 .stats-banner {
     background: #f0f4f8;
     padding: 8px 12px;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     font-size: 0.85rem;
     color: #444;
     border: 1px solid #d1d9e6;
 }
 .stats-item b { color: var(--danger-color); font-weight: 900; }
 
-.video-box { 
-    margin-top: 10px; 
-    border-radius: 15px; 
-    overflow: hidden; 
-    border: 3px solid var(--primary-color); 
-    background: #000;
+.descBox { 
+    margin-top: 20px; 
+    padding: 20px; 
+    background: #fffbe6; 
+    border-radius: 20px; 
+    font-size: 1.25rem; 
+    color: #111; 
+    border: 3px solid #ffd666; 
+    font-weight: 800; 
+    line-height: 1.5;
     position: relative;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
+
+.descBox::before {
+    content: '🚔 경찰관 핵심 안내';
+    display: block;
+    background: #ffd666;
+    color: #000;
+    font-size: 0.9rem;
+    padding: 4px 12px;
+    border-radius: 10px;
+    position: absolute;
+    top: -15px;
+    left: 20px;
+}
+
+#caseScreen { background: linear-gradient(180deg, #202020 0%, #101010 100%); border: 4px solid var(--danger-color); color: #fff; }
+.caseItem-v2 { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 18px; border-left: 5px solid var(--danger-color); }
+.caseMoney-v2 { font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; display: block; }
+
+.video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid var(--primary-color); background: #000; position: relative; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
-.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; } /* 클릭 방지 */
-.video-label { text-align: center; background: var(--primary-color); color: white; padding: 6px; font-weight: 800; font-size: 1rem; }
+.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.video-label { text-align: center; background: var(--primary-color); color: white; padding: 8px; font-weight: 900; font-size: 1.1rem; }
 
-.descBox { margin-top: 15px; padding: 15px; background: #fffbe6; border-radius: 15px; border: 2px solid #ffd666; font-weight: 800; font-size: 1.1rem; text-align: center; }
-
-#caseScreen { background: #111; color: #fff; border: 3px solid var(--danger-color); }
-.caseItem-v2 { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 5px solid var(--danger-color); }
-.caseMoney-v2 { font-size: 1.8rem; font-weight: 900; color: #fff; text-align: right; display: block; }
-
-.prevent-item { background: #f8f9fa; padding: 12px; border-radius: 10px; margin-bottom: 8px; border-left: 6px solid var(--primary-color); font-weight: 800; }
-.report-item { background: #fff; border: 2px solid var(--danger-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.prevent-item { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid var(--primary-color); font-size: 1.3rem; font-weight: 800; }
+.prevent-sub { font-size: 1rem; color: var(--danger-color); display: block; margin-top: 4px; }
+.report-item { background: #fff; border: 2px solid var(--danger-color); border-radius: 15px; padding: 15px; margin-bottom: 12px; }
 
 .hidden { display: none !important; }
 .blink { animation: blink 1s infinite; }
-@keyframes blink { 50% { opacity: 0.7; } }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(211,47,47, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(211,47,47, 0); } 100% { box-shadow: 0 0 0 0 rgba(211,47,47, 0); } }
+@keyframes blink { 50% { opacity: 0.5; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(211,47,47, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(211,47,47, 0); } 100% { box-shadow: 0 0 0 0 rgba(211,47,47, 0); } }
 </style>
 </head>
 
 <body>
 <div class="header">
     <button id="backBtn" class="back-btn" onclick="goBack()">◀</button>
-    <span>🚔 광산경찰서 피싱범죄수사팀</span>
+    <span>🚔 광주광산경찰서 피싱범죄수사팀</span>
 </div>
 
 <div class="container">
@@ -151,34 +176,34 @@ button:active { transform: scale(0.97); }
             <div class="stats-item">📅 오늘 <b id="todayCount">0</b></div>
             <div class="stats-item">🔗 공유 <b id="mainShareCount">0</b></div>
         </div>
-        <p>수사 데이터를 기반으로 한<br>정밀 진단 시스템입니다.</p>
-        <button class="video-btn" id="videoBtn">▶ 안내 영상 시청 (30초)</button>
+        <p>실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
+        <button class="video-btn" id="videoBtn">▶ 교육 영상 시청 (30초 대기)</button>
         <div id="introVideoBox" class="video-box hidden">
             <div class="video-label">안내 영상 시청 중 (<span id="count">30</span>초)</div>
             <div class="video-container">
                 <iframe id="introFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
             </div>
         </div>
-        <button id="startBtn" class="primary" style="margin-top:10px;" disabled>안내 영상을 시청해 주세요</button>
+        <button id="startBtn" class="primary" style="margin-top:15px;" disabled>안내 영상을 시청해 주세요</button>
     </div>
 
     <div class="card screen" id="caseScreen">
-        <h2 style="color:#fff;">🚨 실제 피해 사례</h2>
+        <div class="case-title-bar" style="text-align:center; margin-bottom:20px;">🚨 <h2>실제 피해 사례</h2></div>
         <div class="caseBox">
-            <div class="caseItem-v2">2025년 광주청 피해액<div class="caseMoney-v2">총 279억 원</div></div>
-            <div class="caseItem-v2">검찰사칭 - 자산검수<div class="caseMoney-v2">피해금 1억 원</div></div>
-            <div class="caseItem-v2">대출사칭 - 계약위반<div class="caseMoney-v2">피해금 1,600만 원</div></div>
+            <div class="caseItem-v2"><p>2025년 광주청 피해액</p><div class="caseMoney-v2">총 279억 원</div></div>
+            <div class="caseItem-v2"><p>검찰사칭 - 자산검수(26년 4월)</p><div class="caseMoney-v2">피해금 1억 원</div></div>
+            <div class="caseItem-v2"><p>대출사칭 - 계약위반(26년 2월)</p><div class="caseMoney-v2">피해금 1,600만 원</div></div>
         </div>
-        <button id="caseNextBtn" class="primary video-btn blink" style="margin-top:15px;">진단 시작하기</button>
+        <button id="caseNextBtn" class="primary video-btn blink" style="margin-top:20px;">내 상황 진단하기 (클릭)</button>
     </div>
 
     <div class="card screen" id="quiz">
-        <div id="question" style="font-size:1.4rem; font-weight:900; text-align:center; color:var(--primary-color); margin-bottom:20px;"></div>
+        <div id="question"></div>
         <div id="choices"></div>
         <div id="dynamicVideoArea"></div>
         <div id="descBox" class="descBox hidden"></div>
-        <div id="timerText" class="hidden" style="text-align:center; margin-top:10px; color:var(--danger-color); font-weight:bold;">잠시만 기다려주세요...</div>
-        <button id="nextBtn" class="primary hidden">다음으로 넘어가기 ▶</button>
+        <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:var(--danger-color); font-weight:bold;">📍 잠시만 기다려주세요...</div>
+        <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
     </div>
 
     <div class="card screen" id="reWatchScreen">
@@ -186,53 +211,55 @@ button:active { transform: scale(0.97); }
         <div class="video-box">
             <div id="reWatchLabel" class="video-label">영상 시청 중 (대기...)</div>
             <div class="video-container">
-                <iframe id="reWatchFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                <iframe id="reWatchFrame" src="" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
-        <p style="margin-top:15px;">영상을 시청하신 후<br>버튼을 눌러주세요.</p>
-        <button id="toPreventionBtn" class="primary" disabled style="background:#ccc;">영상을 시청해 주세요</button>
+        <button id="toPreventionBtn" class="primary" disabled style="background:#ccc; margin-top:15px;">영상을 시청해 주세요</button>
     </div>
 
     <div class="card screen" id="preventionScreen">
-        <h2>🛡️ 예방 수칙 완결편</h2>
+        <h2>🛡️ 보이스피싱 예방 완결편</h2>
         <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
-        <div class="prevent-item">2. 공식 고객센터로 직접 확인</div>
+        <div class="prevent-item">2. 공식 고객센터로 직접 연락</div>
         <div class="prevent-item">3. 보안위험자동차단 설정</div>
-        <div class="prevent-item">4. 휴대전화 소액결제 차단</div>
-        <div class="prevent-item">5. 명의도용방지 가입제한</div>
-        <button id="resultBtn" class="btn-gold" style="margin-top:15px;">나의 결과 보기</button>
+        <div class="prevent-item">4. 휴대전화 소액결제 원천차단</div>
+        <div class="prevent-item">5. 명의도용방지 가입제한 설정</div>
+        <div class="prevent-item">6. 여신거래안심차단</div>
+        <div class="prevent-item">7. 비대면계좌개설차단</div>
+        <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
     </div>
 
     <div class="card screen" id="resultBox">
         <h2>진단 결과</h2>
-        <div id="result" style="font-size:2.5rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
+        <div id="result" style="font-size:3rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
         <div id="detailResult"></div>
         <button id="goFinalBtn" class="primary" style="margin-top:15px;"></button>
     </div>
 
     <div class="card screen" id="finalGuideBox">
-        <h2 style="color:var(--danger-color);">🚨 긴급 가이드</h2>
-        <div style="background:#fff5f5; padding:15px; border-radius:15px; border:2px solid var(--danger-color);">
-            <p style="color:var(--danger-color); font-weight:900;">즉시 실행하세요!</p>
-            <ul style="font-weight:bold; line-height:1.6;">
-                <li>휴대전화 <b>비행기모드</b> 전환</li>
-                <li>다른 전화기로 <b>112</b> 신고</li>
-                <li>해당 계좌 <b>지급정지</b> 요청</li>
+        <h2 style="color:var(--danger-color);">🚨 긴급 조치 가이드</h2>
+        <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color);">
+            <p style="font-size:1.4rem; color:var(--danger-color); text-align:center; font-weight:900;">지금 즉시 실행하세요!</p>
+            <ul style="font-size:1.2rem; font-weight:bold; margin-top:15px; line-height: 1.6;">
+                <li>휴대전화를 즉시 <b>비행기모드</b>로 전환하세요.</li>
+                <li>주변인의 전화를 빌려 <b>112</b>에 신고하세요.</li>
+                <li>계좌번호 유출 시 계좌를 <b>지급정지</b>하세요.</li>
             </ul>
         </div>
-        <button class="share-btn" onclick="shareSystem()" style="background:#fee500; margin-top:20px;">💬 가족에게 공유하기</button>
-        <button class="primary" onclick="location.reload()" style="background:#666; margin-top:10px;">처음으로</button>
+        <button class="share-btn" onclick="shareSystem()" style="background:#fee500; margin-top:20px;">💬 가족·지인에게 공유하기</button>
+        <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
     </div>
 
     <div class="card screen" id="shareOnlyBox">
-        <h2 style="color:var(--success-color);">✅ 진단 완료</h2>
-        <p>위험 징후가 발견되지 않았습니다.<br>주변에도 널리 알려주세요!</p>
-        <button class="share-btn" onclick="shareSystem()" style="background:#fee500; margin-top:20px;">💬 지인에게 공유하기</button>
-        <button class="primary" onclick="location.reload()" style="background:#666; margin-top:10px;">처음으로</button>
+        <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
+        <p style="font-size:1.4rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
+        <button class="share-btn" onclick="shareSystem()" style="background:#fee500; margin-top:20px;">💬 가족·지인에게 공유하기</button>
+        <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
     </div>
 </div>
 
 <script>
+/* 파이어베이스 설정 */
 const firebaseConfig = {
     apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
     authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -252,97 +279,114 @@ function initStatistics() {
     const todayRef = db.ref(`stats/visitors/${dayKey}`);
     const totalRef = db.ref('stats/visitors/total_accumulated');
     const shareRef = db.ref('stats/shares/total');
-
     todayRef.transaction(c => (c || 0) + 1);
     totalRef.transaction(c => (c || 0) + 1);
-
     todayRef.on('value', snap => { document.getElementById('todayCount').innerText = (snap.val() || 0).toLocaleString(); });
     totalRef.on('value', snap => { document.getElementById('totalCount').innerText = (snap.val() || 0).toLocaleString(); });
-    shareRef.on('value', snap => { document.getElementById('mainShareCount').innerText = (snap.val() || 0).toLocaleString(); });
+    shareRef.on('value', snap => { if(document.getElementById('mainShareCount')) document.getElementById('mainShareCount').innerText = (snap.val() || 0).toLocaleString(); });
 }
 window.addEventListener('load', initStatistics);
 
+/* 질문 데이터 (기존 10개 100% 유지) */
 const questions = [
-    { q:"1. 신청하지 않은 '카드발급' 혹은 '배송완료' 문자를 받았나요?", choices:["예","아니오"], desc:"정보유출을 노린 가짜 문자입니다. 즉시 차단하세요.", risk:3, vid:"EC8lTWKjCQM" },
-    { q:"2. 경찰/검찰이라며 '범죄연루', '자산검수'를 요구하나요?", choices:["예","아니오"], desc:"수사기관은 절대 돈을 요구하거나 전화를 길게 끌지 않습니다.", risk:5, vid:"vNsf2p9CDZQ" },
-    { q:"3. 보안을 위해 특정 '앱(원격제어 등)' 설치를 유도하나요?", choices:["예","아니오"], desc:"앱 설치는 폰의 모든 권한을 범인에게 넘기는 행위입니다.", risk:5 },
-    { q:"4. 금감원이나 112에 직접 전화해 보라고 유도하나요?", choices:["예","아니오"], desc:"악성 앱이 깔리면 어떤 번호로 전화해도 범인이 가로챕니다.", risk:5 },
-    { q:"5. 텔레그램 등 메신저로만 연락하며 보안을 강조하나요?", choices:["예","아니오"], desc:"수사기관은 공식 채널 외의 메신저를 사용하지 않습니다.", risk:5 },
-    { q:"6. 저금리 대출로 갈아타라는 제안을 받았나요?", choices:["예","아니오"], desc:"먼저 걸려온 대출 권유 전화는 99% 사기입니다.", risk:3, vid:"ePcTTZIi2uw" },
-    { q:"7. 기존 대출금을 '현금'으로 직접 갚아야 한다고 하나요?", choices:["예","아니오"], desc:"은행 직원이 밖에서 현금을 받는 경우는 절대 없습니다.", risk:5 }
+    { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
+    { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5, videoId:"MULTI", vTitle:"📽️ 수사기관 사칭 보이스피싱" },
+    { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예 (설치함)","아니오"], desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
+    { q:"4. 금감원(1332)이나 검찰청(1301)에 직접 전화해서 확인해보라고 유도합니까?", choices:["예 (유도함)","아니오"], desc:"악성어플이 설치되면 어디에 전화해도 범인이 전화를 가로채서 받습니다.", risk:5 },
+    { q:"5. 텔레그램, 시그널 등 메신저로 수사 지시를 받거나 보고하였습니까?", choices:["예 (그렇다)","아니오"], desc:"수사기관은 절대로 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
+    { q:"6. 수사 보안이라며 '주변 사람이나 가족에게 절대 말하지 말라'고 합니까?", choices:["예 (그렇다)","아니오"], desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 범죄 수법입니다.", risk:5 },
+    { q:"7. 전화나 영상통화 또는 CCTV로 본인을 계속 감시하고 있다는 느낌을 받고있습니까?", choices:["예 (그렇다)","아니오"], desc:"범인이 실시간으로 상황을 통제하려는 시도입니다. 100% 피싱입니다.", risk:5 },
+    { q:"8. 낮은 이자로 대출을 바꿔주겠다며 걸려온 광고 전화를 받았습니까?", choices:["예 (받았습니다)","아니오"], desc:"은행은 먼저 전화를 걸어 낮은 금리로 바꿔주겠다고 하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", vTitle:"📽️ 대출 빙자 보이스피싱" },
+    { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
+    { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다.", risk:5 }
 ];
 
-let index = 0, selectedRisks = [], highRisk = false;
-let history = ['intro'];
+let index = 0, selectedRisks = [], highRiskDetected = false;
+let screenHistory = ['intro'];
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.getElementById('backBtn').style.display = (id==='intro'||id==='finalGuideBox'||id==='shareOnlyBox') ? 'none' : 'block';
+    document.getElementById('backBtn').style.display = (id==='intro'||id==='shareOnlyBox'||id==='finalGuideBox') ? 'none' : 'block';
 }
 
 function goBack() {
     if (index > 0 && document.getElementById('quiz').classList.contains('active')) { index--; loadQ(); }
-    else if (history.length > 1) { history.pop(); showScreen(history[history.length-1]); }
+    else if (screenHistory.length > 1) { screenHistory.pop(); showScreen(screenHistory[screenHistory.length-1]); }
 }
 
 document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
-    // controls=0 & disablekb=1 & modestbranding=1 적용
+    // 영상 상태바 제거 옵션 적용
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3";
     let timer = 30;
-    const inv = setInterval(() => {
+    const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
-            clearInterval(inv);
-            const btn = document.getElementById("startBtn");
-            btn.disabled = false; btn.innerText = "진단 시작하기 (클릭)";
-            btn.style.background = "var(--success-color)";
+            clearInterval(interval);
+            const sBtn = document.getElementById("startBtn");
+            sBtn.disabled = false; sBtn.innerText = "진단 시작하기 (클릭)";
+            sBtn.style.background = "var(--success-color)";
         }
     }, 1000);
 };
 
-document.getElementById("startBtn").onclick = () => { history.push('caseScreen'); showScreen('caseScreen'); };
-document.getElementById("caseNextBtn").onclick = () => { history.push('quiz'); showScreen('quiz'); loadQ(); };
+document.getElementById("startBtn").onclick = () => { screenHistory.push('caseScreen'); showScreen('caseScreen'); };
+document.getElementById("caseNextBtn").onclick = () => { screenHistory.push('quiz'); showScreen('quiz'); loadQ(); };
 
 function loadQ(){
+    window.scrollTo(0,0);
     const q = questions[index];
     document.getElementById("question").innerText = q.q;
     const c = document.getElementById("choices");
     c.innerHTML = "";
     q.choices.forEach((t, i) => {
         let b = document.createElement("button");
-        b.className = (i===0) ? "btn-yes" : "btn-no";
+        b.className = (i === 0) ? "btn-yes" : "btn-no";
         b.innerText = t;
-        b.onclick = () => {
-            if(i===0){ selectedRisks.push({q:q.q, d:q.desc}); if(q.risk>=5) highRisk=true; }
-            document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
-            if(q.vid) {
-                const area = document.getElementById("dynamicVideoArea");
-                area.innerHTML = `<div class="video-box"><div class="video-container"><iframe id="qFrame" src="https://www.youtube.com/embed/${q.vid}?autoplay=1&controls=0&rel=0&modestbranding=1&disablekb=1" frameborder="0"></iframe></div></div>`;
-            }
-            document.getElementById("descBox").innerText = q.desc;
-            document.getElementById("descBox").classList.remove("hidden");
-            document.getElementById("timerText").classList.remove("hidden");
-            setTimeout(() => { document.getElementById("timerText").classList.add("hidden"); document.getElementById("nextBtn").classList.remove("hidden"); }, 2000);
-        };
+        b.onclick = () => answer(i);
         c.appendChild(b);
     });
     document.getElementById("dynamicVideoArea").innerHTML = "";
     document.getElementById("descBox").classList.add("hidden");
     document.getElementById("nextBtn").classList.add("hidden");
+    document.getElementById("timerText").classList.add("hidden");
 }
+
+function answer(i){
+    const q = questions[index];
+    if(i === 0){
+        selectedRisks.push({q: q.q, desc: q.desc});
+        if(q.risk >= 5) highRiskDetected = true;
+    }
+    document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
+    if(q.videoId) {
+        const area = document.getElementById("dynamicVideoArea");
+        area.innerHTML = `<div class="video-box"><div class="video-label">${q.vTitle}</div><div class="video-container"><iframe id="qFrame" src="" frameborder="0" allowfullscreen></iframe></div>${q.videoId === "MULTI" ? `<div style="padding:8px; background:#fff; display:flex; flex-direction:column; gap:8px;"><button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 1 보기</button><button onclick="playVid('CvEsZdEL00I')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 2 보기</button></div>` : ''}</div>`;
+        playVid(q.videoId === "MULTI" ? 'vNsf2p9CDZQ' : q.videoId);
+    }
+    document.getElementById("descBox").innerText = q.desc;
+    document.getElementById("descBox").classList.remove("hidden");
+    document.getElementById("timerText").classList.remove("hidden");
+    setTimeout(() => { document.getElementById("timerText").classList.add("hidden"); document.getElementById("nextBtn").classList.remove("hidden"); }, 2000); 
+}
+
+function playVid(id) { const frame = document.getElementById("qFrame"); if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&controls=0&rel=0&modestbranding=1&disablekb=1&start=8`; }
 
 document.getElementById("nextBtn").onclick = () => {
     index++;
     if(index >= questions.length) { 
         showScreen('reWatchScreen');
         document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75&controls=0&rel=0&modestbranding=1";
-        let vT = 10;
-        const vI = setInterval(() => {
-            vT--; document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vT}초)`;
-            if(vT<=0){ clearInterval(vI); document.getElementById("toPreventionBtn").disabled = false; document.getElementById("toPreventionBtn").style.background = "var(--primary-color)"; }
+        let vTimer = 10;
+        const vInterval = setInterval(() => {
+            vTimer--; document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
+            if(vTimer <= 0) {
+                clearInterval(vInterval);
+                document.getElementById("toPreventionBtn").disabled = false;
+                document.getElementById("toPreventionBtn").style.background = "var(--primary-color)";
+            }
         }, 1000);
     } else { loadQ(); }
 };
@@ -351,26 +395,28 @@ document.getElementById("toPreventionBtn").onclick = () => showScreen('preventio
 document.getElementById("resultBtn").onclick = () => {
     showScreen('resultBox');
     const res = document.getElementById("result");
-    const dRes = document.getElementById("detailResult");
-    const fBtn = document.getElementById("goFinalBtn");
-    dRes.innerHTML = "";
-    if(highRisk){ res.innerText="🚨 고위험"; res.style.color="red"; fBtn.innerText="긴급 가이드 확인"; }
-    else if(selectedRisks.length>0){ res.innerText="⚠️ 주의"; res.style.color="orange"; fBtn.innerText="긴급 가이드 확인"; }
-    else { res.innerText="✅ 안전"; res.style.color="green"; fBtn.innerText="진단 완료"; }
+    const isSafe = !highRiskDetected && selectedRisks.length === 0;
+    if(highRiskDetected){ res.innerText = "🚨 고위험"; res.style.color = "red"; document.getElementById("goFinalBtn").innerText = "긴급 조치 가이드 ▶"; }
+    else if(selectedRisks.length > 0){ res.innerText = "⚠️ 주의"; res.style.color = "orange"; document.getElementById("goFinalBtn").innerText = "긴급 조치 가이드 ▶"; }
+    else { res.innerText = "✅ 안전"; res.style.color = "green"; document.getElementById("goFinalBtn").innerText = "진단 완료 ▶"; }
     
-    selectedRisks.forEach(item => {
-        let div = document.createElement("div");
+    let reportArea = document.getElementById("detailResult");
+    reportArea.innerHTML = "";
+    selectedRisks.forEach((item) => {
+        const div = document.createElement("div");
         div.className = "report-item";
-        div.innerHTML = `<b>${item.q}</b><br><span style="color:red;">${item.d}</span>`;
-        dRes.appendChild(div);
+        div.innerHTML = `<b>${item.q}</b><br><span style="color:red;">${item.desc}</span>`;
+        reportArea.appendChild(div);
     });
 };
 
-document.getElementById("goFinalBtn").onclick = () => { if(highRisk || selectedRisks.length>0) showScreen('finalGuideBox'); else showScreen('shareOnlyBox'); };
+document.getElementById("goFinalBtn").onclick = () => {
+    if(highRiskDetected || selectedRisks.length > 0) showScreen('finalGuideBox'); else showScreen('shareOnlyBox');
+};
 
 async function shareSystem() {
     if (navigator.share) {
-        await navigator.share({ title:'보이스피싱 진단', text:'나의 위험도를 체크해보세요!', url:window.location.href });
+        await navigator.share({ title: '보이스피싱 예방 진단', text: '나의 위험도를 점검해보세요!', url: window.location.href });
         db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
     } else { alert("주소가 복사되었습니다."); }
 }
