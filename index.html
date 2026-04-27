@@ -115,6 +115,19 @@ button:disabled { transform: none; }
 .btn-no { background: #448aff; color: white; border-bottom: 5px solid #1565c0; margin-bottom: 5px; }
 .btn-gold { background: #ffd600; color: #000; border: 2px solid #000; }
 
+/* 통계 대시보드 스타일 */
+.stats-box {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: 700;
+    color: #002b5c;
+    border: 2px solid #bbdefb;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
 .descBox { 
     margin-top: 20px; 
     padding: 20px; 
@@ -172,18 +185,6 @@ button:disabled { transform: none; }
 .blink { animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(211,47,47, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(211,47,47, 0); } 100% { box-shadow: 0 0 0 0 rgba(211,47,47, 0); } }
-
-/* 통계 디자인 추가 */
-.stats-box {
-    background: #e3f2fd;
-    padding: 12px;
-    border-radius: 15px;
-    margin: 15px 0;
-    text-align: center;
-    font-weight: 700;
-    color: #002b5c;
-    border: 1px solid #bbdefb;
-}
 </style>
 </head>
 
@@ -199,8 +200,13 @@ button:disabled { transform: none; }
         <h2>보이스피싱 진단</h2>
         
         <div class="stats-box">
-            📊 현재 참여 현황<br>
-            <span style="font-size: 0.95rem; color: #444;">오늘: <span id="todayCount" style="color:#d32f2f;">0</span>명 | 이달: <span id="monthCount">0</span>명</span>
+            📊 실시간 참여 현황<br>
+            <div style="margin: 8px 0;">
+                <span style="font-size: 1.2rem; color: #d32f2f; font-weight: 900;">누적 참여: <span id="totalCount">0</span>명</span>
+            </div>
+            <div style="font-size: 0.9rem; color: #555;">
+                오늘: <span id="todayCount">0</span>명 | 공유: <span id="mainShareCount">0</span>회
+            </div>
         </div>
 
         <p>실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
@@ -274,8 +280,8 @@ button:disabled { transform: none; }
                 <li>계좌번호 유출 시 계좌를 <b>지급정지</b>하세요.</li>
             </ul>
         </div>
-        <p style="text-align: center; font-size: 1rem; color: #666; margin-top: 15px;">
-            현재까지 총 <span id="shareCount1" style="font-weight: 900; color: #d32f2f;">0</span>회 공유되었습니다!
+        <p style="text-align: center; font-size: 1.1rem; color: #444; margin-top: 15px; font-weight: bold;">
+            현재까지 총 <span id="shareCount1" style="color: #d32f2f;">0</span>회 공유되었습니다!
         </p>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
@@ -284,8 +290,8 @@ button:disabled { transform: none; }
     <div class="card screen" id="shareOnlyBox">
         <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
         <p style="font-size:1.4rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
-        <p style="text-align: center; font-size: 1rem; color: #666; margin-top: 10px;">
-            현재까지 총 <span id="shareCount2" style="font-weight: 900; color: #d32f2f;">0</span>회 공유되었습니다!
+        <p style="text-align: center; font-size: 1.1rem; color: #444; margin-top: 10px; font-weight: bold;">
+            현재까지 총 <span id="shareCount2" style="color: #d32f2f;">0</span>회 공유되었습니다!
         </p>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
@@ -307,44 +313,48 @@ const firebaseConfig = {
     measurementId: "G-JBNN4T7FNH"
 };
 
-// 파이어베이스 초기화
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 
-// 날짜 키 생성
 const dateObj = new Date();
 const monthKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
 const dayKey = `${monthKey}-${String(dateObj.getDate()).padStart(2, '0')}`;
 
 /* =========================================
-   2. 통계 로직 (접속자 및 공유수)
+   2. 통합 통계 로직 (누적/오늘/공유)
    ========================================= */
 function initStatistics() {
     const todayRef = db.ref(`stats/visitors/${dayKey}`);
     const monthRef = db.ref(`stats/visitors/${monthKey}`);
+    const totalRef = db.ref('stats/visitors/total_accumulated'); // 누적 인원 경로
     const shareRef = db.ref('stats/shares/total');
 
-    // 방문자 카운트 증가
+    // 카운트 증가
     todayRef.transaction(current => (current || 0) + 1);
     monthRef.transaction(current => (current || 0) + 1);
+    totalRef.transaction(current => (current || 0) + 1);
 
-    // 실시간 화면 업데이트
-    todayRef.on('value', snap => { document.getElementById('todayCount').innerText = snap.val() || 0; });
-    monthRef.on('value', snap => { document.getElementById('monthCount').innerText = snap.val() || 0; });
+    // 실시간 업데이트 (숫자에 콤마 추가)
+    todayRef.on('value', snap => { 
+        document.getElementById('todayCount').innerText = (snap.val() || 0).toLocaleString(); 
+    });
+    totalRef.on('value', snap => { 
+        document.getElementById('totalCount').innerText = (snap.val() || 0).toLocaleString(); 
+    });
     shareRef.on('value', snap => { 
-        const val = snap.val() || 0;
+        const val = (snap.val() || 0).toLocaleString();
+        if(document.getElementById('mainShareCount')) document.getElementById('mainShareCount').innerText = val;
         if(document.getElementById('shareCount1')) document.getElementById('shareCount1').innerText = val;
         if(document.getElementById('shareCount2')) document.getElementById('shareCount2').innerText = val;
     });
 }
 
-// 페이지 로드 시 실행
 window.addEventListener('load', initStatistics);
 
 /* =========================================
-   3. 기존 시스템 로직
+   3. 기존 시스템 로직 (진단 내용 유지)
    ========================================= */
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
@@ -500,7 +510,6 @@ document.getElementById("goFinalBtn").onclick = () => {
     window.scrollTo(0,0);
 };
 
-// 공유 기능 및 DB 업데이트
 async function shareSystem() {
     const shareRef = db.ref('stats/shares/total');
     if (navigator.share) {
