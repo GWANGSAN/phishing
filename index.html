@@ -18,88 +18,35 @@
     --police-gold: #ffd600;
 }
 
-body { 
-    margin: 0; 
-    font-family: 'Pretendard', -apple-system, "Malgun Gothic", sans-serif; 
-    background: var(--bg-color); 
-    color: #111; 
-    line-height: 1.5; 
-    word-break: keep-all; 
-}
+body { margin: 0; font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg-color); color: #111; line-height: 1.5; word-break: keep-all; }
 
-/* 헤더 글래스모피즘 */
 .header { 
-    background: rgba(0, 43, 92, 0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: white; 
-    padding: 16px 10px; 
-    text-align: center; 
-    font-weight: 800; 
-    font-size: 1.2rem; 
-    position: sticky; 
-    top: 0; 
-    z-index: 1000; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: rgba(0, 43, 92, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    color: white; padding: 16px 10px; text-align: center; font-weight: 800; font-size: 1.2rem; 
+    position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: center;
 }
 
-.back-btn {
-    position: absolute;
-    left: 15px;
-    background: transparent;
-    color: white;
-    border: none;
-    font-size: 1.4rem;
-    cursor: pointer;
-    display: none;
-}
-
+.back-btn { position: absolute; left: 15px; background: transparent; color: white; border: none; font-size: 1.4rem; cursor: pointer; display: none; }
 .container { width: 100%; max-width: 500px; margin: 0 auto; box-sizing: border-box; }
 
 .card { 
-    background: white; 
-    margin: 12px;
-    border-radius: 24px; 
-    padding: 24px 18px; 
-    box-shadow: 0 8px 30px rgba(0,0,0,0.05); 
-    min-height: calc(100vh - 100px); 
-    display: flex; 
-    flex-direction: column; 
-    box-sizing: border-box;
-    position: relative;
+    background: white; margin: 12px; border-radius: 24px; padding: 24px 18px; 
+    box-shadow: 0 8px 30px rgba(0,0,0,0.05); min-height: calc(100vh - 100px); 
+    display: flex; flex-direction: column; box-sizing: border-box; position: relative;
 }
 
 .screen { display: none; flex-direction: column; }
-.screen.active { display: flex; animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.screen.active { display: flex; animation: fadeInUp 0.5s forwards; }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-h2 { color: var(--primary-color); font-size: 1.7rem; margin-bottom: 20px; text-align: center; font-weight: 900; line-height: 1.2; }
-#question { font-size: 1.5rem; font-weight: 900; margin-bottom: 24px; color: var(--primary-color); text-align: center; line-height: 1.4; }
+h2 { color: var(--primary-color); font-size: 1.7rem; margin-bottom: 20px; text-align: center; font-weight: 900; }
+#question { font-size: 1.5rem; font-weight: 900; margin-bottom: 24px; color: var(--primary-color); text-align: center; }
 
-button { 
-    width: 100%; 
-    padding: 18px 10px; 
-    margin-top: 12px; 
-    border: none; 
-    border-radius: 16px; 
-    font-size: 1.3rem; 
-    font-weight: 800; 
-    cursor: pointer; 
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-button:active { transform: scale(0.97); opacity: 0.9; }
-button:disabled { background: #ccc !important; transform: none; cursor: not-allowed; }
+button { width: 100%; padding: 18px 10px; margin-top: 12px; border: none; border-radius: 16px; font-size: 1.3rem; font-weight: 800; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+button:active { transform: scale(0.97); }
+button:disabled { background: #ccc !important; transform: none; }
 
 .primary { background: var(--primary-color); color: white; }
 .video-btn { background: var(--danger-color); color: white; animation: pulse 2s infinite; }
@@ -107,85 +54,22 @@ button:disabled { background: #ccc !important; transform: none; cursor: not-allo
 .btn-no { background: #448aff; color: white; border-bottom: 4px solid #1565c0; }
 .btn-gold { background: var(--police-gold); color: #000; border: 2px solid #333; }
 
-/* 통계 대시보드 */
-.stats-banner {
-    background: #f8f9fc;
-    padding: 10px;
-    border-radius: 16px;
-    margin-bottom: 24px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    text-align: center;
-    font-size: 0.8rem;
-    color: #666;
-    border: 1px solid #edf2f7;
-}
-.stats-item b { display: block; font-size: 1rem; color: var(--primary-color); margin-bottom: 2px; }
+.stats-banner { background: #f8f9fc; padding: 10px; border-radius: 16px; margin-bottom: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; font-size: 0.8rem; color: #666; border: 1px solid #edf2f7; }
+.stats-item b { display: block; font-size: 1rem; color: var(--primary-color); }
 
-/* 경찰관 말풍선 */
-.descBox { 
-    margin-top: 24px; 
-    padding: 20px; 
-    background: #fffdf0; 
-    border-radius: 20px; 
-    font-size: 1.2rem; 
-    color: #222; 
-    border: 2px solid var(--police-gold); 
-    font-weight: 800; 
-    line-height: 1.6;
-    position: relative;
-    box-shadow: 0 4px 12px rgba(255, 214, 0, 0.15);
-}
+.descBox { margin-top: 24px; padding: 20px; background: #fffdf0; border-radius: 20px; font-size: 1.2rem; color: #222; border: 2px solid var(--police-gold); font-weight: 800; position: relative; }
+.descBox::before { content: '🚔 경찰관 안내'; display: inline-block; background: var(--police-gold); color: #000; font-size: 0.85rem; padding: 4px 12px; border-radius: 8px; position: absolute; top: -14px; left: 20px; font-weight: 900; }
 
-.descBox::before {
-    content: '🚔 경찰관 안내';
-    display: inline-block;
-    background: var(--police-gold);
-    color: #000;
-    font-size: 0.85rem;
-    padding: 4px 12px;
-    border-radius: 8px;
-    position: absolute;
-    top: -14px;
-    left: 20px;
-    font-weight: 900;
-}
-
-/* 피해사례 카드 스타일 */
 #caseScreen { background: #1a1a1a; border: 2px solid var(--danger-color); color: #fff; }
-.caseItem-v2 { 
-    background: rgba(255,255,255,0.08); 
-    padding: 18px; 
-    border-radius: 18px; 
-    margin-bottom: 15px; 
-    border-left: 6px solid var(--danger-color); 
-}
-.caseItem-v2 p { margin: 0; color: #bbb; font-size: 1rem; text-align: left; }
-.caseMoney-v2 { display: block; font-size: 2rem; font-weight: 900; color: #fff; text-align: right; margin-top: 5px; }
+.caseItem-v2 { background: rgba(255,255,255,0.08); padding: 18px; border-radius: 18px; margin-bottom: 15px; border-left: 6px solid var(--danger-color); }
+.caseMoney-v2 { display: block; font-size: 2rem; font-weight: 900; color: #fff; text-align: right; }
 
-/* 유튜브 플레이어 박스 */
-.video-box { 
-    margin-top: 20px; 
-    border-radius: 18px; 
-    overflow: hidden; 
-    border: 3px solid var(--primary-color); 
-    background: #000; 
-    position: relative; 
-}
+/* 유튜브 박스 및 터치 방지 오버레이 */
+.video-box { margin-top: 20px; border-radius: 18px; overflow: hidden; border: 3px solid var(--primary-color); background: #000; position: relative; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
-.video-container iframe { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-    pointer-events: none; /* 조작 방지 */
-}
-.video-label { 
-    text-align: center; 
-    background: var(--primary-color); 
-    color: white; 
-    padding: 10px; 
-    font-weight: 900; 
-    font-size: 1rem; 
-}
+.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: transparent; }
+.video-label { text-align: center; background: var(--primary-color); color: white; padding: 10px; font-weight: 900; font-size: 1rem; }
 
 .prevent-item { background: #f1f4f8; padding: 16px; border-radius: 14px; margin-bottom: 12px; border-left: 6px solid var(--primary-color); font-size: 1.2rem; font-weight: 800; }
 .report-item { background: #fff; border: 2px solid var(--danger-color); border-radius: 16px; padding: 18px; margin-bottom: 12px; }
@@ -213,10 +97,11 @@ button:disabled { background: #ccc !important; transform: none; cursor: not-allo
         </div>
         <p style="font-size:1.4rem;">실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
         <button class="video-btn" id="videoBtn">▶ 교육 영상 시청 (30초 대기)</button>
-        <div id="introVideoBox" class="video-box hidden" style="border-color:var(--primary-color);">
+        <div id="introVideoBox" class="video-box hidden">
             <div class="video-label">필수 안내 영상 시청 중 (<span id="count">30</span>초)</div>
             <div class="video-container">
                 <iframe id="introFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                <div class="video-overlay"></div>
             </div>
         </div>
         <button id="startBtn" class="primary" style="margin-top:20px;" disabled>안내 영상을 시청해 주세요</button>
@@ -237,7 +122,7 @@ button:disabled { background: #ccc !important; transform: none; cursor: not-allo
         <div id="choices"></div>
         <div id="dynamicVideoArea"></div>
         <div id="descBox" class="descBox hidden"></div>
-        <div id="timerText" class="hidden" style="text-align:center; margin-top:20px; color:var(--danger-color); font-weight:bold; font-size:1.1rem;">📍 잠시만 기다려주세요...</div>
+        <div id="timerText" class="hidden" style="text-align:center; margin-top:20px; color:var(--danger-color); font-weight:bold;">📍 잠시만 기다려주세요...</div>
         <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
     </div>
 
@@ -247,10 +132,10 @@ button:disabled { background: #ccc !important; transform: none; cursor: not-allo
             <div id="reWatchLabel" class="video-label">안내 영상 시청 중 (대기...)</div>
             <div class="video-container">
                 <iframe id="reWatchFrame" src="" frameborder="0" allowfullscreen></iframe>
+                <div class="video-overlay"></div>
             </div>
         </div>
-        <p style="margin-top:20px; font-weight:800;">영상을 끝까지 시청하신 후<br>아래 버튼을 눌러주세요.</p>
-        <button id="toPreventionBtn" class="primary" disabled style="background:#ccc;">영상을 시청해 주세요</button>
+        <button id="toPreventionBtn" class="primary" disabled style="background:#ccc; margin-top:20px;">영상을 시청해 주세요</button>
     </div>
 
     <div class="card screen" id="preventionScreen">
@@ -276,26 +161,26 @@ button:disabled { background: #ccc !important; transform: none; cursor: not-allo
         <h2 style="color:var(--danger-color);">🚨 긴급 조치 가이드</h2>
         <div style="background:#fff5f5; padding:24px; border-radius:24px; border:3px solid var(--danger-color);">
             <p style="font-size:1.5rem; color:var(--danger-color); text-align:center; font-weight:900;">지금 즉시 실행하세요!</p>
-            <ul style="font-size:1.25rem; font-weight:800; margin-top:20px; padding-left:15px; line-height: 1.7;">
+            <ul style="font-size:1.25rem; font-weight:800; margin-top:20px; padding-left:15px;">
                 <li>즉시 <b style="color:red;">비행기모드</b>로 전환!</li>
                 <li>다른 전화로 <b style="color:red;">112</b> 신고!</li>
                 <li>은행에 <b style="color:red;">지급정지</b> 요청!</li>
             </ul>
         </div>
-        <button class="btn-gold" onclick="shareSystem()" style="margin-top:25px; border-radius:50px;">💬 가족·지인에게 긴급 공유</button>
+        <button class="btn-gold" onclick="shareSystem()" style="margin-top:25px; border-radius:50px;">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:12px; background:#555;">다시 처음으로</button>
     </div>
 
     <div class="card screen" id="shareOnlyBox">
         <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
-        <p style="font-size:1.5rem; text-align:center; margin:30px 0;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
+        <p style="font-size:1.5rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
         <button class="btn-gold" onclick="shareSystem()" style="margin-top:20px; border-radius:50px;">💬 가족·지인에게 공유하기</button>
         <button class="primary" onclick="location.reload()" style="margin-top:12px; background:#555;">다시 처음으로</button>
     </div>
 </div>
 
 <script>
-/* 파이어베이스 설정 */
+/* 파이어베이스 설정 (기존값 그대로 사용) */
 const firebaseConfig = {
     apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
     authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -308,34 +193,31 @@ const firebaseConfig = {
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const dateObj = new Date();
-const dayKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+const dayKey = new Date().toISOString().split('T')[0];
 
 function initStatistics() {
-    const todayRef = db.ref(`stats/visitors/${dayKey}`);
-    const totalRef = db.ref('stats/visitors/total_accumulated');
-    const shareRef = db.ref('stats/shares/total');
-    todayRef.transaction(c => (c || 0) + 1);
-    totalRef.transaction(c => (c || 0) + 1);
-    todayRef.on('value', snap => { document.getElementById('todayCount').innerText = (snap.val() || 0).toLocaleString(); });
-    totalRef.on('value', snap => { document.getElementById('totalCount').innerText = (snap.val() || 0).toLocaleString(); });
-    shareRef.on('value', snap => { if(document.getElementById('mainShareCount')) document.getElementById('mainShareCount').innerText = (snap.val() || 0).toLocaleString(); });
+    db.ref(`stats/visitors/${dayKey}`).transaction(c => (c || 0) + 1);
+    db.ref('stats/visitors/total_accumulated').transaction(c => (c || 0) + 1);
+    db.ref(`stats/visitors/${dayKey}`).on('value', snap => { document.getElementById('todayCount').innerText = (snap.val() || 0).toLocaleString(); });
+    db.ref('stats/visitors/total_accumulated').on('value', snap => { document.getElementById('totalCount').innerText = (snap.val() || 0).toLocaleString(); });
+    db.ref('stats/shares/total').on('value', snap => { if(document.getElementById('mainShareCount')) document.getElementById('mainShareCount').innerText = (snap.val() || 0).toLocaleString(); });
 }
 window.addEventListener('load', initStatistics);
 
-/* 질문 10개 (원본 내용 유지) */
+<script>
 const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
-    { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:5, videoId:"MULTI", vTitle:"📽️ 수사기관 사칭 보이스피싱" },
+    { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:3, videoId:"MULTI", vTitle:"📽️ 수사기관, 검찰 사칭 보이스피싱" },
     { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예 (설치함)","아니오"], desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
     { q:"4. 금감원(1332)이나 검찰청(1301)에 직접 전화해서 확인해보라고 유도합니까?", choices:["예 (유도함)","아니오"], desc:"악성어플이 설치되면 어디에 전화해도 범인이 전화를 가로채서 받습니다.", risk:5 },
-    { q:"5. 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저로 수사 지시를 받거나 보고하였습니까?", choices:["예 (그렇다)","아니오"], desc:"수사기관은 절대로 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
+    { q:"5. 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저로 수사 지시를 받거나 보고하였습니까?", choices:["예 (그렇다)","아니오"], desc:"수사기관은 절대로 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
     { q:"6. 수사 보안이라며 '주변 사람이나 가족에게 절대 말하지 말라'고 합니까?", choices:["예 (그렇다)","아니오"], desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 범죄 수법입니다.", risk:5 },
     { q:"7. 전화나 영상통화 또는 CCTV로 본인을 계속 감시하고 있다는 느낌을 받고있습니까?", choices:["예 (그렇다)","아니오"], desc:"범인이 실시간으로 상황을 통제하려는 시도입니다. 100% 피싱입니다.", risk:5 },
     { q:"8. 낮은 이자로 대출을 바꿔주겠다며 걸려온 광고 전화를 받았습니까?", choices:["예 (받았습니다)","아니오"], desc:"은행은 먼저 전화를 걸어 낮은 금리로 바꿔주겠다고 하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", vTitle:"📽️ 대출 빙자 보이스피싱" },
     { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
-    { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다.", risk:5 }
+    { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다. 돈을 요구한다면 그건 100% 보이스피싱입니다.", risk:5 },
 ];
+
 
 let index = 0, selectedRisks = [], highRiskDetected = false;
 let screenHistory = ['intro'];
@@ -351,11 +233,11 @@ function goBack() {
     else if (screenHistory.length > 1) { screenHistory.pop(); showScreen(screenHistory[screenHistory.length-1]); }
 }
 
-/* 첫 영상 로직 (30초 대기) */
 document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
-    document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3";
+    // ✅ 재생 보장을 위해 mute=1 추가
+    document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&disablekb=1";
     let timer = 30;
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
@@ -364,7 +246,6 @@ document.getElementById("videoBtn").onclick = function(){
             const sBtn = document.getElementById("startBtn");
             sBtn.disabled = false; sBtn.innerText = "진단 시작하기 (클릭)";
             sBtn.style.background = "var(--success-color)";
-            sBtn.classList.add("blink");
         }
     }, 1000);
 };
@@ -406,112 +287,73 @@ function answer(i){
                 <div class="video-label">${q.vTitle}</div>
                 <div class="video-container">
                     <iframe id="qFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                    <div class="video-overlay"></div>
                 </div>
                 ${q.videoId === "MULTI" ? `
                 <div style="padding:10px; background:#fff; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1rem; padding:12px; background:var(--danger-color); color:white; margin:0; border-radius:10px;">📺 영상 1</button>
-                    <button onclick="playVid('CvEsZdEL00I')" style="font-size:1rem; padding:12px; background:var(--danger-color); color:white; margin:0; border-radius:10px;">📺 영상 2</button>
+                    <button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1rem; padding:12px; background:var(--danger-color); color:white; border-radius:10px;">📺 영상 1</button>
+                    <button onclick="playVid('CvEsZdEL00I')" style="font-size:1rem; padding:12px; background:var(--danger-color); color:white; border-radius:10px;">📺 영상 2</button>
                 </div>` : ''}
             </div>`;
         playVid(q.videoId === "MULTI" ? 'vNsf2p9CDZQ' : q.videoId);
     }
 
-    const dBox = document.getElementById("descBox");
-    dBox.innerText = q.desc;
-    dBox.classList.remove("hidden");
-    
-    const tText = document.getElementById("timerText");
-    tText.classList.remove("hidden");
-    setTimeout(() => { 
-        tText.classList.add("hidden"); 
-        document.getElementById("nextBtn").classList.remove("hidden"); 
-    }, 2000); 
+    document.getElementById("descBox").innerText = q.desc;
+    document.getElementById("descBox").classList.remove("hidden");
+    document.getElementById("timerText").classList.remove("hidden");
+    setTimeout(() => { document.getElementById("timerText").classList.add("hidden"); document.getElementById("nextBtn").classList.remove("hidden"); }, 2000); 
 }
 
-/* 🎥 영상 재생 함수 (8초 시작/컨트롤 금지) */
 function playVid(id) { 
     const frame = document.getElementById("qFrame"); 
-    if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=8&controls=0&rel=0&modestbranding=1&disablekb=1`; 
+    if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&start=8&controls=0&rel=0&modestbranding=1&disablekb=1`; 
 }
 
 document.getElementById("nextBtn").onclick = () => {
     index++;
     if(index >= questions.length) { 
         showScreen('reWatchScreen');
-        // 마지막 영상 (75초 시작)
-        document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75&controls=0&rel=0&modestbranding=1&disablekb=1";
+        document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&start=75&controls=0&rel=0&modestbranding=1";
         let vTimer = 10;
         const vInterval = setInterval(() => {
             vTimer--; document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
             if(vTimer <= 0) {
                 clearInterval(vInterval);
                 const toP = document.getElementById("toPreventionBtn");
-                toP.disabled = false;
-                toP.innerText = "예방 수칙 확인하기 ▶";
-                toP.style.background = "var(--primary-color)";
+                toP.disabled = false; toP.innerText = "예방 수칙 확인하기 ▶"; toP.style.background = "var(--primary-color)";
             }
         }, 1000);
     } else { loadQ(); }
 };
 
 document.getElementById("toPreventionBtn").onclick = () => showScreen('preventionScreen');
-
 document.getElementById("resultBtn").onclick = () => {
     showScreen('resultBox');
     const res = document.getElementById("result");
     const goFinal = document.getElementById("goFinalBtn");
-    if(highRiskDetected){ 
-        res.innerText = "🚨 고위험"; res.style.color = "var(--danger-color)"; 
-        goFinal.innerText = "긴급 조치 가이드 확인 ▶"; 
-        goFinal.style.background = "var(--danger-color)";
-    }
-    else if(selectedRisks.length > 0){ 
-        res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; 
-        goFinal.innerText = "긴급 조치 가이드 확인 ▶"; 
-        goFinal.style.background = "#f57c00";
-    }
-    else { 
-        res.innerText = "✅ 안전"; res.style.color = "var(--success-color)"; 
-        goFinal.innerText = "진단 완료 ▶"; 
-        goFinal.style.background = "var(--success-color)";
-    }
+    if(highRiskDetected){ res.innerText = "🚨 고위험"; res.style.color = "var(--danger-color)"; goFinal.innerText = "긴급 조치 가이드 확인 ▶"; goFinal.style.background = "var(--danger-color)"; }
+    else if(selectedRisks.length > 0){ res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; goFinal.innerText = "긴급 조치 가이드 확인 ▶"; goFinal.style.background = "#f57c00"; }
+    else { res.innerText = "✅ 안전"; res.style.color = "var(--success-color)"; goFinal.innerText = "진단 완료 ▶"; goFinal.style.background = "var(--success-color)"; }
     
     let reportArea = document.getElementById("detailResult");
     reportArea.innerHTML = "";
     selectedRisks.forEach((item) => {
         const div = document.createElement("div");
         div.className = "report-item";
-        div.innerHTML = `<div style="font-size:1.1rem; margin-bottom:8px;"><b>${item.q}</b></div><div style="color:var(--danger-color); font-weight:800;">📢 안내: ${item.desc}</div>`;
+        div.innerHTML = `<div><b>${item.q}</b></div><div style="color:var(--danger-color); font-weight:800; margin-top:5px;">📢 안내: ${item.desc}</div>`;
         reportArea.appendChild(div);
     });
 };
 
-document.getElementById("goFinalBtn").onclick = () => {
-    if(highRiskDetected || selectedRisks.length > 0) showScreen('finalGuideBox'); else showScreen('shareOnlyBox');
-};
+document.getElementById("goFinalBtn").onclick = () => { if(highRiskDetected || selectedRisks.length > 0) showScreen('finalGuideBox'); else showScreen('shareOnlyBox'); };
 
-/* 🔗 공유 시스템 및 통계 트래킹 */
 async function shareSystem() {
-    const shareData = {
-        title: '보이스피싱 예방 진단',
-        text: '광주광산경찰서 보이스피싱 위험도 자가진단 시스템입니다.',
-        url: window.location.href
-    };
-
+    const shareData = { title: '보이스피싱 예방 진단', text: '광주광산경찰서 보이스피싱 자가진단 시스템입니다.', url: window.location.href };
     if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-            db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
-        } catch (err) { console.log("공유 취소"); }
+        try { await navigator.share(shareData); db.ref('stats/shares/total').transaction(c => (c || 0) + 1); } catch (err) {}
     } else {
-        const tempInput = document.createElement("input");
-        document.body.appendChild(tempInput);
-        tempInput.value = window.location.href;
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        alert("링크가 복사되었습니다! 가족들에게 전달해 주세요.");
-        db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
+        const tempInput = document.createElement("input"); document.body.appendChild(tempInput); tempInput.value = window.location.href; tempInput.select(); document.execCommand("copy"); document.body.removeChild(tempInput);
+        alert("링크가 복사되었습니다!"); db.ref('stats/shares/total').transaction(c => (c || 0) + 1);
     }
 }
 </script>
