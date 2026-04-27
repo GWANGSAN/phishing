@@ -10,7 +10,6 @@
         :root { --p-blue: #002b5c; --p-gold: #ffd600; --danger: #d32f2f; }
         body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f0f4f8; color: #111; line-height: 1.5; word-break: keep-all; }
         
-        /* 고령층 최적화 시인성 강화 UI */
         .header { background: var(--p-blue); color: white; padding: 20px; text-align: center; font-weight: 900; font-size: 1.45rem; border-bottom: 5px solid var(--p-gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .container { width: 100%; max-width: 500px; margin: 0 auto; }
         
@@ -22,7 +21,6 @@
         .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8f9fc; padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-size: 0.9rem; border: 1px solid #dee2e6; }
         .stats-bar b { display: block; color: var(--p-blue); font-size: 1.2rem; }
         
-        /* 스마트폰 터치 및 고령층 시인성 고려 버튼 */
         button { width: 100%; padding: 22px; margin-top: 15px; border: none; border-radius: 18px; font-size: 1.7rem; font-weight: 900; cursor: pointer; transition: 0.2s; -webkit-appearance: none; }
         .btn-main { background: var(--p-blue); color: white; }
         .btn-red { background: var(--danger); color: white; box-shadow: 0 4px 0 #8b0000; }
@@ -31,14 +29,17 @@
         .btn-gold { background: var(--p-gold); color: #000; border: 3px solid #333; }
         button:disabled { background: #ccc !important; border-bottom: none; color: #666; }
 
-        /* 안내 텍스트 */
         .wait-info { text-align: center; color: var(--danger); font-weight: 900; font-size: 1.3rem; margin: 15px 0; background: #fff5f5; padding: 12px; border-radius: 15px; border: 2px dashed var(--danger); }
         
         .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 5px solid var(--p-blue); margin-top: 15px; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        .desc-box { margin-top: 25px; padding: 25px; background: #fffdf0; border-radius: 20px; border: 4px solid var(--p-gold); font-weight: 800; font-size: 1.5rem; line-height: 1.6; position: relative; }
+        /* 멀티 영상 선택 버튼 */
+        .v-select-box { display: flex; gap: 10px; padding: 10px; background: #eee; }
+        .btn-v-small { flex: 1; padding: 12px; font-size: 1rem; background: var(--p-blue); color: white; border-radius: 10px; }
+
+        .desc-box { margin-top: 25px; padding: 25px; background: #fffdf0; border-radius: 20px; border: 5px solid var(--p-gold); font-weight: 800; font-size: 1.55rem; line-height: 1.6; position: relative; }
         .desc-tag { display: inline-block; background: var(--p-gold); color: #000; font-size: 1.1rem; padding: 5px 15px; border-radius: 10px; position: absolute; top: -18px; left: 20px; font-weight: 900; border: 2px solid #333; }
         
         .case-item { background: #111; color: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 12px solid var(--danger); }
@@ -86,7 +87,7 @@
                 <div id="qDescText"></div>
             </div>
             
-            <div id="btnTimerBox" class="wait-info">안내를 읽어주세요... <span id="timer">2</span>초</div>
+            <div id="btnTimerBox" class="wait-info">조언을 읽어주세요... <span id="timer">2</span>초</div>
             <button id="btnNext" class="btn-main" style="display:none; margin-top:20px;">내용 확인 완료, 다음 질문 ▶</button>
         </div>
     </div>
@@ -130,7 +131,7 @@
     db.ref('stats/visitors/total_accumulated').on('value', s => { document.getElementById('totalV').innerText = (s.val() || 0).toLocaleString(); });
     db.ref('stats/shares/total').on('value', s => { document.getElementById('shareV').innerText = (s.val() || 0).toLocaleString(); });
 
-  const questions = [
+    const questions = [
     { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
     { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:3, videoId:"MULTI", vTitle:"📽️ 수사기관, 검찰 사칭 보이스피싱" },
     { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예 (설치함)","아니오"], desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
@@ -142,7 +143,6 @@
     { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
     { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다. 돈을 요구한다면 그건 100% 보이스피싱입니다.", risk:5 },
 ];
-
     let current = 0, results = [], highRisk = false;
 
     function show(id) { document.querySelectorAll('.card').forEach(c => c.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
@@ -151,7 +151,7 @@
         this.style.display = 'none';
         document.getElementById('introVidBox').style.display = 'block';
         document.getElementById('frameIntro').src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&controls=0&rel=0";
-        let time = 0;
+        let time = 0; // 30초 시청 유도
         const timer = setInterval(() => {
             time--;
             if(time > 0) document.getElementById('btnStart').innerText = `시청 중 (${time}초)`;
@@ -176,22 +176,27 @@
         document.getElementById('btnTimerBox').style.display = "none";
     }
 
-    // 답변 클릭 시의 로직 고정
     function handle(i) {
         const q = questions[current];
         document.querySelectorAll('#qChoices button').forEach(b => b.disabled = true);
         if(i === 0) { results.push(q); if(q.risk >= 5) highRisk = true; }
         
-        // 1. 즉시 영상과 설명 노출
+        // 1. 즉시 영상 및 설명 노출 (videoId 참조 수정)
         document.getElementById('qResultArea').style.display = "block";
         document.getElementById('qDescText').innerText = q.desc;
-        if(q.vid) {
-            const vId = (q.vid === "MULTI") ? "vNsf2p9CDZQ" : q.vid;
+        
+        if(q.videoId) {
+            const vId = (q.videoId === "MULTI") ? "vNsf2p9CDZQ" : q.videoId;
             document.getElementById('qVideoArea').innerHTML = `
                 <div class="video-box">
                     <div class="video-container">
                         <iframe id="qFrame" src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&start=8&controls=0" allow="autoplay"></iframe>
                     </div>
+                    ${q.videoId === "MULTI" ? `
+                    <div class="v-select-box">
+                        <button class="btn-v-small" onclick="playV('vNsf2p9CDZQ')">사례 1</button>
+                        <button class="btn-v-small" onclick="playV('CvEsZdEL00I')">사례 2</button>
+                    </div>` : ''}
                 </div>`;
         } else { document.getElementById('qVideoArea').innerHTML = ""; }
 
@@ -208,11 +213,13 @@
             if(count <= 0) {
                 clearInterval(timerItv);
                 timerBox.style.display = "none";
-                document.getElementById('btnNext').style.display = "block"; // 2초 뒤 버튼 노출
+                document.getElementById('btnNext').style.display = "block";
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }
         }, 1000);
     }
+
+    function playV(id) { document.getElementById('qFrame').src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&start=8&controls=0`; }
 
     document.getElementById('btnNext').onclick = () => { current++; if(current < questions.length) loadQ(); else showResult(); };
 
@@ -235,7 +242,6 @@
 
     document.getElementById('btnFinal').onclick = () => { if(results.length > 0) show('final'); else share(); };
 
-    // 강화된 공유 및 클립보드 복사 로직
     async function share() {
         const shareData = { title: '보이스피싱 진단', text: '부모님, 꼭 한번 진단해보세요! 광주경찰청 보이스피싱 진단 시스템', url: window.location.href };
         try {
