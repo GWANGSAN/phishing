@@ -34,29 +34,30 @@ body {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: white; 
-    padding: 12px 10px; 
+    padding: 15px 10px; 
     text-align: center; 
     position: sticky; 
     top: 0; 
     z-index: 1000; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
+    /* 아래 설정을 통해 내부 요소 정렬을 수동으로 제어 */
+    display: block; 
 }
 
 /* 뒤로가기 버튼: 왼쪽 상단 고정 및 글자 겹침 방지 */
 .back-btn {
     position: absolute;
-    left: 10px;
-    top: 10px;
+    left: 15px !important; /* !important를 붙여 다른 정렬 무시 */
+    top: 12px;
     background: transparent;
     color: white;
     border: none;
     font-size: 1.5rem; 
     cursor: pointer;
     display: none; 
-    z-index: 1001;
-    padding: 5px;
+    z-index: 1010;
+    padding: 0;
+    line-height: 1;
 }
 
 /* 경찰서 이름: 버튼 공간 확보를 위해 padding 추가 */
@@ -64,8 +65,9 @@ body {
     display: block;
     font-weight: 800; 
     font-size: 1.05rem;
-    padding: 0 35px; /* 좌우 여백으로 버튼과 겹침 방지 */
-    margin-bottom: 8px;
+    margin: 0 auto 10px auto;
+    padding: 0 45px; /* 양옆 45px 여백으로 버튼과 절대 안 겹치게 설정 */
+    word-break: keep-all;
 }
 
 /* 통계 5종 그리드 배치 */
