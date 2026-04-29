@@ -8,19 +8,18 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root { --p-blue: #002b5c; --p-gold: #ffd600; --danger: #d32f2f; }
-        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f0f4f8; color: #111; line-height: 1.5; word-break: keep-all; }
+        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f0f4f8; color: #111; line-height: 1.5; word-break: keep-all; overflow-x: hidden; }
         
         .header { background: var(--p-blue); color: white; padding: 20px; text-align: center; font-weight: 900; font-size: 1.4rem; border-bottom: 5px solid var(--p-gold); position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         .back-btn { position: absolute; left: 15px; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; display: none; }
 
         .container { width: 100%; max-width: 500px; margin: 0 auto; }
-        .card { background: white; margin: 12px; border-radius: 20px; padding: 30px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; flex-direction: column; min-height: 80vh; border: 1px solid #ddd; box-sizing: border-box; }
+        .card { background: white; margin: 12px; border-radius: 20px; padding: 30px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; flex-direction: column; min-height: 85vh; border: 1px solid #ddd; box-sizing: border-box; }
         .card.active { display: flex; }
         
         h2 { color: var(--p-blue); font-size: 2rem; text-align: center; margin-top: 0; font-weight: 900; letter-spacing: -1px; }
         
-        /* 버튼 스타일 */
-        button { width: 100%; padding: 22px; margin-top: 15px; border: none; border-radius: 18px; font-size: 1.7rem; font-weight: 900; cursor: pointer; transition: 0.2s; -webkit-appearance: none; }
+        button { width: 100%; padding: 22px; margin-top: 15px; border: none; border-radius: 18px; font-size: 1.7rem; font-weight: 900; cursor: pointer; transition: 0.2s; -webkit-appearance: none; touch-action: manipulation; }
         .btn-main { background: var(--p-blue); color: white; }
         .btn-red { background: var(--danger); color: white; box-shadow: 0 4px 0 #8b0000; }
         .btn-yes { background: #ff4d4d; color: white; border-bottom: 8px solid #b30000; height: 110px; margin-top: 0; }
@@ -28,19 +27,18 @@
         .btn-gold { background: var(--p-gold); color: #000; border: 3px solid #333; }
         button:disabled { background: #ccc !important; border-bottom: none; color: #666; }
 
-        /* 유튜브 누름 방지 레이어 */
-        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 5px solid var(--p-blue); margin-top: 15px; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        /* 유튜브 고정 높이 레이아웃 - 화면 밀림 방지 */
+        .video-box { position: relative; border-radius: 15px; overflow: hidden; background: #000; border: 5px solid var(--p-blue); margin-top: 15px; width: 100%; height: 0; padding-bottom: 56.25%; }
+        .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-container iframe { width: 100%; height: 100%; border: none; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
 
-        /* 예방 완결편 아이템 */
-        .prevent-item { background: #fff; border: 2px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 1.3rem; font-weight: 800; color: #333; border-left: 8px solid var(--p-blue); }
-        .prevent-sub { display: block; font-size: 1rem; color: #666; font-weight: 600; margin-top: 5px; }
-        
-        .desc-box { margin-top: 25px; padding: 25px; background: #fffdf0; border-radius: 20px; border: 5px solid var(--p-gold); font-weight: 800; font-size: 1.55rem; line-height: 1.6; position: relative; }
+        .desc-box { margin-top: 20px; padding: 25px; background: #fffdf0; border-radius: 20px; border: 5px solid var(--p-gold); font-weight: 800; font-size: 1.55rem; line-height: 1.6; position: relative; }
         .desc-tag { display: inline-block; background: var(--p-gold); color: #000; font-size: 1.1rem; padding: 5px 15px; border-radius: 10px; position: absolute; top: -18px; left: 20px; font-weight: 900; border: 2px solid #333; }
         .wait-info { text-align: center; color: var(--danger); font-weight: 900; font-size: 1.4rem; margin: 15px 0; background: #fff5f5; padding: 12px; border-radius: 15px; border: 2px dashed var(--danger); }
+        
+        /* 통계 섹션 스타일 */
+        .stat-box { background: #eee; padding: 15px; border-radius: 15px; margin-top: 20px; text-align: center; font-size: 1.1rem; font-weight: 700; color: #555; }
         .case-item { background: #111; color: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 12px solid var(--danger); }
         .case-money { display: block; font-size: 2.3rem; font-weight: 900; text-align: right; color: #ff5252; }
     </style>
@@ -53,21 +51,22 @@
 </div>
 
 <div class="container">
-    <!-- [1] 인트로 -->
     <div class="card active" id="intro">
         <h2>보이스피싱 진단</h2>
         <p style="text-align:center; font-size:1.6rem; font-weight:900; color:var(--p-blue);">실제 수사 데이터 기반<br>나의 위험도를 점검하십시오.</p>
         <button class="btn-red" id="btnIntroVid">▶ 교육 영상 시청 (30초)</button>
-        <div id="introVidBox" class="video-box" style="display:none;">
-            <div class="video-container">
-                <iframe id="frameIntro" src="" allow="autoplay; fullscreen"></iframe>
-                <div class="video-overlay"></div> <!-- 누름 방지 막 -->
+        <div id="introVidBox" style="display:none; margin-top:15px;">
+            <div class="video-box">
+                <div class="video-container">
+                    <iframe id="frameIntro" src="" allow="autoplay; fullscreen"></iframe>
+                    <div class="video-overlay"></div>
+                </div>
             </div>
         </div>
         <button id="btnStart" class="btn-main" disabled style="margin-top:25px;">영상을 시청해 주세요</button>
+        <div class="stat-box">현재까지 <span id="totalCount">...</span>명이 진단에 참여했습니다.</div>
     </div>
 
-    <!-- [2] 피해 사례 -->
     <div class="card" id="case">
         <h2 style="color:var(--danger);">🚨 실제 피해 데이터</h2>
         <div class="case-item">2025년 광주청 전체 피해 <span class="case-money">총 279억 원</span></div>
@@ -76,7 +75,6 @@
         <button class="btn-red" style="margin-top:auto;" onclick="goQuiz()">내 상황 진단하기 ▶</button>
     </div>
 
-    <!-- [3] 퀴즈 -->
     <div class="card" id="quiz">
         <div id="qText" style="font-size:1.8rem; font-weight:900; text-align:center; margin-bottom:30px; color:var(--p-blue);"></div>
         <div id="qChoices" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;"></div>
@@ -91,20 +89,19 @@
         </div>
     </div>
 
-    <!-- [4] 예방 완결편 (결과 현출 전 노출) -->
     <div class="card" id="preventionScreen">
         <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 보이스피싱 예방 완결편</h2>
-        <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
-        <div class="prevent-item">2. 확인할 땐 알려준 번호가 아닌 공식 고객센터로 연락</div>
-        <div class="prevent-item">3. 보안위험자동차단 설정<span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span></div>
-        <div class="prevent-item">4. 휴대전화 소액결제 원천차단</div>
-        <div class="prevent-item">5. 명의도용방지 가입제한 설정<span class="prevent-sub">-휴대전화 비대면 개설차단</span></div>
-        <div class="prevent-item">6. 여신거래안심차단<span class="prevent-sub">-신규 대출, 신규 카드발급 차단</span></div>
-        <div class="prevent-item">7. 비대면계좌개설차단<span class="prevent-sub">6.7.은 금융기관 또는 어플에서 가입가능</span></div>
-        <button id="resultBtn" class="btn-gold" style="margin-top:20px;" onclick="showResult()">내 진단 결과 보기 ▶</button>
+        <div style="font-size:1.1rem; font-weight:700; line-height:1.8;">
+            <p>1. 모르는 전화는 <b>'어서끊자'</b></p>
+            <p>2. 공식 고객센터 번호로 직접 확인</p>
+            <p>3. <b>보안위험자동차단</b> 설정 (갤럭시)</p>
+            <p>4. 휴대전화 소액결제 차단</p>
+            <p>5. <b>명의도용방지</b> 가입제한 설정</p>
+            <p>6. <b>여신거래안심차단</b> 가입</p>
+        </div>
+        <button id="resultBtn" class="btn-gold" style="margin-top:auto;" onclick="saveAndShowResult()">내 진단 결과 보기 ▶</button>
     </div>
 
-    <!-- [5] 최종 결과 -->
     <div class="card" id="result">
         <h2>진단 분석 결과</h2>
         <div id="resTitle" style="font-size:4rem; font-weight:900; text-align:center; margin:25px 0;"></div>
@@ -115,7 +112,6 @@
 </div>
 
 <script>
-    // 파이어베이스 설정 (기존 정보 유지)
     const firebaseConfig = {
         apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
         authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -128,19 +124,23 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-   //질문 사항 절대 수정불가
+    // 실시간 총 참여자 수 업데이트
+    db.ref('stats/totalCount').on('value', (snapshot) => {
+        document.getElementById('totalCount').innerText = (snapshot.val() || 0).toLocaleString();
+    });
+
     const questions = [
-    { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
-    { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:3, videoId:"MULTI", vTitle:"📽️ 수사기관, 검찰 사칭 보이스피싱" },
-    { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예 (설치함)","아니오"], desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
-    { q:"4. 금감원(1332)이나 검찰청(1301)에 직접 전화해서 확인해보라고 유도합니까?", choices:["예 (유도함)","아니오"], desc:"악성어플이 설치되면 어디에 전화해도 범인이 전화를 가로채서 받습니다.", risk:5 },
-    { q:"5. 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저로 수사 지시를 받거나 보고하였습니까?", choices:["예 (그렇다)","아니오"], desc:"수사기관은 절대로 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
-    { q:"6. 수사 보안이라며 '주변 사람이나 가족에게 절대 말하지 말라'고 합니까?", choices:["예 (그렇다)","아니오"], desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 범죄 수법입니다.", risk:5 },
-    { q:"7. 전화나 영상통화 또는 CCTV로 본인을 계속 감시하고 있다는 느낌을 받고있습니까?", choices:["예 (그렇다)","아니오"], desc:"범인이 실시간으로 상황을 통제하려는 시도입니다. 100% 피싱입니다.", risk:5 },
-    { q:"8. 낮은 이자로 대출을 바꿔주겠다며 걸려온 광고 전화를 받았습니까?", choices:["예 (받았습니다)","아니오"], desc:"은행은 먼저 전화를 걸어 낮은 금리로 바꿔주겠다고 하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", vTitle:"📽️ 대출 빙자 보이스피싱" },
-    { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
-    { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다. 돈을 요구한다면 그건 100% 보이스피싱입니다.", risk:5 },
-];
+        { q:"1. 본인이 신청하지 않은 '카드 발급' 안내 문자를 받은 적 있습니까?", choices:["예","아니오"], desc:"개인정보 유출 시도입니다. 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", start:0 },
+        { q:"2. '명의도용', '구속수사'를 언급하며 수사기관에서 전화가 왔습니까?", choices:["예","아니오"], desc:"수사기관은 전화로 돈을 요구하거나 자산을 묻지 않습니다.", risk:3, videoId:"vNsf2p9CDZQ", start:0 },
+        { q:"3. 보안 점검 등을 이유로 '특정 앱'을 설치했습니까?", choices:["예","아니오"], desc:"앱 설치 즉시 폰의 모든 정보가 범인에게 넘어갑니다.", risk:5 },
+        { q:"4. 금감원(1332)에 직접 전화해서 확인해보라고 유도합니까?", choices:["예","아니오"], desc:"악성 앱이 설치되면 범인이 전화를 가로챕니다.", risk:5 },
+        { q:"5. 텔레그램 등 메신저로 수사 지시를 받았습니까?", choices:["예","아니오"], desc:"수사기관은 절대로 메신저로 조사하지 않습니다.", risk:5 },
+        { q:"6. '가족에게 절대 말하지 말라'고 보안을 강조합니까?", choices:["예","아니오"], desc:"외부 도움을 차단하려는 범죄 수법입니다.", risk:5 },
+        { q:"7. 누군가 본인을 계속 감시하고 있다는 느낌을 받습니까?", choices:["예","아니오"], desc:"실시간 위치추적 등을 이용한 100% 피싱입니다.", risk:5 },
+        { q:"8. 저금리 대출 광고 전화를 받았습니까?", choices:["예","아니오"], desc:"은행은 전화로 저금리 전환 대출을 권유하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", start:0 },
+        { q:"9. 약정 위반이라며 당장 현금으로 갚으라고 합니까?", choices:["예","아니오"], desc:"전형적인 협박 수법입니다. 즉시 끊고 은행에 방문하세요.", risk:5 },
+        { q:"10. 현금을 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예","아니오"], desc:"국가기관은 어떤 경우에도 현금을 요구하지 않습니다.", risk:5 }
+    ];
 
     let current = 0, results = [], totalRiskScore = 0, historyStack = ['intro'];
 
@@ -161,8 +161,6 @@
                 current--;
                 const last = results.pop();
                 if(last) totalRiskScore -= last.risk;
-            } else if(prev === 'case') {
-                current = 0; results = []; totalRiskScore = 0;
             }
             show(prev);
             if(prev === 'quiz') loadQ();
@@ -210,21 +208,19 @@
             document.getElementById('qVideoArea').innerHTML = `
                 <div class="video-box">
                     <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/${q.videoId}?autoplay=1&mute=1&controls=0" allow="autoplay"></iframe>
-                        <div class="video-overlay"></div>
+                        <iframe src="https://www.youtube.com/embed/${q.videoId}?autoplay=1&mute=1&controls=0&rel=0&start=${q.start}" allow="autoplay"></iframe>
                     </div>
                 </div>`;
         } else { document.getElementById('qVideoArea').innerHTML = ""; }
 
         let count = 2;
-        const timerBox = document.getElementById('btnTimerBox');
-        timerBox.style.display = "block";
+        document.getElementById('btnTimerBox').style.display = "block";
         const timerItv = setInterval(() => {
             count--;
             document.getElementById('timer').innerText = count;
             if(count <= 0) {
                 clearInterval(timerItv);
-                timerBox.style.display = "none";
+                document.getElementById('btnTimerBox').style.display = "none";
                 document.getElementById('btnNext').style.display = "block";
             }
         }, 1000);
@@ -233,10 +229,22 @@
     document.getElementById('btnNext').onclick = () => { 
         current++; 
         if(current < questions.length) loadQ(); 
-        else show('preventionScreen'); // 바로 결과로 안가고 예방 화면으로 이동
+        else show('preventionScreen'); 
     };
 
-    function showResult() {
+    function saveAndShowResult() {
+        // 통계 저장 및 총 카운트 증가
+        db.ref('stats/totalCount').transaction(c => (c || 0) + 1);
+        
+        // 고위험군일 경우 상세 로그 저장 (선택 사항)
+        if(totalRiskScore >= 5) {
+            db.ref('logs').push({
+                score: totalRiskScore,
+                timestamp: Date.now(),
+                items: results.map(r => r.q)
+            });
+        }
+        
         show('result');
         const resTitle = document.getElementById('resTitle');
         if(totalRiskScore >= 5) { resTitle.innerText = "🚨 고위험"; resTitle.style.color = "var(--danger)"; }
