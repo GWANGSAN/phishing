@@ -1,4 +1,4 @@
-<!-- [시스템 통합 제목] 광주광산경찰서 보이스피싱 예방 진단 시스템 v2.5 -->
+<!-- [시스템 통합 제목] 광주광산경찰서 보이스피싱 예방 진단 시스템 v2.6 -->
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -8,12 +8,12 @@
 <meta name="theme-color" content="#002b5c">
 <title>보이스피싱 예방 진단 시스템 - 광주광산경찰서</title>
 
-<!-- [외부 라이브러리] Firebase SDK: 실시간 통계 데이터 연동 -->
+<!-- [외부 라이브러리] Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
-/* [스타일 섹션 1] 기본 테마 및 레이아웃 설정 */
+/* [스타일 섹션 1] 기본 테마 및 레이아웃 초기화 */
 :root {
     --primary-color: #002b5c;
     --danger-color: #d32f2f;
@@ -28,10 +28,15 @@ body {
     color: #111; 
     line-height: 1.4; 
     word-break: keep-all; 
-    overflow-wrap: break-word;
 }
 
-/* [스타일 섹션 2] 상단 헤더 및 실시간 통계 레이아웃 */
+/* [스타일 섹션 2] 제목 및 문단 여백 강제 초기화 (UI 깨짐 방지 핵심) */
+h2, p { 
+    margin: 0; 
+    padding: 0; 
+}
+
+/* [스타일 섹션 3] 상단 헤더 */
 .header { 
     background: rgba(0, 43, 92, 0.85);
     backdrop-filter: blur(10px);
@@ -44,11 +49,8 @@ body {
     position: sticky; 
     top: 0; 
     z-index: 1000; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .mini-stats {
@@ -58,12 +60,11 @@ body {
     font-size: 0.75rem;
     margin-top: 5px;
     font-weight: 400;
-    opacity: 0.9;
 }
 .mini-stats b { color: #ffd600; }
 
-/* [스타일 섹션 3] 개별 카드 및 버튼 공통 디자인 */
-.container { width: 100%; max-width: 500px; margin: 0 auto; box-sizing: border-box; }
+/* [스타일 섹션 4] 카드 레이아웃 및 인트로 스타일 고정 */
+.container { width: 100%; max-width: 500px; margin: 0 auto; }
 .card { 
     background: white; 
     margin: 10px;
@@ -71,20 +72,27 @@ body {
     padding: 20px 15px; 
     box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
     min-height: calc(100vh - 100px); 
-    display: flex; 
+    display: none; 
     flex-direction: column; 
     box-sizing: border-box;
-    position: relative;
-    display: none; /* 기본적으로 숨김 */
+}
+.card.active { display: flex; }
+
+/* 인트로 전용 스타일 (글자 크기 복구) */
+#intro h2 { 
+    font-size: 1.8rem !important; 
+    margin-bottom: 15px !important; 
+    color: var(--primary-color); 
+    text-align: center;
+}
+#intro p { 
+    font-size: 1.2rem !important; 
+    text-align: center; 
+    margin-bottom: 25px !important; 
+    color: #444;
 }
 
-.card.active { display: flex; animation: fadeInUp 0.4s ease-out; }
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* [스타일 섹션 5] 버튼 디자인 */
 button { 
     width: 100%; 
     padding: 18px 12px; 
@@ -93,20 +101,13 @@ button {
     border-radius: 15px; 
     font-size: 1.4rem; 
     font-weight: 800; 
-    cursor: pointer; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    line-height: 1.2;
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
+    cursor: pointer;
 }
-
 .primary { background: var(--primary-color); color: white; }
 .btn-yes { background: #ff5252; color: white; border-bottom: 5px solid #b71c1c; }
 .btn-no { background: #448aff; color: white; border-bottom: 5px solid #1565c0; }
 
-/* [스타일 섹션 4] 경찰관 안내 박스 및 애니메이션 효과 */
+/* [스타일 섹션 6] 경찰관 안내 박스 */
 .descBox { 
     margin-top: 20px; 
     padding: 20px; 
@@ -116,54 +117,38 @@ button {
     color: #111; 
     border: 3px solid #ffd666; 
     font-weight: 800; 
-    line-height: 1.5;
     position: relative;
 }
-
 .descBox::before {
     content: '🚔 경찰관 핵심 안내';
     display: block;
     background: #ffd666;
     color: #000;
     font-size: 0.9rem;
-    padding: 4px 12px;
+    padding: 2px 10px;
     border-radius: 10px;
     position: absolute;
     top: -15px;
     left: 20px;
 }
 
-/* [스타일 섹션 5] 실제 피해 사례 강조 디자인 (시인성 강화) */
-#caseScreen { 
-    background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%); 
-    border: 4px solid var(--danger-color); 
-    color: #fff; 
-}
-
+/* [스타일 섹션 7] 실제 피해 사례 강조 */
+#caseScreen { background: #111; border: 4px solid var(--danger-color); color: #fff; }
 .caseItem-v2 { 
-    background: rgba(255, 255, 255, 0.08); 
-    padding: 18px 20px; 
+    background: rgba(255, 255, 255, 0.1); 
+    padding: 15px; 
     border-radius: 15px; 
     border-left: 6px solid var(--danger-color);
     margin-bottom: 15px;
 }
+.caseMoney-v2 { display: block; font-size: 2rem; font-weight: 900; color: #ff4d4d; text-align: right; }
+.caseMoney-total { color: #ffd600 !important; }
 
-.caseMoney-v2 { 
-    display: block; 
-    font-size: 2.1rem; 
-    font-weight: 900; 
-    color: #ff4d4d; 
-    text-align: right; 
-    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
-}
-
-.caseMoney-total { color: #ffd600 !important; font-size: 2.3rem !important; }
-
-/* [스타일 섹션 6] 비디오 박스 및 조작 방지 레이어 */
+/* [스타일 섹션 8] 비디오 제어 */
 .video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid var(--danger-color); background: #000; position: relative; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.video-glass { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
+.video-glass { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: transparent; }
 
 .hidden { display: none !important; }
 .blink { animation: blink 1s infinite; }
@@ -173,25 +158,25 @@ button {
 
 <body>
 
-<!-- [UI 섹션 1] 고정 헤더 영역 -->
+<!-- [UI 1] 헤더 및 실시간 통계 -->
 <div class="header">
-    <button id="backBtn" class="back-btn" style="position:absolute; left:15px; background:none; border:none; color:white; font-size:1.5rem; display:none;" onclick="goBack()">◀</button>
+    <button id="backBtn" style="position:absolute; left:15px; background:none; border:none; color:white; font-size:1.5rem; display:none; width:auto; padding:0; margin:0;" onclick="goBack()">◀</button>
     <span>🚔 광주광산경찰서 피싱범죄수사팀</span>
     <div class="mini-stats">
         <span>누적 진단: <b id="totalCount">0</b></span>
         <span>오늘 방문: <b id="todayCount">0</b></span>
-        <span>공유 횟수: <b id="shareCount">0</b></span>
+        <span>공유: <b id="shareCount">0</b></span>
     </div>
 </div>
 
 <div class="container">
-    <!-- [UI 섹션 2] 인트로 화면 -->
+    <!-- [UI 2] 인트로 화면 -->
     <div class="card screen active" id="intro">
-        <h2 style="color:var(--primary-color);">보이스피싱 진단</h2>
+        <h2>보이스피싱 진단</h2>
         <p>실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
         <button class="primary" id="videoBtn" style="background:var(--danger-color);">▶ 교육 영상 시청 (30초 대기)</button>
         <div id="introVideoBox" class="video-box hidden">
-            <div class="video-label" style="text-align:center; background:var(--primary-color); color:white; padding:8px;">안내 영상 시청 중 (<span id="count">30</span>초)</div>
+            <div style="text-align:center; background:var(--primary-color); color:white; padding:5px;">안내 영상 시청 중 (<span id="count">30</span>초)</div>
             <div class="video-container">
                 <iframe id="introFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
                 <div class="video-glass"></div>
@@ -200,58 +185,47 @@ button {
         <button id="startBtn" class="primary" style="margin-top:15px;" disabled>안내 영상을 시청해 주세요</button>
     </div>
 
-    <!-- [UI 섹션 3] 피해 사례 화면 -->
+    <!-- [UI 3] 피해 사례 화면 -->
     <div class="card screen" id="caseScreen">
-        <h2 style="color:white;">🚨 실제 피해 현황</h2>
-        <div class="caseBox">
-            <div class="caseItem-v2" style="border-left-color: #ffd600;">
-                <p style="color:#aaa; text-align:left; font-size:1rem; margin:0;">2025년 광주청 누적 피해액</p>
-                <div class="caseMoney-v2 caseMoney-total">279억 원</div>
-            </div>
-            <div class="caseItem-v2">
-                <p style="color:#aaa; text-align:left; font-size:1rem; margin:0;">기관사칭 - 자산검수 수법</p>
-                <div class="caseMoney-v2">1억 원</div>
-            </div>
-            <div class="caseItem-v2">
-                <p style="color:#aaa; text-align:left; font-size:1rem; margin:0;">대출사칭 - 대환대출 수법</p>
-                <div class="caseMoney-v2">1,600만 원</div>
-            </div>
+        <h2 style="color:white; margin-bottom:20px; text-align:center;">🚨 실제 피해 현황</h2>
+        <div class="caseItem-v2" style="border-left-color: #ffd600;">
+            <p style="color:#aaa; font-size:0.9rem;">2025년 광주청 누적 피해액</p>
+            <div class="caseMoney-v2 caseMoney-total">279억 원</div>
         </div>
-        <button id="caseNextBtn" class="primary blink" style="background:var(--danger-color); margin-top: auto;">내 상황 진단하기 (클릭)</button>
+        <div class="caseItem-v2">
+            <p style="color:#aaa; font-size:0.9rem;">기관사칭 수법</p>
+            <div class="caseMoney-v2">1억 원</div>
+        </div>
+        <button id="caseNextBtn" class="primary blink" style="background:var(--danger-color); margin-top:auto;">내 상황 진단하기 (클릭)</button>
     </div>
 
-    <!-- [UI 섹션 4] 퀴즈 진단 화면 -->
+    <!-- [UI 4] 퀴즈 화면 -->
     <div class="card screen" id="quiz">
-        <div id="question" style="font-size:1.5rem; font-weight:900; color:var(--primary-color); text-align:center; margin-bottom:20px;"></div>
+        <div id="question" style="font-size:1.4rem; font-weight:800; text-align:center; margin-bottom:20px;"></div>
         <div id="choices"></div>
-        <div id="dynamicVideoArea"></div>
         <div id="descBox" class="descBox hidden"></div>
-        <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:var(--danger-color); font-weight:bold;">📍 잠시만 기다려주세요...</div>
-        <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+        <button id="nextBtn" class="primary hidden" style="margin-top:auto;">다음 질문 이동 ▶</button>
     </div>
 
-    <!-- [UI 섹션 5] 결과 화면 -->
+    <!-- [UI 5] 결과 화면 -->
     <div class="card screen" id="resultBox">
-        <h2>진단 결과</h2>
-        <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
-        <div id="detailResult"></div>
-        <button id="goFinalBtn" class="primary" style="margin-top:auto;"></button>
+        <h2 style="text-align:center; margin-bottom:20px;">진단 결과</h2>
+        <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin-bottom:30px;"></div>
+        <button id="goFinalBtn" class="primary" style="margin-top:auto;">최종 가이드 보기 ▶</button>
     </div>
 
-    <!-- [UI 섹션 6] 긴급 가이드 화면 -->
+    <!-- [UI 6] 최종 가이드 -->
     <div class="card screen" id="finalGuideBox">
-        <h2 style="color:var(--danger-color);">🚨 긴급 조치 가이드</h2>
-        <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color); margin-bottom: 20px;">
-            <p style="font-size:1.3rem; font-weight:bold; color:#d32f2f; text-align:center;">지금 즉시!</p>
-            <p style="font-size:1.1rem; line-height:1.6; font-weight:500;">1. 휴대전화를 <b>비행기모드</b>로 전환<br>2. 주변인의 전화로 <b>112 신고</b><br>3. 주거래 은행 계좌 <b>지급정지</b></p>
+        <h2 style="color:var(--danger-color); text-align:center; margin-bottom:20px;">🚨 긴급 조치 가이드</h2>
+        <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color); line-height:1.6;">
+            <b>1. 비행기모드 전환<br>2. 112 신고 (타인 휴대폰 사용)<br>3. 계좌 지급 정지</b>
         </div>
-        <button style="background:#fee500; color:#3c1e1e;" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
-        <button class="primary" onclick="location.reload()" style="background:#666; margin-top:10px;">처음으로 돌아가기</button>
+        <button style="background:#fee500; color:#3c1e1e; margin-top:auto;" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
     </div>
 </div>
 
 <script>
-// [로직 1] Firebase 연동 (제공해주신 설정 유지)
+// [로직 1] Firebase 초기화
 const firebaseConfig = {
     apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
     authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -264,44 +238,36 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// [로직 2] 실시간 통계 연동
 const todayStr = new Date().toISOString().split('T')[0];
 db.ref('stats/totalCount').on('value', s => document.getElementById('totalCount').innerText = (s.val() || 0).toLocaleString());
 db.ref(`stats/daily/${todayStr}`).on('value', s => document.getElementById('todayCount').innerText = (s.val() || 0).toLocaleString());
 db.ref('stats/shareCount').on('value', s => document.getElementById('shareCount').innerText = (s.val() || 0).toLocaleString());
 db.ref(`stats/daily/${todayStr}`).transaction(c => (c || 0) + 1);
 
-// [로직 2] 질문 데이터
+// [로직 3] 질문 데이터 및 변수
 const questions = [
-    { q:"1. 본인이 신청하지 않은 '카드 발급' 안내 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보 유출 수법입니다. 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM" },
-    { q:"2. 검찰, 경찰이라며 '범죄 연루'를 언급하며 전화를 받았습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화를 통해 돈이나 자산검수를 요구하지 않습니다.", risk:5, videoId:"vNsf2p9CDZQ" },
-    { q:"3. 보안을 이유로 특정 앱(원격제어 등) 설치를 요구받았습니까?", choices:["예","아니오"], desc:"앱 설치 즉시 폰의 모든 정보가 범인에게 넘어갑니다.", risk:5 }
+    { q:"1. 본인이 신청하지 않은 '카드 발급' 안내 문자를 받은 적 있습니까?", choices:["예","아니오"], desc:"개인정보 유출 수법입니다. 즉시 전화를 끊으세요.", risk:3 },
+    { q:"2. 검찰, 경찰이라며 '범죄 연루'를 언급하며 전화를 받았습니까?", choices:["예","아니오"], desc:"수사기관은 절대로 전화를 통해 돈을 요구하지 않습니다.", risk:5 },
+    { q:"3. 보안을 이유로 특정 앱 설치를 요구받았습니까?", choices:["예","아니오"], desc:"앱 설치 즉시 폰의 제어권이 범인에게 넘어갑니다.", risk:5 }
 ];
+let index = 0, highRiskDetected = false;
 
-let index = 0, selectedRisks = [], highRiskDetected = false;
-
-// [로직 3] 화면 전환 함수
-function showScreen(screenId) {
+// [로직 4] 화면 제어 함수
+function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    document.getElementById('backBtn').style.display = (screenId === 'intro') ? 'none' : 'block';
-    window.scrollTo(0,0);
+    document.getElementById(id).classList.add('active');
+    document.getElementById('backBtn').style.display = (id === 'intro') ? 'none' : 'block';
 }
 
-function goBack() {
-    if(index > 0 && document.getElementById('quiz').classList.contains('active')) {
-        index--; loadQ();
-    } else {
-        showScreen('intro');
-        index = 0; selectedRisks = []; highRiskDetected = false;
-    }
-}
+function goBack() { location.reload(); }
 
-// [로직 4] 인트로 타이머
+// [로직 5] 타이머 및 시작 로직
 document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1";
-    let timer = 0; // 30초로 설정
+    let timer = 0;
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
@@ -309,7 +275,6 @@ document.getElementById("videoBtn").onclick = function(){
             const sBtn = document.getElementById("startBtn");
             sBtn.disabled = false; sBtn.innerText = "진단 시작하기 (클릭)";
             sBtn.style.background = "var(--success-color)";
-            sBtn.classList.add("blink");
         }
     }, 1000);
 };
@@ -317,7 +282,7 @@ document.getElementById("videoBtn").onclick = function(){
 document.getElementById("startBtn").onclick = () => showScreen('caseScreen');
 document.getElementById("caseNextBtn").onclick = () => { showScreen('quiz'); loadQ(); };
 
-// [로직 5] 퀴즈 처리
+// [로직 6] 퀴즈 및 결과 로직
 function loadQ(){
     const q = questions[index];
     document.getElementById("question").innerText = q.q;
@@ -327,53 +292,36 @@ function loadQ(){
         let b = document.createElement("button");
         b.className = (i === 0) ? "btn-yes" : "btn-no";
         b.innerText = t;
-        b.onclick = () => answer(i);
+        b.onclick = () => {
+            if(i === 0 && q.risk >= 4) highRiskDetected = true;
+            document.getElementById("descBox").innerText = q.desc;
+            document.getElementById("descBox").classList.remove("hidden");
+            document.getElementById("nextBtn").classList.remove("hidden");
+        };
         c.appendChild(b);
     });
     document.getElementById("descBox").classList.add("hidden");
     document.getElementById("nextBtn").classList.add("hidden");
 }
 
-function answer(i){
-    const q = questions[index];
-    if(i === 0){
-        selectedRisks.push({q: q.q, desc: q.desc});
-        if(q.risk >= 4) highRiskDetected = true;
-    }
-    document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
-    document.getElementById("descBox").innerText = q.desc;
-    document.getElementById("descBox").classList.remove("hidden");
-    setTimeout(() => document.getElementById("nextBtn").classList.remove("hidden"), 1200);
-}
-
 document.getElementById("nextBtn").onclick = () => {
     index++;
-    if(index >= questions.length) { showScreen('resultBox'); showResult(); } 
-    else { loadQ(); }
+    if(index >= questions.length) { 
+        showScreen('resultBox'); 
+        const res = document.getElementById("result");
+        res.innerText = highRiskDetected ? "🚨 고위험" : "✅ 안전";
+        res.style.color = highRiskDetected ? "var(--danger-color)" : "var(--success-color)";
+        db.ref('stats/totalCount').transaction(c => (c || 0) + 1);
+    } else { loadQ(); }
 };
-
-// [로직 6] 결과 처리
-function showResult(){
-    const res = document.getElementById("result");
-    if(highRiskDetected) { res.innerText = "🚨 고위험"; res.style.color = "var(--danger-color)"; }
-    else if(selectedRisks.length > 0) { res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; }
-    else { res.innerText = "✅ 안전"; res.style.color = "var(--success-color)"; }
-    
-    document.getElementById("goFinalBtn").innerText = "최종 가이드 보기 ▶";
-    db.ref('stats/totalCount').transaction(c => (c || 0) + 1);
-}
 
 document.getElementById("goFinalBtn").onclick = () => showScreen('finalGuideBox');
 
 async function shareSystem() {
     db.ref('stats/shareCount').transaction(c => (c || 0) + 1);
     if (navigator.share) {
-        try {
-            await navigator.share({ title: '보이스피싱 진단 시스템', url: window.location.href });
-        } catch (e) {}
-    } else {
-        alert("링크가 복사되었습니다.");
-    }
+        await navigator.share({ title: '보이스피싱 진단', url: window.location.href });
+    } else { alert("링크가 복사되었습니다."); }
 }
 </script>
 </body>
