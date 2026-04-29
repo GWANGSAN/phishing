@@ -164,13 +164,67 @@ button:disabled { transform: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-#caseScreen { background: linear-gradient(180deg, #202020 0%, #101010 100%); border: 4px solid var(--danger-color); color: #fff; }
-.case-title-bar { background: #000; padding: 15px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid var(--danger-color); }
-.case-title-bar h2 { color: #fff; margin: 0; font-size: 1.7rem; }
-.caseItem-v2 { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; }
-.caseItem-v2::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--danger-color); }
-.caseItem-v2 p { color: #ccc; font-size: 1.1rem; text-align: left; }
-.caseMoney-v2 { display: block; font-size: 2.2rem; font-weight: 900; color: #fff; text-align: right; }
+/* =========================================
+   📺 피해 사례 화면 [UI 개선 버전]
+   ========================================= */
+#caseScreen { 
+    background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%); 
+    border: 4px solid var(--danger-color); 
+    color: #fff; 
+}
+.case-title-bar { 
+    background: #000; 
+    padding: 15px; 
+    border-radius: 10px; 
+    margin-bottom: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-bottom: 3px solid var(--danger-color); 
+}
+.case-title-bar h2 { color: #fff; margin: 0; font-size: 1.6rem; }
+
+.caseBox {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.caseItem-v2 { 
+    background: rgba(255, 255, 255, 0.08); 
+    padding: 18px 20px; 
+    border-radius: 15px; 
+    border: 1px solid rgba(255,255,255,0.1);
+    border-left: 6px solid var(--danger-color);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.caseItem-v2 p { 
+    color: #aaa; 
+    font-size: 1rem; 
+    text-align: left; 
+    margin: 0 0 5px 0;
+    font-weight: 500;
+}
+
+/* 금액 강조 스타일 */
+.caseMoney-v2 { 
+    display: block; 
+    font-size: 2.1rem; 
+    font-weight: 900; 
+    color: #ff4d4d; 
+    text-align: right; 
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+}
+
+/* 누적 피해액 특별 강조 */
+.caseMoney-total {
+    color: #ffd600 !important;
+    font-size: 2.3rem !important;
+    text-shadow: 0 0 10px rgba(255, 214, 0, 0.4) !important;
+}
 
 .video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid var(--danger-color); background: #000; position: relative; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
@@ -223,12 +277,25 @@ button:disabled { transform: none; }
         <button id="startBtn" class="primary" style="margin-top:15px;" disabled>안내 영상을 시청해 주세요</button>
     </div>
 
+    <!-- [개선된 피해 사례 화면] -->
     <div class="card screen" id="caseScreen">
-        <div class="case-title-bar"><span class="siren-icon">🚨</span><h2>실제 피해 사례</h2></div>
+        <div class="case-title-bar"><span class="siren-icon" style="margin-right:8px;">🚨</span><h2>실제 피해 발생 현황</h2></div>
         <div class="caseBox">
-            <div class="caseItem-v2"><p>2025년 광주청 피해액</p><div class="caseMoney-v2">총 279억 원</div></div>
-            <div class="caseItem-v2"><p>검찰사칭 - 자산검수(26년 4월)</p><div class="caseMoney-v2">피해금 1억 원</div></div>
-            <div class="caseItem-v2"><p>대출사칭 - 계약위반(26년 2월)</p><div class="caseMoney-v2">피해금 1,600만 원</div></div>
+            <div class="caseItem-v2" style="border-left-color: #ffd600; background: rgba(255, 214, 0, 0.05);">
+                <p>2025년 광주청 누적 피해액</p>
+                <div class="caseMoney-v2 caseMoney-total">279억 원</div>
+            </div>
+            <div class="caseItem-v2">
+                <p>기관사칭(검찰) - 자산검수 수법</p>
+                <div class="caseMoney-v2">1억 원</div>
+            </div>
+            <div class="caseItem-v2">
+                <p>대출사칭 - 저금리 대환대출 수법</p>
+                <div class="caseMoney-v2">1,600만 원</div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:15px; color:#ff4d4d; font-weight:800; font-size:1.1rem; animation: blink 1.5s infinite;">
+            ⚠️ 다음은 당신의 차례가 될 수 있습니다.
         </div>
         <button id="caseNextBtn" class="primary video-btn blink" style="margin-top:20px;">내 상황 진단하기 (클릭)</button>
     </div>
@@ -356,7 +423,7 @@ document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&rel=0";
-    let timer = 0;
+    let timer = 30;
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
@@ -403,7 +470,6 @@ function answer(i){
     document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
     if(q.videoId) {
         const area = document.getElementById("dynamicVideoArea");
-        // [수정] 퀴즈 영상 영역에도 글래스(조작방지) 추가
         area.innerHTML = `<div class="video-box"><div class="video-label">${q.vTitle}</div><div class="video-container"><iframe id="qFrame" src="" frameborder="0" allowfullscreen></iframe><div class="video-glass"></div></div>${q.videoId === "MULTI" ? `<div style="padding:8px; background:#fff; display:flex; flex-direction:column; gap:8px; z-index:20; position:relative;"><button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 1 보기</button><button onclick="playVid('CvEsZdEL00I')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 2 보기</button></div>` : ''}</div>`;
         playVid(q.videoId === "MULTI" ? 'vNsf2p9CDZQ' : q.videoId);
     }
@@ -423,7 +489,7 @@ document.getElementById("nextBtn").onclick = () => {
     index++;
     if(index >= questions.length) { 
         screenHistory.push('reWatchScreen'); showScreen('reWatchScreen');
-        document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=75&controls=0";
+        document.getElementById("reWatchFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&start=76&controls=0";
         let vTimer = 10;
         const vInterval = setInterval(() => {
             vTimer--; document.getElementById("reWatchLabel").innerText = `영상 시청 중 (${vTimer}초...)`;
@@ -444,7 +510,6 @@ document.getElementById("toPreventionBtn").onclick = () => {
 };
 
 document.getElementById("resultBtn").onclick = () => { 
-    // [추가] 진단 완료 시 누적 카운트 증가
     db.ref('stats/totalCount').transaction(c => (c || 0) + 1);
     screenHistory.push('resultBox'); showScreen('resultBox'); showResult(); 
 };
@@ -478,7 +543,6 @@ document.getElementById("goFinalBtn").onclick = () => {
 };
 
 async function shareSystem() {
-    // [추가] 공유 실행 시 공유 카운트 증가
     db.ref('stats/shareCount').transaction(c => (c || 0) + 1);
     if (navigator.share) {
         try {
