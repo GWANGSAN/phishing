@@ -171,7 +171,7 @@
         this.style.display = 'none';
         document.getElementById('introVidBox').style.display = 'block';
         document.getElementById('frameIntro').src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&mute=1&controls=0&rel=0";
-        let time = 30;
+        let time = 0;
         const timer = setInterval(() => {
             time--;
             if(time > 0) document.getElementById('btnStart').innerText = `시청 중 (${time}초)`;
