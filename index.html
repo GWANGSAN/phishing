@@ -423,7 +423,7 @@ document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&rel=0";
-    let timer = 30;
+    let timer = 0;
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
