@@ -1,3 +1,5 @@
+<!-- [시스템 통합 제목] 광주광산경찰서 보이스피싱 예방 진단 시스템 v2.8 -->
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,7 +8,7 @@
 <meta name="theme-color" content="#002b5c">
 <title>보이스피싱 예방 진단 시스템</title>
 
-<!-- Firebase SDK (통계용) -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -28,48 +30,41 @@ body {
     overflow-wrap: break-word;
 }
 
-/* 상단 헤더 글래스모피즘 */
+/* 상단 헤더 및 5종 통계 스타일 개선 */
 .header { 
-    background: rgba(0, 43, 92, 0.85);
+    background: rgba(0, 43, 92, 0.9);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: white; 
-    padding: 10px; 
+    padding: 12px 10px; 
     text-align: center; 
-    font-weight: 800; 
-    font-size: 1.1rem; 
     position: sticky; 
     top: 0; 
     z-index: 1000; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
-/* [추가] 상단 통계 스타일 */
 .mini-stats {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    font-size: 0.75rem;
-    margin-top: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    font-size: 0.68rem;
+    margin-top: 10px;
     font-weight: 400;
-    opacity: 0.9;
 }
+.mini-stats div { background: rgba(255,255,255,0.1); padding: 4px 2px; border-radius: 6px; }
 .mini-stats b { color: #ffd600; }
 
 .back-btn {
     position: absolute;
     left: 15px;
+    top: 12px;
     background: transparent;
     color: white;
     border: none;
     font-size: 1.5rem;
-    padding: 0;
-    margin: 0;
-    width: auto;
     cursor: pointer;
     display: none;
 }
@@ -82,7 +77,7 @@ body {
     border-radius: 20px; 
     padding: 20px 15px; 
     box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
-    min-height: calc(100vh - 100px); 
+    min-height: calc(100vh - 140px); 
     display: flex; 
     flex-direction: column; 
     box-sizing: border-box;
@@ -100,9 +95,9 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-h2 { color: var(--primary-color); font-size: 1.8rem; margin-bottom: 20px; text-align: center; font-weight: 900; line-height: 1.2; }
+h2 { color: var(--primary-color); font-size: 1.8rem; margin: 0 0 20px 0; text-align: center; font-weight: 900; line-height: 1.2; }
 #question { font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; color: var(--primary-color); text-align: center; padding: 0 5px; }
-p { font-size: 1.3rem; margin-bottom: 1rem; color: #000; font-weight: 700; text-align: center; }
+p { font-size: 1.3rem; margin: 0 0 1rem 0; color: #000; font-weight: 700; text-align: center; }
 
 button { 
     width: 100%; 
@@ -118,12 +113,10 @@ button {
     justify-content: center;
     text-align: center;
     line-height: 1.2;
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
+    transition: transform 0.1s ease;
 }
 
 button:active { transform: scale(0.96); }
-button:disabled { transform: none; }
-
 .primary { background: var(--primary-color); color: white; }
 .video-btn { background: var(--danger-color); color: white; animation: pulse 2s infinite; }
 .btn-yes { background: #ff5252; color: white; border-bottom: 5px solid #b71c1c; }
@@ -141,7 +134,6 @@ button:disabled { transform: none; }
     font-weight: 800; 
     line-height: 1.5;
     position: relative;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     animation: slideUp 0.4s ease-out;
 }
 
@@ -156,7 +148,6 @@ button:disabled { transform: none; }
     position: absolute;
     top: -15px;
     left: 20px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 
 @keyframes slideUp {
@@ -164,79 +155,28 @@ button:disabled { transform: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================
-   📺 피해 사례 화면 [UI 개선 버전]
-   ========================================= */
+/* 피해 사례 화면 스타일 */
 #caseScreen { 
     background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%); 
     border: 4px solid var(--danger-color); 
     color: #fff; 
 }
-.case-title-bar { 
-    background: #000; 
-    padding: 15px; 
-    border-radius: 10px; 
-    margin-bottom: 20px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border-bottom: 3px solid var(--danger-color); 
-}
+.case-title-bar { background: #000; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid var(--danger-color); }
 .case-title-bar h2 { color: #fff; margin: 0; font-size: 1.6rem; }
+.caseItem-v2 { background: rgba(255, 255, 255, 0.08); padding: 18px 20px; border-radius: 15px; border-left: 6px solid var(--danger-color); margin-bottom: 15px; }
+.caseMoney-v2 { display: block; font-size: 2.1rem; font-weight: 900; color: #ff4d4d; text-align: right; }
+.caseMoney-total { color: #ffd600 !important; }
 
-.caseBox {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 10px 0;
-}
-
-.caseItem-v2 { 
-    background: rgba(255, 255, 255, 0.08); 
-    padding: 18px 20px; 
-    border-radius: 15px; 
-    border: 1px solid rgba(255,255,255,0.1);
-    border-left: 6px solid var(--danger-color);
-    position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.caseItem-v2 p { 
-    color: #aaa; 
-    font-size: 1rem; 
-    text-align: left; 
-    margin: 0 0 5px 0;
-    font-weight: 500;
-}
-
-/* 금액 강조 스타일 */
-.caseMoney-v2 { 
-    display: block; 
-    font-size: 2.1rem; 
-    font-weight: 900; 
-    color: #ff4d4d; 
-    text-align: right; 
-    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
-}
-
-/* 누적 피해액 특별 강조 */
-.caseMoney-total {
-    color: #ffd600 !important;
-    font-size: 2.3rem !important;
-    text-shadow: 0 0 10px rgba(255, 214, 0, 0.4) !important;
-}
-
+/* 비디오 영역 스타일 */
 .video-box { margin-top: 15px; border-radius: 15px; overflow: hidden; border: 4px solid var(--danger-color); background: #000; position: relative; }
 .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
-/* [추가] 영상 조작 방지 글래스 */
 .video-glass { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
-
 .video-label { text-align: center; background: var(--danger-color); color: white; padding: 8px; font-weight: 900; font-size: 1.1rem; }
-.prevent-item { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid var(--primary-color); font-size: 1.3rem; font-weight: 800; }
-.prevent-sub { font-size: 1rem; color: var(--danger-color); display: block; margin-top: 4px; font-weight: bold; }
-.report-item { background: #fff; border: 2px solid var(--danger-color); border-radius: 15px; padding: 15px; margin-bottom: 12px; }
+
+.prevent-item { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid var(--primary-color); font-size: 1.2rem; font-weight: 800; text-align: left; }
+.prevent-sub { font-size: 0.9rem; color: var(--danger-color); display: block; margin-top: 4px; font-weight: bold; }
+.report-item { background: #fff; border: 2px solid var(--danger-color); border-radius: 15px; padding: 15px; margin-bottom: 12px; text-align: left; }
 .report-q { font-size: 1.1rem; color: #333; font-weight: 800; margin-bottom: 8px; }
 .report-desc { font-size: 1.2rem; color: var(--danger-color); font-weight: 900; background: #fff3f3; padding: 10px; border-radius: 10px; border-left: 5px solid var(--danger-color); }
 .share-btn { background: #fee500; color: #3c1e1e; border: 2px solid #3c1e1e; margin-top: 15px; }
@@ -250,18 +190,21 @@ button:disabled { transform: none; }
 
 <body>
 
+<!-- 상단 헤더: 요청하신 5종 통계 반영 -->
 <div class="header">
     <button id="backBtn" class="back-btn" onclick="goBack()">◀</button>
-    <span>🚔 광주광산경찰서 피싱범죄수사팀</span>
-    <!-- [추가] 통계 현출 영역 -->
+    <span style="font-weight: 900;">🚔 광주광산경찰서 피싱수사팀</span>
     <div class="mini-stats">
-        <span>누적 진단: <b id="totalCount">0</b></span>
-        <span>오늘 방문: <b id="todayCount">0</b></span>
-        <span>공유 횟수: <b id="shareCount">0</b></span>
+        <div>오늘방문: <b id="todayVisit">0</b></div>
+        <div>오늘진단: <b id="todayDone">0</b></div>
+        <div>공유횟수: <b id="shareCount">0</b></div>
+        <div>누적방문: <b id="totalVisit">0</b></div>
+        <div>누적진단: <b id="totalDone">0</b></div>
     </div>
 </div>
 
 <div class="container">
+    <!-- 인트로 화면 -->
     <div class="card screen active" id="intro">
         <h2>보이스피싱 진단</h2>
         <p>실제 수사 데이터를 기반으로<br>나의 위험도를 점검합니다.</p>
@@ -269,103 +212,100 @@ button:disabled { transform: none; }
         <div id="introVideoBox" class="video-box hidden" style="border-color:var(--primary-color);">
             <div class="video-label" style="background:var(--primary-color);">안내 영상 시청 중 (<span id="count">30</span>초)</div>
             <div class="video-container">
-                <iframe id="introFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                <!-- 조작 방지 글래스 -->
+                <iframe id="introFrame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
                 <div class="video-glass"></div>
             </div>
         </div>
         <button id="startBtn" class="primary" style="margin-top:15px;" disabled>안내 영상을 시청해 주세요</button>
     </div>
 
-    <!-- [개선된 피해 사례 화면] -->
+    <!-- 피해 사례 화면 -->
     <div class="card screen" id="caseScreen">
-        <div class="case-title-bar"><span class="siren-icon" style="margin-right:8px;">🚨</span><h2>실제 피해 발생 현황</h2></div>
-        <div class="caseBox">
-            <div class="caseItem-v2" style="border-left-color: #ffd600; background: rgba(255, 214, 0, 0.05);">
-                <p>2025년 광주청 누적 피해액</p>
-                <div class="caseMoney-v2 caseMoney-total">279억 원</div>
-            </div>
-            <div class="caseItem-v2">
-                <p>기관사칭(검찰) - 자산검수 수법</p>
-                <div class="caseMoney-v2">1억 원</div>
-            </div>
-            <div class="caseItem-v2">
-                <p>대출사칭 - 저금리 대환대출 수법</p>
-                <div class="caseMoney-v2">1,600만 원</div>
-            </div>
+        <div class="case-title-bar">🚨 실제 피해 발생 현황</div>
+        <div class="caseItem-v2" style="border-left-color: #ffd600;">
+            <p>2025년 광주청 누적 피해액</p>
+            <div class="caseMoney-v2 caseMoney-total">279억 원</div>
         </div>
-        <div style="text-align:center; margin-top:15px; color:#ff4d4d; font-weight:800; font-size:1.1rem; animation: blink 1.5s infinite;">
-            ⚠️ 다음은 당신의 차례가 될 수 있습니다.
+        <div class="caseItem-v2">
+            <p>기관사칭(검찰) - 자산검수 수법</p>
+            <div class="caseMoney-v2">1억 원</div>
         </div>
+        <div class="caseItem-v2">
+            <p>대출사칭 - 저금리 대환대출 수법</p>
+            <div class="caseMoney-v2">1,600만 원</div>
+        </div>
+        <div style="text-align:center; color:#ff4d4d; font-weight:800; animation: blink 1.5s infinite;">⚠️ 다음은 당신의 차례가 될 수 있습니다.</div>
         <button id="caseNextBtn" class="primary video-btn blink" style="margin-top:20px;">내 상황 진단하기 (클릭)</button>
     </div>
 
+    <!-- 퀴즈 화면 -->
     <div class="card screen" id="quiz">
         <div id="question"></div>
         <div id="choices"></div>
         <div id="dynamicVideoArea"></div>
         <div id="descBox" class="descBox hidden"></div>
-        <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:var(--danger-color); font-weight:bold; font-size:1.1rem;">📍 잠시만 기다려주세요...</div>
-        <button id="nextBtn" class="primary hidden">다음 질문 이동 ▶</button>
+        <div id="timerText" class="hidden" style="text-align:center; margin-top:15px; color:var(--danger-color); font-weight:bold;">📍 잠시만 기다려주세요...</div>
+        <button id="nextBtn" class="primary hidden" style="margin-top:auto;">다음 질문 이동 ▶</button>
     </div>
 
+    <!-- 예방 영상 재시청 화면 -->
     <div class="card screen" id="reWatchScreen">
         <h2 style="color:var(--danger-color);">📱 꼭 기억하세요!</h2>
         <div class="video-box">
             <div id="reWatchLabel" class="video-label">영상 시청 중 (대기...)</div>
             <div class="video-container">
-                <iframe id="reWatchFrame" src="" frameborder="0" allowfullscreen></iframe>
-                <!-- 조작 방지 글래스 -->
+                <iframe id="reWatchFrame" src="" frameborder="0"></iframe>
                 <div class="video-glass"></div>
             </div>
         </div>
-        <p style="text-align:center; font-size:1.3rem; margin-top:15px; font-weight:800;">영상을 시청하신 후<br>아래 버튼을 눌러주세요.</p>
+        <p style="margin-top:15px; font-weight:800;">영상을 시청하신 후<br>아래 버튼을 눌러주세요.</p>
         <button id="toPreventionBtn" class="primary" disabled style="background:#ccc;">영상을 시청해 주세요</button>
     </div>
 
+    <!-- 예방 수칙 화면 -->
     <div class="card screen" id="preventionScreen">
-        <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 보이스피싱 예방 완결편</h2>
+        <h2 style="background:#fff3f3; padding:10px; border-radius:10px;">🛡️ 예방 수칙 완결편</h2>
         <div class="prevent-item">1. 모르는 전화는 '어서끊자'</div>
-        <div class="prevent-item">2. 확인할 땐 알려준 번호가 아닌 공식 고객센터로 연락</div>
-        <div class="prevent-item">3. 보안위험자동차단 설정<span class="prevent-sub">갤럭시-설정-보안 및 개인정보보호</span></div>
+        <div class="prevent-item">2. 공식 고객센터로 직접 연락</div>
+        <div class="prevent-item">3. 보안위험자동차단 설정<span class="prevent-sub">갤럭시 설정-보안 및 개인정보보호</span></div>
         <div class="prevent-item">4. 휴대전화 소액결제 원천차단</div>
-        <div class="prevent-item">5. 명의도용방지 가입제한 설정<span class="prevent-sub">-휴대전화 비대면 개설차단</span></div>
-        <div class="prevent-item">6. 여신거래안심차단<span class="prevent-sub">-신규 대출, 신규 카드발급 차단</span></div>
-        <div class="prevent-item">7. 비대면계좌개설차단<span class="prevent-sub">6.7.은 금융기관 또는 어플에서 가입가능</span></div>
+        <div class="prevent-item">5. 명의도용방지 가입제한 설정</div>
         <button id="resultBtn" class="btn-gold" style="margin-top:20px;">내 진단 결과 보기 ▶</button>
     </div>
 
+    <!-- 결과 화면 -->
     <div class="card screen" id="resultBox">
         <h2>진단 결과</h2>
-        <div id="result" style="font-size:3rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
+        <div id="result" style="font-size:3.5rem; font-weight:900; text-align:center; margin-bottom:15px;"></div>
         <div id="detailResult"></div>
-        <button id="goFinalBtn" class="primary" style="margin-top:15px;"></button>
+        <button id="goFinalBtn" class="primary" style="margin-top:auto;"></button>
     </div>
 
+    <!-- 긴급 가이드 / 공유 화면 -->
     <div class="card screen" id="finalGuideBox">
         <h2 style="color:var(--danger-color);">🚨 긴급 조치 가이드</h2>
-        <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color);">
-            <p style="font-size:1.4rem; color:var(--danger-color); text-align:center; font-weight:900;">지금 즉시 실행하세요!</p>
-            <ul style="font-size:1.2rem; font-weight:bold; margin-top:15px; padding-left:20px; line-height: 1.6;">
-                <li>휴대전화를 즉시 <b>비행기모드</b>로 전환하세요.</li>
-                <li>주변인의 전화를 빌려 <b>112</b>에 신고하세요.</li>
-                <li>계좌번호 유출 시 계좌를 <b>지급정지</b>하세요.</li>
+        <div style="background:#fff5f5; padding:20px; border-radius:20px; border:3px solid var(--danger-color); text-align: left;">
+            <p style="font-size:1.3rem; color:var(--danger-color); font-weight:900;">지금 즉시 실행하세요!</p>
+            <ul style="font-weight:bold; line-height:1.8;">
+                <li>휴대전화를 <b>비행기모드</b>로 전환</li>
+                <li>주변인의 전화로 <b>112 신고</b></li>
+                <li>계좌번호 유출 시 <b>지급정지</b></li>
             </ul>
         </div>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
-        <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
+        <button class="primary" onclick="location.reload()" style="background:#666; margin-top:10px;">다시 처음으로</button>
     </div>
 
     <div class="card screen" id="shareOnlyBox">
         <h2 style="color:var(--success-color);">✅ 예방 수칙 완료</h2>
-        <p style="font-size:1.4rem; text-align:center;">진단 결과 안전합니다!<br>가족들에게도 이 시스템을 알려주세요.</p>
+        <p style="font-size:1.4rem;">진단 결과 안전합니다!<br>가족들에게도 공유해주세요.</p>
         <button class="share-btn" onclick="shareSystem()">💬 가족·지인에게 공유하기</button>
-        <button class="primary" onclick="location.reload()" style="margin-top:10px; background:#666;">다시 처음으로</button>
+        <button class="primary" onclick="location.reload()" style="background:#666; margin-top:10px;">다시 처음으로</button>
     </div>
 </div>
 
 <script>
-// [추가] Firebase 초기화
+// Firebase 초기화
 const firebaseConfig = {
     apiKey: "AIzaSyA2KjZYbexB646qWgZFHgfwl-cTEUNbj3Y",
     authDomain: "phishing-check-647d9.firebaseapp.com",
@@ -378,24 +318,30 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// [추가] 통계 데이터 동기화
+// [수정] 5종 통계 데이터 실시간 연동
 const todayStr = new Date().toISOString().split('T')[0];
-db.ref('stats/totalCount').on('value', s => document.getElementById('totalCount').innerText = (s.val() || 0).toLocaleString());
-db.ref(`stats/daily/${todayStr}`).on('value', s => document.getElementById('todayCount').innerText = (s.val() || 0).toLocaleString());
+
+db.ref(`stats/daily/${todayStr}/visit`).on('value', s => document.getElementById('todayVisit').innerText = (s.val() || 0).toLocaleString());
+db.ref(`stats/daily/${todayStr}/done`).on('value', s => document.getElementById('todayDone').innerText = (s.val() || 0).toLocaleString());
 db.ref('stats/shareCount').on('value', s => document.getElementById('shareCount').innerText = (s.val() || 0).toLocaleString());
-db.ref(`stats/daily/${todayStr}`).transaction(c => (c || 0) + 1);
+db.ref('stats/totalVisit').on('value', s => document.getElementById('totalVisit').innerText = (s.val() || 0).toLocaleString());
+db.ref('stats/totalCount').on('value', s => document.getElementById('totalDone').innerText = (s.val() || 0).toLocaleString());
+
+// 방문자수 자동 증가 (중복 방지 없이 페이지 로드마다 증가)
+db.ref(`stats/daily/${todayStr}/visit`).transaction(c => (c || 0) + 1);
+db.ref('stats/totalVisit').transaction(c => (c || 0) + 1);
 
 const questions = [
-    { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예 (받았습니다)","아니오"], desc:"개인정보를 빼내기 위한 거짓 수법입니다. 본인이 신청하지 않았다면 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 보이스피싱" },
-    { q:"2. '명의도용', '범죄 연루', '구속수사'를 언급하며 수사기관(검찰, 경찰)에서 전화가 왔습니까?", choices:["예 (받았습니다)","아니오"], desc:"수사기관은 절대로 전화로 자산 내역을 묻거나 돈을 요구하지 않고, 구속등의 이유로 협박하지 않습니다.", risk:3, videoId:"MULTI", vTitle:"📽️ 수사기관, 검찰 사칭 보이스피싱" },
-    { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예 (설치함)","아니오"], desc:"앱을 설치하는 순간 폰의 정보가 유출되고 전화가 가로채기 당합니다.", risk:5 },
-    { q:"4. 금감원(1332)이나 검찰청(1301)에 직접 전화해서 확인해보라고 유도합니까?", choices:["예 (유도함)","아니오"], desc:"악성어플이 설치되면 어디에 전화해도 범인이 전화를 가로채서 받습니다.", risk:5 },
-    { q:"5. 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저로 수사 지시를 받거나 보고하였습니까?", choices:["예 (그렇다)","아니오"], desc:"수사기관은 절대로 텔레그램, 시그널, 라인, 왓츠, 위챗, 시그널 등 메신저를 통해 조사를 진행하지 않습니다.", risk:5 },
-    { q:"6. 수사 보안이라며 '주변 사람이나 가족에게 절대 말하지 말라'고 합니까?", choices:["예 (그렇다)","아니오"], desc:"외부 도움을 차단하여 판단력을 흐리게 하려는 범죄 수법입니다.", risk:5 },
-    { q:"7. 전화나 영상통화 또는 CCTV로 본인을 계속 감시하고 있다는 느낌을 받고있습니까?", choices:["예 (그렇다)","아니오"], desc:"범인이 실시간으로 상황을 통제하려는 시도입니다. 100% 피싱입니다.", risk:5 },
-    { q:"8. 낮은 이자로 대출을 바꿔주겠다며 걸려온 광고 전화를 받았습니까?", choices:["예 (받았습니다)","아니오"], desc:"은행은 먼저 전화를 걸어 낮은 금리로 바꿔주겠다고 하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", vTitle:"📽️ 대출 빙자 보이스피싱" },
-    { q:"9. 대출 약정 위반, 계약위반이라며 당장 현금으로 돈을 갚아야 한다고 합니까?", choices:["예 (그렇다)","아니오"], desc:"전형적인 대출 사기 멘트입니다. 즉시 전화를 끊고 은행에 확인하세요.", risk:5 },
-    { q:"10. 현금을 인출하여 직접 전달하거나 특정 계좌로 송금하라고 합니까?", choices:["예 (그렇다)","아니오"], desc:"국가기관은 어떤 경우에도 개인에게 현금을 요구하지 않습니다. 돈을 요구한다면 그건 100% 보이스피싱입니다.", risk:5 },
+    { q:"1. 본인이 신청하지 않은 '카드 발급'이나 '배송 안내' 문자를 받은 적 있습니까?", choices:["예","아니오"], desc:"개인정보 유출 수법입니다. 즉시 전화를 끊으세요.", risk:3, videoId:"EC8lTWKjCQM", vTitle:"📽️ 카드배송 빙자 피싱" },
+    { q:"2. '범죄 연루', '구속수사'를 언급하며 수사기관에서 전화가 왔습니까?", choices:["예","아니오"], desc:"수사기관은 전화로 돈을 요구하거나 협박하지 않습니다.", risk:3, videoId:"MULTI", vTitle:"📽️ 수사기관 사칭 피싱" },
+    { q:"3. 보안 점검 등을 이유로 '특정 앱(원격제어 등)' 설치했습니까?", choices:["예","아니오"], desc:"앱 설치 즉시 폰의 정보가 유출되고 제어권이 넘어갑니다.", risk:5 },
+    { q:"4. 금감원이나 검찰청에 직접 전화해서 확인해보라고 유도합니까?", choices:["예","아니오"], desc:"악성앱이 깔리면 어디에 전화해도 범인이 가로채서 받습니다.", risk:5 },
+    { q:"5. 텔레그램, 시그널 등 메신저로 수사 지시를 받았습니까?", choices:["예","아니오"], desc:"공공기관은 절대로 메신저로 조사하지 않습니다.", risk:5 },
+    { q:"6. 주변 사람이나 가족에게 절대 말하지 말라고 합니까?", choices:["예","아니오"], desc:"판단력을 흐리게 하려는 범죄 수법입니다.", risk:5 },
+    { q:"7. 실시간으로 본인을 감시하고 있다는 느낌을 받습니까?", choices:["예","아니오"], desc:"상황을 통제하려는 시도입니다. 100% 피싱입니다.", risk:5 },
+    { q:"8. 낮은 이자로 대출을 바꿔주겠다는 광고 전화를 받았습니까?", choices:["예","아니오"], desc:"은행은 먼저 전화를 걸어 대환대출을 권하지 않습니다.", risk:3, videoId:"ePcTTZIi2uw", vTitle:"📽️ 대출 빙자 피싱" },
+    { q:"9. 대출 약정 위반이라며 당장 현금으로 갚으라고 합니까?", choices:["예","아니오"], desc:"전형적인 사기 멘트입니다. 즉시 끊으세요.", risk:5 },
+    { q:"10. 현금을 인출하여 직접 전달하거나 송금하라고 합니까?", choices:["예","아니오"], desc:"국가는 어떤 경우에도 현금을 직접 요구하지 않습니다.", risk:5 },
 ];
 
 let index = 0, selectedRisks = [], highRiskDetected = false;
@@ -405,9 +351,7 @@ function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
     const backBtn = document.getElementById('backBtn');
-    if (screenId === 'intro' || screenId === 'shareOnlyBox' || screenId === 'finalGuideBox') {
-        backBtn.style.display = 'none';
-    } else { backBtn.style.display = 'block'; }
+    backBtn.style.display = (['intro', 'shareOnlyBox', 'finalGuideBox'].includes(screenId)) ? 'none' : 'block';
 }
 
 function goBack() {
@@ -423,7 +367,7 @@ document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1&rel=0";
-    let timer = 0;
+    let timer = 30;
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
@@ -470,20 +414,22 @@ function answer(i){
     document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
     if(q.videoId) {
         const area = document.getElementById("dynamicVideoArea");
-        area.innerHTML = `<div class="video-box"><div class="video-label">${q.vTitle}</div><div class="video-container"><iframe id="qFrame" src="" frameborder="0" allowfullscreen></iframe><div class="video-glass"></div></div>${q.videoId === "MULTI" ? `<div style="padding:8px; background:#fff; display:flex; flex-direction:column; gap:8px; z-index:20; position:relative;"><button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 1 보기</button><button onclick="playVid('CvEsZdEL00I')" style="font-size:1.1rem; padding:12px; background:var(--danger-color); color:white; margin:0;">📺 영상 2 보기</button></div>` : ''}</div>`;
+        area.innerHTML = `<div class="video-box"><div class="video-label">${q.vTitle}</div><div class="video-container"><iframe id="qFrame" src="" frameborder="0"></iframe><div class="video-glass"></div></div>${q.videoId === "MULTI" ? `<div style="padding:8px; display:flex; gap:8px;"><button onclick="playVid('vNsf2p9CDZQ')" style="font-size:1rem; padding:10px;">영상 1</button><button onclick="playVid('CvEsZdEL00I')" style="font-size:1rem; padding:10px;">영상 2</button></div>` : ''}</div>`;
         playVid(q.videoId === "MULTI" ? 'vNsf2p9CDZQ' : q.videoId);
     }
     const dBox = document.getElementById("descBox");
     dBox.innerText = q.desc;
     dBox.classList.remove("hidden");
-    
     const tText = document.getElementById("timerText");
     const nBtn = document.getElementById("nextBtn");
     tText.classList.remove("hidden");
     setTimeout(() => { tText.classList.add("hidden"); nBtn.classList.remove("hidden"); }, 2000); 
 }
 
-function playVid(id) { const frame = document.getElementById("qFrame"); if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=8&controls=0`; }
+function playVid(id) { 
+    const frame = document.getElementById("qFrame"); 
+    if(frame) frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=8&controls=0`; 
+}
 
 document.getElementById("nextBtn").onclick = () => {
     index++;
@@ -510,6 +456,8 @@ document.getElementById("toPreventionBtn").onclick = () => {
 };
 
 document.getElementById("resultBtn").onclick = () => { 
+    // 진단 완료 시점에 DB 업데이트
+    db.ref(`stats/daily/${todayStr}/done`).transaction(c => (c || 0) + 1);
     db.ref('stats/totalCount').transaction(c => (c || 0) + 1);
     screenHistory.push('resultBox'); showScreen('resultBox'); showResult(); 
 };
@@ -519,14 +467,13 @@ function showResult(){
     const res = document.getElementById("result");
     const finalBtn = document.getElementById("goFinalBtn");
     const isSafe = !highRiskDetected && selectedRisks.length === 0;
-    if(highRiskDetected){ res.innerText = "🚨 고위험"; res.style.color = "var(--danger-color)"; finalBtn.innerText = "다음: 긴급 조치 가이드 ▶"; finalBtn.style.background = "var(--danger-color)"; }
-    else if(selectedRisks.length > 0){ res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; finalBtn.innerText = "다음: 긴급 조치 가이드 ▶"; finalBtn.style.background = "#f57c00"; }
+    if(highRiskDetected){ res.innerText = "🚨 고위험"; res.style.color = "var(--danger-color)"; finalBtn.innerText = "다음: 긴급 가이드 ▶"; finalBtn.style.background = "var(--danger-color)"; }
+    else if(selectedRisks.length > 0){ res.innerText = "⚠️ 주의"; res.style.color = "#f57c00"; finalBtn.innerText = "다음: 긴급 가이드 ▶"; finalBtn.style.background = "#f57c00"; }
     else { res.innerText = "✅ 안전"; res.style.color = "var(--success-color)"; finalBtn.innerText = "다음: 진단 완료 ▶"; finalBtn.style.background = "var(--success-color)"; }
     
     let reportArea = document.getElementById("detailResult");
-    reportArea.innerHTML = "";
-    if(isSafe) { reportArea.innerHTML = "<p style='text-align:center;'>의심 징후가 없습니다.<br>평소 예방 수칙을 잘 지키고 계십니다!</p>"; }
-    else {
+    reportArea.innerHTML = isSafe ? "<p>의심 징후가 없습니다. 안전합니다!</p>" : "";
+    if(!isSafe) {
         selectedRisks.forEach((item) => {
             const div = document.createElement("div");
             div.className = "report-item";
@@ -539,24 +486,13 @@ function showResult(){
 document.getElementById("goFinalBtn").onclick = () => {
     const isSafe = !highRiskDetected && selectedRisks.length === 0;
     if(isSafe) { showScreen('shareOnlyBox'); } else { showScreen('finalGuideBox'); }
-    window.scrollTo(0,0);
 };
 
 async function shareSystem() {
     db.ref('stats/shareCount').transaction(c => (c || 0) + 1);
     if (navigator.share) {
-        try {
-            await navigator.share({
-                title: '보이스피싱 예방 진단 시스템',
-                text: '실제 수사 데이터를 기반으로 나의 보이스피싱 위험도를 점검해보세요. (광주광산경찰서 제공)',
-                url: window.location.href
-            });
-        } catch (err) {
-            console.log('공유가 취소되었거나 오류가 발생했습니다.', err);
-        }
-    } else {
-        alert("시스템 주소가 복사되었습니다.\n(현재 브라우저는 바로 공유하기 기능을 지원하지 않습니다.)");
-    }
+        try { await navigator.share({ title: '보이스피싱 진단', text: '위험도를 점검해보세요. (광주광산경찰서)', url: window.location.href }); } catch (err) {}
+    } else { alert("주소가 복사되었습니다."); }
 }
 </script>
 </body>
