@@ -296,12 +296,12 @@ function goBack() {
     }
 }
 
-// [로직 4] 인트로 타이머 (timer 값을 30으로 수정)
+// [로직 4] 인트로 타이머
 document.getElementById("videoBtn").onclick = function(){
     this.classList.add("hidden");
     document.getElementById("introVideoBox").classList.remove("hidden");
     document.getElementById("introFrame").src = "https://www.youtube.com/embed/tV-yM5EWJ3k?autoplay=1";
-    let timer = 30; // 30초로 설정
+    let timer = 0; // 30초로 설정
     const interval = setInterval(() => {
         timer--; document.getElementById("count").innerText = timer;
         if(timer <= 0) {
